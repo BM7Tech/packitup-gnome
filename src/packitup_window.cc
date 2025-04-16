@@ -398,8 +398,13 @@ PackitupWindow::on_result_changed ()
       iterBuffer = m_refBuffer->get_iter_at_offset (offset_field);
       m_refBuffer->insert (iterBuffer, fourth_str);
 
+      Glib::ustring str_packs;
+      if (number_of_packs > 1)
+        str_packs = _ ("packs");
+      else
+        str_packs = _ ("pack");
       Glib::ustring str_total = Glib::ustring::compose (
-          _ ("%1 packs of beer have %2%3."), number_of_packs,
+          _ ("%1 %2 of beer have %3%4."), number_of_packs, str_packs,
           amount_of_beer_packs, unit);
       offset_field += fourth_str.size ();
       iterBuffer = m_refBuffer->get_iter_at_offset (offset_field);

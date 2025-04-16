@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: packitup\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-16 20:12-0300\n"
-"PO-Revision-Date: 2025-04-16 20:19-0300\n"
+"POT-Creation-Date: 2025-04-16 20:49-0300\n"
+"PO-Revision-Date: 2025-04-16 20:52-0300\n"
 "Last-Translator: <eduardo@bm7>\n"
 "Language-Team: Brazilian Portuguese <ldpbr-"
 "translation@lists.sourceforge.net>\n"
@@ -106,7 +106,7 @@ msgid ""
 "You might need "
 msgstr ""
 "\n"
-"Voce pode precisar "
+"Voce pode precisar de "
 
 #: src/packitup_window.cc:372
 msgid "%1%2"
@@ -124,9 +124,17 @@ msgstr " pessoas.\n"
 msgid " person.\n"
 msgstr " pessoa.\n"
 
-#: src/packitup_window.cc:402
-msgid "%1 packs of beer have %2%3."
-msgstr "%1 engradados de cerveja têm %2%3."
+#: src/packitup_window.cc:403
+msgid "packs"
+msgstr "engradados"
+
+#: src/packitup_window.cc:405
+msgid "pack"
+msgstr "engradado"
+
+#: src/packitup_window.cc:407
+msgid "%1 %2 of beer have %3%4."
+msgstr "%1 %2 de cerveja têm %3%4."
 
 #: src/window.ui:4 src/window.ui:13
 msgid "Pack It UP!"

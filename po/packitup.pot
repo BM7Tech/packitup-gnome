@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: packitup\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-16 20:12-0300\n"
+"POT-Creation-Date: 2025-04-16 20:49-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -105,8 +105,16 @@ msgstr ""
 msgid " person.\n"
 msgstr ""
 
-#: src/packitup_window.cc:402
-msgid "%1 packs of beer have %2%3."
+#: src/packitup_window.cc:403
+msgid "packs"
+msgstr ""
+
+#: src/packitup_window.cc:405
+msgid "pack"
+msgstr ""
+
+#: src/packitup_window.cc:407
+msgid "%1 %2 of beer have %3%4."
 msgstr ""
 
 #: src/window.ui:4 src/window.ui:13
