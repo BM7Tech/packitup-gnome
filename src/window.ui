@@ -66,6 +66,72 @@
                 <property name="margin-bottom">5</property>
                 <property name="spacing">5</property>
                 <child>
+                  <object class="GtkBox" id="buttons_size_HBox">
+                    <property name="orientation">horizontal</property>
+                    <property name="spacing">5</property>
+                    <child>
+                      <object class="GtkBox" id="buttons_pack_size_VBox">
+                        <property name="orientation">vertical</property>
+                        <property name="spacing">5</property>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="label"
+                                      translatable="yes">Pack size:</property>
+                            <property name="wrap">True</property>
+                            <property name="halign">GTK_ALIGN_START</property>
+                            <property name="hexpand">True</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkDropDown" id="pack_size_dropdown">
+                            <property name="model">
+                              <object class="GtkStringList" id="pack_size_list">
+                                <items>
+                                  <item translatable="yes">6</item>
+                                  <item translatable="yes">8</item>
+                                  <item translatable="yes">12</item>
+                                  <item translatable="yes">15</item>
+                                  <item translatable="yes">24</item>
+                                  <item translatable="yes">30</item>
+                                </items>
+                              </object>
+                            </property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkBox" id="buttons_bottle_size_VBox">
+                        <property name="orientation">vertical</property>
+                        <property name="spacing">5</property>
+                        <child>
+                          <object class="GtkLabel">
+                            <property name="label"
+                              translatable="yes">Beer bottle/can size:</property>
+                            <property name="wrap">True</property>
+                            <property name="halign">GTK_ALIGN_START</property>
+                            <property name="hexpand">True</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="GtkDropDown" id="bottle_size_dropdown">
+                            <property name="model">
+                              <object class="GtkStringList" id="bottle_size_list">
+                                <items>
+                                  <item translatable="yes">250ml</item>
+                                  <item translatable="yes">269ml</item>
+                                  <item translatable="yes">330ml</item>
+                                  <item translatable="yes">355ml</item>
+                                </items>
+                              </object>
+                            </property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
                   <object class="GtkBox" id="buttons_more_VBox">
                     <property name="orientation">vertical</property>
                     <property name="spacing">5</property>

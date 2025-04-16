@@ -2,6 +2,7 @@
 #define GTKMM_PACKITUP_WINDOW_H
 
 #include "gtkmm/revealer.h"
+#include "gtkmm/stringlist.h"
 #include <gtkmm.h>
 
 class PackitupWindow : public Gtk::ApplicationWindow
@@ -15,6 +16,7 @@ public:
   void open_result_view ();
   void on_result_clicked ();
   void on_result_changed ();
+  void on_unit_dropdown_changed ();
 
 protected:
   Glib::RefPtr<Gtk::Builder> m_refBuilder;
@@ -23,10 +25,15 @@ protected:
   Glib::RefPtr<Gtk::TextTag> m_refTagFont;
   Glib::RefPtr<Gtk::TextBuffer> m_refBuffer;
   Glib::RefPtr<Gtk::CssProvider> m_refCssProvider;
+  Glib::RefPtr<Gtk::StringList> m_bottle_size_list;
+  Glib::RefPtr<Gtk::StringList> m_pack_size_list;
   Gtk::Revealer m_revealer;
   Gtk::Box *m_result_VBox{ nullptr };
   Gtk::Button *m_result_button{ nullptr };
   Gtk::DropDown *m_unit_dropdown{ nullptr };
+  Gtk::DropDown *m_pack_size_dropdown{ nullptr };
+  Gtk::DropDown *m_bottle_size_dropdown{ nullptr };
+
   Gtk::MenuButton *m_gears{ nullptr };
   Gtk::SpinButton *m_spin_button_more{ nullptr };
   Gtk::SpinButton *m_spin_button_alright{ nullptr };

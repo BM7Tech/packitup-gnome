@@ -20,6 +20,7 @@
 #include <iomanip>
 #include <iostream>
 #include <stdexcept>
+#include <string>
 
 #define HAS_STYLE_PROVIDER_ADD_PROVIDER_FOR_DISPLAY                           \
   GTKMM_CHECK_VERSION (4, 9, 1)
@@ -43,10 +44,26 @@ PackitupWindow::PackitupWindow (BaseObjectType *cobject,
   m_spin_button_alright->set_numeric ();
   m_spin_button_more->set_numeric ();
 
+  // Add scrollable window to the whole application for WM support
+  auto application_box_layout
+      = m_refBuilder->get_widget<Gtk::Box> ("application_box_layout");
+  if (!application_box_layout)
+    throw std::runtime_error (
+        "no \"application_box_layout\" object in window.ui");
+  auto app_scrolled_window = Gtk::make_managed<Gtk::ScrolledWindow> ();
+  app_scrolled_window->set_policy (Gtk::PolicyType::AUTOMATIC,
+                                   Gtk::PolicyType::AUTOMATIC);
+  app_scrolled_window->set_expand ();
+
+  set_child (*app_scrolled_window);
+  app_scrolled_window->set_child (*application_box_layout);
+
   m_unit_dropdown = m_refBuilder->get_widget<Gtk::DropDown> ("unit_dropdown");
   if (!m_unit_dropdown)
     throw std::runtime_error ("no \"unit_dropdown\" object in window.ui");
 
+  m_unit_dropdown->property_selected ().signal_changed ().connect (
+      sigc::mem_fun (*this, &PackitupWindow::on_unit_dropdown_changed));
   m_result_button = m_refBuilder->get_widget<Gtk::Button> ("result_button");
   if (!m_result_button)
     throw std::runtime_error ("no \"result_button\" object in window.ui");
@@ -59,6 +76,35 @@ PackitupWindow::PackitupWindow (BaseObjectType *cobject,
   m_result_VBox = m_refBuilder->get_widget<Gtk::Box> ("result_VBox");
   if (!m_result_VBox)
     throw std::runtime_error ("no \"result_VBox\" object in window.ui");
+
+  // Bottle size dropdown menu
+  m_bottle_size_dropdown
+      = m_refBuilder->get_widget<Gtk::DropDown> ("bottle_size_dropdown");
+  if (!m_bottle_size_dropdown)
+    throw std::runtime_error (
+        "no \"bottle_size_dropdown\" object in window.ui");
+
+  m_bottle_size_dropdown->set_selected (0);
+
+  // Bottle size dropdown menu
+  m_bottle_size_list
+      = m_refBuilder->get_object<Gtk::StringList> ("bottle_size_list");
+  if (!m_bottle_size_list)
+    throw std::runtime_error ("no \"bottle_size_list\" object in window.ui");
+
+  // Bottle size dropdown menu
+  m_pack_size_list
+      = m_refBuilder->get_object<Gtk::StringList> ("pack_size_list");
+  if (!m_pack_size_list)
+    throw std::runtime_error ("no \"pack_size_list\" object in window.ui");
+
+  // Pack size dropdown menu
+  m_pack_size_dropdown
+      = m_refBuilder->get_widget<Gtk::DropDown> ("pack_size_dropdown");
+  if (!m_pack_size_dropdown)
+    throw std::runtime_error ("no \"pack_size_dropdown\" object in window.ui");
+
+  m_pack_size_dropdown->set_selected (0);
 
   // App info box
   auto m_info_VBox = m_refBuilder->get_widget<Gtk::Box> ("info_box");
@@ -216,6 +262,28 @@ PackitupWindow::create ()
 }
 
 void
+PackitupWindow::on_unit_dropdown_changed ()
+{
+  while (m_bottle_size_list->get_n_items ())
+    m_bottle_size_list->remove (0);
+  auto unit_idx = m_unit_dropdown->get_selected ();
+  if (unit_idx > 0)
+    {
+      m_bottle_size_list->append ("8oz");
+      m_bottle_size_list->append ("11.2oz");
+      m_bottle_size_list->append ("11.5oz");
+      m_bottle_size_list->append ("12oz");
+    }
+  else
+    {
+      m_bottle_size_list->append ("250ml");
+      m_bottle_size_list->append ("269ml");
+      m_bottle_size_list->append ("330ml");
+      m_bottle_size_list->append ("355ml");
+    }
+}
+
+void
 PackitupWindow::on_result_clicked ()
 {
 
@@ -229,22 +297,23 @@ PackitupWindow::on_result_clicked ()
   auto more_Value = m_spin_button_more->get_value ();
   auto alright_Value = m_spin_button_alright->get_value ();
   auto unit_idx = m_unit_dropdown->get_selected ();
+  auto single_bottle_idx = m_bottle_size_dropdown->get_selected ();
+  auto pack_size_idx = m_pack_size_dropdown->get_selected ();
+  auto single_bottle
+      = std::stof (m_bottle_size_list->get_string (single_bottle_idx));
+  auto pack_size = std::stoi (m_pack_size_list->get_string (pack_size_idx));
 
   // Set the Unit to use
-  float single_bottle;
   if (unit_idx > 0)
-    {
-      single_bottle = 11.6;
-      unit = "oz";
-    }
+    unit = "oz";
   else
     {
-      single_bottle = 0.33;
       unit = "L";
+      single_bottle /= 1000;
     }
 
   // Calculate the number of packs for that day they will have to buy
-  auto pack = single_bottle * 6;
+  auto pack = single_bottle * pack_size;
   amount_of_beer
       = ((more_Value * 2 * pack) + more_Value * single_bottle)
         + (pack * alright_Value + (alright_Value * 2 * single_bottle));
