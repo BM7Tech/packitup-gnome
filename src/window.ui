@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<interface>
+<interface domain="packitup">
   <object class="GtkApplicationWindow" id="app_window">
     <property name="title" translatable="yes">Pack It UP!</property>
-    <property name="default-width">400</property>
-    <property name="default-height">700</property>
+    <property name="default-width">600</property>
+    <property name="default-height">800</property>
     <property name="hide-on-close">True</property>
     <child type="titlebar">
       <object class="GtkHeaderBar" id="header">
@@ -36,7 +36,7 @@
         <property name="margin-end">7</property>
         <child>
           <object class="GtkFrame" id="info_frame">
-            <property name="label">About</property>
+            <property name="label" translatable="yes">About</property>
             <property name="label-xalign">0.5</property>
             <property name="vexpand">False</property>
             <property name="hexpand">True</property>
@@ -54,7 +54,7 @@
         </child>
         <child>
           <object class="GtkFrame" id="user_calculator_frame">
-            <property name="label">Packs Calculator</property>
+            <property name="label" translatable="yes">Packs Calculator</property>
             <property name="label-xalign">0.5</property>
             <property name="vexpand">False</property>
             <property name="hexpand">True</property>

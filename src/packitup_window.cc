@@ -135,7 +135,7 @@ PackitupWindow::PackitupWindow (BaseObjectType *cobject,
       "More than moderated would be more than or equal to 2 packs that "
       "day(12 bottles "
       "of 269ml or 8oz, ~3.0L or ~96oz).\n\n"
-      "Keep in mind that in order to not let you go short on beer, this"
+      "Keep in mind that in order to not let you go short on beer, this "
       "calculation will round up the amount of packs needed.\n\n"
       "The values in Liters and Ounces aren't direct convertable. It takes "
       "into account localization."));
@@ -153,7 +153,7 @@ PackitupWindow::PackitupWindow (BaseObjectType *cobject,
 
   // Add result's frame
   auto m_frame = Gtk::make_managed<Gtk::Frame> ();
-  m_frame->set_label ("Result");
+  m_frame->set_label (_ ("Result"));
   m_frame->set_label_align (Gtk::Align::CENTER);
   m_frame->set_expand ();
   m_result_VBox->append (*m_frame);

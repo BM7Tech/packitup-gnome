@@ -1,0 +1,208 @@
+# English translations for packitup package.
+# Copyright (C) 2025 THE packitup'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the packitup package.
+#  <eduardo@bm7>, 2025.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: packitup\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-04-16 20:12-0300\n"
+"PO-Revision-Date: 2025-04-16 18:32-0300\n"
+"Last-Translator:  <eduardo@bm7>\n"
+"Language-Team: English\n"
+"Language: en_US\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: src/packitup_window.cc:131
+msgid ""
+"This is our application for how many packs of beer you and your friends need "
+"to buy so you won't be short on beer :)\n"
+"\n"
+"The calculation takes how many people drinks more than moderated, and how "
+"many drinks alright\n"
+"\n"
+"More than moderated would be more than or equal to 2 packs that day(12 "
+"bottles of 269ml or 8oz, ~3.0L or ~96oz).\n"
+"\n"
+"Keep in mind that in order to not let you go short on beer, this calculation "
+"will round up the amount of packs needed.\n"
+"\n"
+"The values in Liters and Ounces aren't direct convertable. It takes into "
+"account localization."
+msgstr ""
+"This is our application for how many packs of beer you and your friends need "
+"to buy so you won't be short on beer :)\n"
+"\n"
+"The calculation takes how many people drinks more than moderated, and how "
+"many drinks alright\n"
+"\n"
+"More than moderated would be more than or equal to 2 packs that day(12 "
+"bottles of 269ml or 8oz, ~3.0L or ~96oz).\n"
+"\n"
+"Keep in mind that in order to not let you go short on beer, this calculation "
+"will round up the amount of packs needed.\n"
+"\n"
+"The values in Liters and Ounces aren't direct convertable. It takes into "
+"account localization."
+
+#: src/packitup_window.cc:156
+msgid "Result"
+msgstr ""
+
+#: src/packitup_window.cc:183
+msgid "Select the values above and click \"Calculate\" to begin..."
+msgstr "Select the values above and click \"Calculate\" to begin..."
+
+#: src/packitup_window.cc:279
+msgid "8oz"
+msgstr "8oz"
+
+#: src/packitup_window.cc:280
+msgid "11.2oz"
+msgstr "11.2oz"
+
+#: src/packitup_window.cc:281
+msgid "11.5oz"
+msgstr "11.5oz"
+
+#: src/packitup_window.cc:282
+msgid "12oz"
+msgstr "12oz"
+
+#: src/packitup_window.cc:286 src/window.ui:121
+msgid "250ml"
+msgstr "250ml"
+
+#: src/packitup_window.cc:287 src/window.ui:122
+msgid "269ml"
+msgstr "269ml"
+
+#: src/packitup_window.cc:288 src/window.ui:123
+msgid "330ml"
+msgstr "330ml"
+
+#: src/packitup_window.cc:289 src/window.ui:124
+msgid "355ml"
+msgstr "355ml"
+
+#: src/packitup_window.cc:347
+msgid "The total number of packs you might need: "
+msgstr "The total number of packs you might need: "
+
+#: src/packitup_window.cc:357 src/packitup_window.cc:386
+msgid "%1"
+msgstr "%1"
+
+#: src/packitup_window.cc:365
+msgid ""
+"\n"
+"You might need "
+msgstr ""
+"\n"
+"You might need "
+
+#: src/packitup_window.cc:372
+msgid "%1%2"
+msgstr "%1%2"
+
+#: src/packitup_window.cc:379
+msgid " of beer for "
+msgstr " of beer for "
+
+#: src/packitup_window.cc:393
+msgid " people.\n"
+msgstr " people.\n"
+
+#: src/packitup_window.cc:395
+msgid " person.\n"
+msgstr " person.\n"
+
+#: src/packitup_window.cc:402
+msgid "%1 packs of beer have %2%3."
+msgstr "%1 packs of beer have %2%3."
+
+#: src/window.ui:4 src/window.ui:13
+msgid "Pack It UP!"
+msgstr "Pack It UP!"
+
+#: src/window.ui:39
+msgid "About"
+msgstr ""
+
+#: src/window.ui:57
+#, fuzzy
+msgid "Packs Calculator"
+msgstr "Calculate"
+
+#: src/window.ui:79
+msgid "Pack size:"
+msgstr "Pack size:"
+
+#: src/window.ui:90
+msgid "6"
+msgstr "6"
+
+#: src/window.ui:91
+msgid "8"
+msgstr "8"
+
+#: src/window.ui:92
+msgid "12"
+msgstr "12"
+
+#: src/window.ui:93
+msgid "15"
+msgstr "15"
+
+#: src/window.ui:94
+msgid "24"
+msgstr "24"
+
+#: src/window.ui:95
+msgid "30"
+msgstr "30"
+
+#: src/window.ui:110
+msgid "Beer bottle/can size:"
+msgstr "Beer bottle/can size:"
+
+#: src/window.ui:141
+msgid "Drinks more than moderate:"
+msgstr "Drinks more than moderate:"
+
+#: src/window.ui:171
+msgid "Drinks alright:"
+msgstr "Drinks alright:"
+
+#: src/window.ui:201
+msgid "Select the Unit:"
+msgstr "Select the Unit:"
+
+#: src/window.ui:212
+msgid "Liters"
+msgstr "Liters"
+
+#: src/window.ui:213
+msgid "Ounces"
+msgstr "Ounces"
+
+#: src/window.ui:233
+msgctxt "button2"
+msgid "Calculate"
+msgstr "Calculate"
+
+#: src/gears_menu.ui:6
+msgid "_Preferences"
+msgstr "_Preferences"
+
+#: src/gears_menu.ui:12
+msgid "_Quit"
+msgstr "_Quit"
+
+#: src/prefs.ui:4
+msgid "Preferences"
+msgstr "Preferences"
