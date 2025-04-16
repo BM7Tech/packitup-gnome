@@ -1,0 +1,14 @@
+windowcontrols.end>button.close {
+	margin: 14px 0px;
+	padding: 3px;
+	min-height: 16px;
+	min-width: 16px;
+	color: @theme_fg_color;
+	background-color: unset;
+}
+
+windowcontrols.end>button.close:hover {
+	margin: 14px 0px;
+	color: @theme_bg_color;
+	background-color: @theme_fg_color;
+}

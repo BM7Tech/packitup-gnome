@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <object class="GtkApplicationWindow" id="app_window">
+    <property name="title" translatable="yes">Pack It UP!</property>
+    <property name="default-width">400</property>
+    <property name="default-height">700</property>
+    <property name="hide-on-close">True</property>
+    <child type="titlebar">
+      <object class="GtkHeaderBar" id="header">
+        <property name="decoration-layout">icon:close</property>
+        <property name="title-widget">
+          <object class="GtkLabel">
+            <property name="label" translatable="yes">Pack It UP!</property>
+            <property name="single-line-mode">True</property>
+            <property name="ellipsize">end</property>
+            <property name="width-chars">5</property>
+            <style>
+              <class name="title"/>
+            </style>
+          </object>
+        </property>
+        <child type="end">
+          <object class="GtkMenuButton" id="gears">
+            <property name="direction">none</property>
+          </object>
+        </child>
+      </object>
+    </child>
+    <child>
+      <object class="GtkBox" id="application_box_layout">
+        <property name="orientation">vertical</property>
+        <property name="spacing">7</property>
+        <property name="margin-top">7</property>
+        <property name="margin-bottom">7</property>
+        <property name="margin-start">7</property>
+        <property name="margin-end">7</property>
+        <child>
+          <object class="GtkFrame" id="info_frame">
+            <property name="label">About</property>
+            <property name="label-xalign">0.5</property>
+            <property name="vexpand">False</property>
+            <property name="hexpand">True</property>
+            <child>
+              <object class="GtkBox" id="info_box">
+                <property name="orientation">vertical</property>
+                <property name="spacing">2</property>
+                <property name="margin-top">5</property>
+                <property name="margin-bottom">5</property>
+                <property name="margin-start">5</property>
+                <property name="margin-end">5</property>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkFrame" id="user_calculator_frame">
+            <property name="label">Packs Calculator</property>
+            <property name="label-xalign">0.5</property>
+            <property name="vexpand">False</property>
+            <property name="hexpand">True</property>
+            <child>
+              <object class="GtkBox" id="buttons_main_VBox">
+                <property name="orientation">vertical</property>
+                <property name="margin-end">5</property>
+                <property name="margin-start">5</property>
+                <property name="margin-bottom">5</property>
+                <property name="spacing">5</property>
+                <child>
+                  <object class="GtkBox" id="buttons_more_VBox">
+                    <property name="orientation">vertical</property>
+                    <property name="spacing">5</property>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="label"
+                                  translatable="yes">Drinks more than moderate:</property>
+                        <property name="wrap">True</property>
+                        <property name="halign">GTK_ALIGN_START</property>
+                        <property name="hexpand">True</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkSpinButton" id="spin_button_more">
+                        <property name="adjustment">
+                          <object class="GtkAdjustment" id="spin_more_adjustment">
+                            <property name="lower">0</property>
+                            <property name="upper">100000</property>
+                            <property name="step-increment">1</property>
+                            <property name="page-increment">5</property>
+                            <property name="value">0</property>
+                          </object>
+                        </property>
+                        <property name="hexpand">True</property>
+                        <property name="wrap">True</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkBox" id="buttons_alright_VBox">
+                    <property name="orientation">vertical</property>
+                    <property name="spacing">5</property>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="label"
+                                  translatable="yes">Drinks alright:</property>
+                        <property name="wrap">True</property>
+                        <property name="halign">GTK_ALIGN_START</property>
+                        <property name="hexpand">True</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkSpinButton" id="spin_button_alright">
+                        <property name="adjustment">
+                          <object class="GtkAdjustment" id="spin_alright_adjustment">
+                            <property name="lower">0</property>
+                            <property name="upper">100000</property>
+                            <property name="step-increment">1</property>
+                            <property name="page-increment">5</property>
+                            <property name="value">0</property>
+                          </object>
+                        </property>
+                        <property name="hexpand">True</property>
+                        <property name="wrap">True</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkBox" id="buttons_unit_VBox">
+                    <property name="orientation">vertical</property>
+                    <property name="spacing">5</property>
+                    <child>
+                      <object class="GtkLabel">
+                        <property name="label"
+                                  translatable="yes">Select the Unit:</property>
+                        <property name="wrap">True</property>
+                        <property name="halign">GTK_ALIGN_START</property>
+                        <property name="hexpand">True</property>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="GtkDropDown" id="unit_dropdown">
+                        <property name="model">
+                          <object class="GtkStringList">
+                            <items>
+                              <item translatable="yes">Liters</item>
+                              <item translatable="yes">Ounces</item>
+                            </items>
+                          </object>
+                        </property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="GtkBox" id="result_VBox">
+            <property name="orientation">vertical</property>
+            <property name="spacing">7</property>
+            <child>
+              <object class="GtkButton" id="result_button">
+                <property name="label"
+                          translatable="yes"
+                          context="button2">Calculate</property>
+                <property name="hexpand">True</property>
+              </object>
+            </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>
+<!-- vim: sts=2 sw=2 et -->
