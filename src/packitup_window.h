@@ -44,6 +44,7 @@ protected:
 private:
   int total_people_number;
   float amount_of_beer;
+  float amount_of_beer_packs;
   float number_of_packs;
   std::string unit;
   std::string m_buffer;

@@ -14,9 +14,11 @@
 
 #include "packitup_window.h"
 #include "giomm/settings.h"
+#include "glib/gi18n.h"
 #include "gtkmm/enums.h"
 #include "gtkmm/object.h"
 #include "gtkmm/scrolledwindow.h"
+#include <glibmm/i18n.h>
 #include <iomanip>
 #include <iostream>
 #include <stdexcept>
@@ -125,13 +127,18 @@ PackitupWindow::PackitupWindow (BaseObjectType *cobject,
   m_refSettings = Gio::Settings::create ("org.gtkmm.packitup");
   auto m_refTagInfoFont = m_refInfoBuffer->create_tag ();
   m_refSettings->bind ("font", m_refTagInfoFont->property_font ());
-  m_refInfoBuffer->set_text (
+  m_refInfoBuffer->set_text (_ (
       "This is our application for how many packs of beer you and your "
       "friends need to buy so you won't be short on beer :)\n\n"
       "The calculation takes how many people drinks more than moderated, and "
       "how many drinks alright\n\n"
-      "More than moderated would be more than or equal to 2 packs(12 bottles "
-      "of 330ml or 11.6oz) that day(~4L or ~140oz)");
+      "More than moderated would be more than or equal to 2 packs that "
+      "day(12 bottles "
+      "of 269ml or 8oz, ~3.0L or ~96oz).\n\n"
+      "Keep in mind that in order to not let you go short on beer, this"
+      "calculation will round up the amount of packs needed.\n\n"
+      "The values in Liters and Ounces aren't direct convertable. It takes "
+      "into account localization."));
   m_refInfoBuffer->apply_tag (m_refTagInfoFont, m_refInfoBuffer->begin (),
                               m_refInfoBuffer->end ());
 
@@ -173,7 +180,7 @@ PackitupWindow::PackitupWindow (BaseObjectType *cobject,
   m_refSettings->bind ("font", m_refTagFont->property_font ());
 
   m_refBuffer->set_text (
-      "Select the values above and click \"Calculate\" to begin...");
+      _ ("Select the values above and click \"Calculate\" to begin..."));
   m_refBuffer->apply_tag (m_refTagFont, m_refBuffer->begin (),
                           m_refBuffer->end ());
   m_revealer.property_child_revealed ().signal_changed ().connect (
@@ -269,17 +276,17 @@ PackitupWindow::on_unit_dropdown_changed ()
   auto unit_idx = m_unit_dropdown->get_selected ();
   if (unit_idx > 0)
     {
-      m_bottle_size_list->append ("8oz");
-      m_bottle_size_list->append ("11.2oz");
-      m_bottle_size_list->append ("11.5oz");
-      m_bottle_size_list->append ("12oz");
+      m_bottle_size_list->append (_ ("8oz"));
+      m_bottle_size_list->append (_ ("11.2oz"));
+      m_bottle_size_list->append (_ ("11.5oz"));
+      m_bottle_size_list->append (_ ("12oz"));
     }
   else
     {
-      m_bottle_size_list->append ("250ml");
-      m_bottle_size_list->append ("269ml");
-      m_bottle_size_list->append ("330ml");
-      m_bottle_size_list->append ("355ml");
+      m_bottle_size_list->append (_ ("250ml"));
+      m_bottle_size_list->append (_ ("269ml"));
+      m_bottle_size_list->append (_ ("330ml"));
+      m_bottle_size_list->append (_ ("355ml"));
     }
 }
 
@@ -314,10 +321,17 @@ PackitupWindow::on_result_clicked ()
 
   // Calculate the number of packs for that day they will have to buy
   auto pack = single_bottle * pack_size;
+  float pack_size_max_value;
+  if (pack > 1.5)
+    pack_size_max_value = 1.5;
+  else
+    pack_size_max_value = pack;
   amount_of_beer
-      = ((more_Value * 2 * pack) + more_Value * single_bottle)
-        + (pack * alright_Value + (alright_Value * 2 * single_bottle));
+      = ((more_Value * 2 * pack_size_max_value) + more_Value * single_bottle)
+        + (pack_size_max_value * alright_Value
+           + (alright_Value * 2 * single_bottle));
   number_of_packs = std::ceil (amount_of_beer / pack);
+  amount_of_beer_packs = pack * number_of_packs;
   // The total number of people that will consume that amount of beer
   total_people_number = more_Value + alright_Value;
 }
@@ -329,7 +343,8 @@ PackitupWindow::on_result_changed ()
     {
 
       // Insert text with aproriate tags one at a time
-      Glib::ustring initial_str = "The total number of packs you might need: ";
+      Glib::ustring initial_str
+          = _ ("The total number of packs you might need: ");
       auto refTagBold = m_refBuffer->create_tag ();
       refTagBold->property_weight () = 800;
       m_refBuffer->set_text (initial_str);
@@ -339,49 +354,56 @@ PackitupWindow::on_result_changed ()
       // We need to convert int/float values to ustring, and to calculate
       // their strlen
       Glib::ustring str_number_of_packs = Glib::ustring::compose (
-          "%1", Glib::ustring::format (std::fixed, std::setprecision (0),
-                                       number_of_packs));
+          _ ("%1"), Glib::ustring::format (std::fixed, std::setprecision (0),
+                                           number_of_packs));
       m_refBuffer->insert_with_tag (iterBuffer, str_number_of_packs,
                                     refTagBold);
 
       offset_field += str_number_of_packs.size ();
       iterBuffer = m_refBuffer->get_iter_at_offset (offset_field);
 
-      Glib::ustring second_str = "\nThats a total of ";
+      Glib::ustring second_str = _ ("\nYou might need ");
       m_refBuffer->insert (iterBuffer, second_str);
 
       offset_field += second_str.size ();
       iterBuffer = m_refBuffer->get_iter_at_offset (offset_field);
 
       Glib::ustring str_amount_of_beer = Glib::ustring::compose (
-          "%1%2",
+          _ ("%1%2"),
           Glib::ustring::format (std::fixed, ::std::setprecision (1),
                                  amount_of_beer),
           unit);
       m_refBuffer->insert_with_tag (iterBuffer, str_amount_of_beer,
                                     refTagBold);
 
-      Glib::ustring third_str = " for ";
+      Glib::ustring third_str = _ (" of beer for ");
       offset_field += str_amount_of_beer.size ();
       iterBuffer = m_refBuffer->get_iter_at_offset (offset_field);
 
       m_refBuffer->insert (iterBuffer, third_str);
 
       Glib::ustring str_total_ppl_number
-          = Glib::ustring::compose ("%1", total_people_number);
+          = Glib::ustring::compose (_ ("%1"), total_people_number);
       offset_field += third_str.size ();
       iterBuffer = m_refBuffer->get_iter_at_offset (offset_field);
       m_refBuffer->insert_with_tag (iterBuffer, str_total_ppl_number,
                                     refTagBold);
       Glib::ustring fourth_str;
       if (total_people_number > 1)
-        fourth_str = " people.\n";
+        fourth_str = _ (" people.\n");
       else
-        fourth_str = " person.\n";
+        fourth_str = _ (" person.\n");
 
       offset_field += str_total_ppl_number.size ();
       iterBuffer = m_refBuffer->get_iter_at_offset (offset_field);
       m_refBuffer->insert (iterBuffer, fourth_str);
+
+      Glib::ustring str_total = Glib::ustring::compose (
+          _ ("%1 packs of beer have %2%3."), number_of_packs,
+          amount_of_beer_packs, unit);
+      offset_field += fourth_str.size ();
+      iterBuffer = m_refBuffer->get_iter_at_offset (offset_field);
+      m_refBuffer->insert_with_tag (iterBuffer, str_total, refTagBold);
       m_refBuffer->apply_tag (m_refTagFont, m_refBuffer->begin (),
                               m_refBuffer->end ());
 
