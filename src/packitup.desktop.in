@@ -1,9 +1,9 @@
 [Desktop Entry]
 Type=Application
-Name=Gtkmm example
-GenericName=Example
-Comment=From the "Programming with gtkmm 4" tutorial
-Icon=exampleapp
+Name=PackItUP!
+GenericName=PackItUP!
+Comment=Don't be short on beer anymore!
+Icon=packitup
 StartupNotify=true
 Exec=@bindir@/packitup %U
 Categories=GNOME;GTK;Utility

@@ -12,3 +12,8 @@ windowcontrols.end>button.close:hover {
 	color: @theme_bg_color;
 	background-color: @theme_fg_color;
 }
+
+windowcontrols.start>image {
+	min-height: 22px;
+	min-width: 22px;
+}
