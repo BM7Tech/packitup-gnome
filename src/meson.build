@@ -90,31 +90,28 @@ executable(program_name,
   cpp_sources, resources, schemas,
   dependencies: gtkmm_dep,
   win_subsystem: 'windows',
+  dependencies: [
+    dependency('glibmm-2.68'),
+    dependency('giomm-2.68'),
+    dependency('gtkmm-4.0'),
+    dependency('intl'),
+  ],
+  install: true
 )
 
-python3 = import('python').find_installation()
-install_cmd = meson.current_source_dir() / 'install-cmd.py'
+bin_dir = get_option('prefix') / get_option('bindir')
 
 conf_data = configuration_data()
-conf_data.set('bindir', meson.current_build_dir())
+conf_data.set('bindir', bin_dir)
 desktop_file = configure_file(
   input: 'packitup.desktop.in',
   output: '@BASENAME@',
   configuration: conf_data,
 )
 
-run_target('install-desktop-file',
-  command: [
-    python3, install_cmd, 'desktop',
-    program_name,
-    desktop_file,
-    meson.current_source_dir() / 'packitup.png',
-  ]
-)
+apps_dir = get_option('prefix') / get_option('datadir') / 'applications'
 
-run_target('install-gschema-file',
-  command: [
-    python3, install_cmd, 'gschema',
-    meson.current_source_dir() / 'dev.bm7.packitup.gschema.xml',
-  ]
+install_data(
+  desktop_file,
+  install_dir: apps_dir
 )
