@@ -1,11 +1,32 @@
+/*
+ * PackItUP! Never run out of beer again.
+ * Copyright (C) 2025  edu-bm7
+ *
+ * This file is part of PackItUP!.
+ *
+ * PackItUP! is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * PackItUP! is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with PackItUP!. If not, see <https://www.gnu.org/licenses/>.
+ * */
+
 #include "packitup.h"
+#include "packitup_license.h"
 #include "packitup_prefs.h"
 #include "packitup_window.h"
 #include <exception>
 #include <iostream>
 
 Packitup::Packitup ()
-    : Gtk::Application ("org.gtkmm.packitup",
+    : Gtk::Application ("dev.bm7.packitup",
                         Gio::Application::Flags::HANDLES_OPEN)
 {
 }
@@ -64,6 +85,7 @@ Packitup::on_startup ()
   // Actions and keyboard accelerators for the menu
   add_action ("preferences",
               sigc::mem_fun (*this, &Packitup::on_action_preferences));
+  add_action ("license", sigc::mem_fun (*this, &Packitup::on_action_license));
   add_action ("quit", sigc::mem_fun (*this, &Packitup::on_action_quit));
   set_accel_for_action ("app.quit", "<Ctrl>Q");
 }
@@ -93,22 +115,36 @@ Packitup::on_action_preferences ()
 }
 
 void
+Packitup::on_action_license ()
+{
+  try
+    {
+      auto license_window = PackitupLicense::create (*get_active_window ());
+      license_window->present ();
+
+      // Delete when its hidden
+      license_window->signal_hide ().connect (
+          [license_window] () { delete license_window; });
+    }
+  catch (const Glib::Error &ex)
+    {
+      std::cerr << "Glib::Error: Packitup::on_action_license(): " << ex.what ()
+                << std::endl;
+    }
+  catch (const std::exception &ex)
+    {
+      std::cerr << "std::exception: Packitup::on_action_license(): "
+                << ex.what () << std::endl;
+    }
+}
+
+void
 Packitup::on_action_quit ()
 {
-  // Gio::Application::quit() will make Gio::Application::run() return,
-  // but it's a crude way of ending the program. The window is not removed
-  // from the application. Neither the window's nor the application's
-  // destructors will be called, because there will be remaining reference
-  // counts in both of them. If we want the destructors to be called, we
-  // must remove the window from the application. One way of doing this
-  // is to hide the window. See comment in create_appwindow().
   auto windows = get_windows ();
   for (auto window : windows)
     window->set_visible (false);
 
-  // Not really necessary, when Gtk::Widget::set_visible(false) is called,
-  // unless Gio::Application::hold() has been called without a corresponding
-  // call to Gio::Application::release().
   quit ();
 }
 

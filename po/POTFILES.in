@@ -2,3 +2,4 @@ src/packitup_window.cc
 src/window.ui
 src/gears_menu.ui
 src/prefs.ui
+src/license.ui

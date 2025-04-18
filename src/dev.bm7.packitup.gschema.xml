@@ -4,6 +4,7 @@ PackItUP! Never run out of beer again.
 Copyright (C) 2025  edu-bm7
 
 This file is part of PackItUP!.
+
 PackItUP! is free software: you can redistribute it and/or modify it
 under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
@@ -17,27 +18,23 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with PackItUP!. If not, see <https://www.gnu.org/licenses/>.
 -->
-<interface>
-    <menu id="menu">
-	<section>
-	    <item>
-		<attribute name="label" translatable="yes">_Preferences</attribute>
-		<attribute name="action">app.preferences</attribute>
-	    </item>
-        </section>
-        <section>
-	    <item>
-		<attribute name="label" translatable="yes">_License</attribute>
-		<attribute name="action">app.license</attribute>
-	    </item>
-	</section>
-	<section>
-	    <item>
-		<attribute name="label" translatable="yes">_Quit</attribute>
-		<attribute name="action">app.quit</attribute>
-	    </item>
-	</section>
-    </menu>
+<schemalist>
+  <schema path="/dev/bm7/packitup/src/" id="dev.bm7.packitup">
+    <key name="font" type="s">
+      <default>'Monospace 10'</default>
+      <summary>Font</summary>
+      <description>The font to be used for content.</description>
+    </key>
+    <key name="transition" type="s">
+      <choices>
+        <choice value='crossfade'/>
+        <choice value='slide-right'/>
+        <choice value='slide-down'/>
+      </choices>
+      <default>'crossfade'</default>
+      <summary>Transition</summary>
+      <description>The transition to use when switching tabs.</description>
+    </key>
+  </schema>
+</schemalist>
 <!-- vim: sts=2 sw=2 et -->
-</interface>
-

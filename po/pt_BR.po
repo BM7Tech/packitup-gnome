@@ -1,16 +1,28 @@
-# Portuguese translations for packitup package
-# Traduções em português brasileiro para o pacote packitup.
-# Copyright (C) 2025 THE packitup'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the packitup package.
-#  <eduardo@bm7>, 2025.
+# PackItUP! Never run out of beer again.
+# Copyright (C) 2025  edu-bm7 <edubm7@bm7.dev>
+#
+# This file is part of PackItUP!.
+#
+# PackItUP! is free software: you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# PackItUP! is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with PackItUP!. If not, see <https://www.gnu.org/licenses/>.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: packitup\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-16 20:49-0300\n"
-"PO-Revision-Date: 2025-04-16 20:52-0300\n"
-"Last-Translator: <eduardo@bm7>\n"
+"POT-Creation-Date: 2025-04-17 19:34-0300\n"
+"PO-Revision-Date: 2025-04-17 21:08-0300\n"
+"Last-Translator:  <edubm7@bm7.dev>\n"
 "Language-Team: Brazilian Portuguese <ldpbr-"
 "translation@lists.sourceforge.net>\n"
 "Language: pt_BR\n"
@@ -18,12 +30,11 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 3.5\n"
 
-#: src/packitup_window.cc:131
+#: src/packitup_window.cc:137
 msgid ""
 "This is our application for how many packs of beer you and your friends need "
-"to buy so you won't be short on beer :)\n"
+"to buy so you won't be out of beer :)\n"
 "\n"
 "The calculation takes how many people drinks more than moderated, and how "
 "many drinks alright\n"
@@ -31,188 +42,192 @@ msgid ""
 "More than moderated would be more than or equal to 2 packs that day(12 "
 "bottles of 269ml or 8oz, ~3.0L or ~96oz).\n"
 "\n"
-"Keep in mind that in order to not let you go short on beer, this calculation "
+"Keep in mind that in order to not let you go out of beer this calculation "
 "will round up the amount of packs needed.\n"
 "\n"
 "The values in Liters and Ounces aren't direct convertable. It takes into "
 "account localization."
 msgstr ""
-"Esse é o nosso aplicativo para calcular quantos engradados de cerveja você e "
-"seus amigos precisam comprar para não faltar cerveja :)\n"
-"\n"
-"O cálculo considera quantas pessoa bebem mais que moderado e quantas bebem "
-"uma quantidade normal.\n"
-"\n"
-"Mais que moderado seria maior ou igual a 2 engradados no dado dia (12 latas "
-"de 269ml ou 8oz, ~3.0L ou ~96oz).\n"
-"\n"
-"Tenha em mente que para que não o falte cerveja, esse cálculo vai arredondar "
-"para cima o número de engradados necessários.\n"
-"\n"
-"Os valores em Litros e Onças não podem ser convertidos diretamente. Eles "
-"estão considerando regionalidade."
 
-#: src/packitup_window.cc:156
+#: src/packitup_window.cc:162
 msgid "Result"
-msgstr "Resultado"
+msgstr ""
 
-#: src/packitup_window.cc:183
+#: src/packitup_window.cc:189
 msgid "Select the values above and click \"Calculate\" to begin..."
-msgstr "Selecione os valores acima e clique em \"Calcular\" para começar..."
+msgstr ""
 
-#: src/packitup_window.cc:279
+#: src/packitup_window.cc:283
 msgid "8oz"
-msgstr "8oz"
+msgstr ""
 
-#: src/packitup_window.cc:280
+#: src/packitup_window.cc:284
 msgid "11.2oz"
-msgstr "11.2oz"
+msgstr ""
 
-#: src/packitup_window.cc:281
+#: src/packitup_window.cc:285
 msgid "11.5oz"
-msgstr "11.5oz"
+msgstr ""
 
-#: src/packitup_window.cc:282
+#: src/packitup_window.cc:286
 msgid "12oz"
-msgstr "12oz"
+msgstr ""
 
-#: src/packitup_window.cc:286 src/window.ui:121
+#: src/packitup_window.cc:290 src/window.ui:141
 msgid "250ml"
-msgstr "250ml"
+msgstr ""
 
-#: src/packitup_window.cc:287 src/window.ui:122
+#: src/packitup_window.cc:291 src/window.ui:142
 msgid "269ml"
-msgstr "269ml"
+msgstr ""
 
-#: src/packitup_window.cc:288 src/window.ui:123
+#: src/packitup_window.cc:292 src/window.ui:143
 msgid "330ml"
-msgstr "330ml"
+msgstr ""
 
-#: src/packitup_window.cc:289 src/window.ui:124
+#: src/packitup_window.cc:293 src/window.ui:144
 msgid "355ml"
-msgstr "355ml"
+msgstr ""
 
-#: src/packitup_window.cc:347
+#: src/packitup_window.cc:351
 msgid "The total number of packs you might need: "
-msgstr "O número total de engradados que você pode precisar é: "
+msgstr ""
 
-#: src/packitup_window.cc:357 src/packitup_window.cc:386
+#: src/packitup_window.cc:361 src/packitup_window.cc:390
 msgid "%1"
-msgstr "%1"
+msgstr ""
 
-#: src/packitup_window.cc:365
+#: src/packitup_window.cc:369
 msgid ""
 "\n"
 "You might need "
 msgstr ""
-"\n"
-"Voce pode precisar de "
 
-#: src/packitup_window.cc:372
+#: src/packitup_window.cc:376
 msgid "%1%2"
-msgstr "%1%2"
+msgstr ""
 
-#: src/packitup_window.cc:379
+#: src/packitup_window.cc:383
 msgid " of beer for "
-msgstr " de cerveja para "
+msgstr ""
 
-#: src/packitup_window.cc:393
+#: src/packitup_window.cc:397
 msgid " people.\n"
-msgstr " pessoas.\n"
+msgstr ""
 
-#: src/packitup_window.cc:395
+#: src/packitup_window.cc:399
 msgid " person.\n"
-msgstr " pessoa.\n"
-
-#: src/packitup_window.cc:403
-msgid "packs"
-msgstr "engradados"
-
-#: src/packitup_window.cc:405
-msgid "pack"
-msgstr "engradado"
+msgstr ""
 
 #: src/packitup_window.cc:407
+msgid "packs"
+msgstr ""
+
+#: src/packitup_window.cc:409
+msgid "pack"
+msgstr ""
+
+#: src/packitup_window.cc:411
 msgid "%1 %2 of beer have %3%4."
-msgstr "%1 %2 de cerveja têm %3%4."
+msgstr ""
 
-#: src/window.ui:4 src/window.ui:13
+#: src/window.ui:24 src/window.ui:33
 msgid "Pack It UP!"
-msgstr "Pack it UP!"
+msgstr ""
 
-#: src/window.ui:39
+#: src/window.ui:59
 msgid "About"
-msgstr "Sobre"
+msgstr ""
 
-#: src/window.ui:57
+#: src/window.ui:77
 msgid "Packs Calculator"
-msgstr "Cálculo de Engradados"
+msgstr ""
 
-#: src/window.ui:79
+#: src/window.ui:99
 msgid "Pack size:"
-msgstr "Tamanho do engradado:"
-
-#: src/window.ui:90
-msgid "6"
-msgstr "6"
-
-#: src/window.ui:91
-msgid "8"
-msgstr "8"
-
-#: src/window.ui:92
-msgid "12"
-msgstr "12"
-
-#: src/window.ui:93
-msgid "15"
-msgstr "15"
-
-#: src/window.ui:94
-msgid "24"
-msgstr "24"
-
-#: src/window.ui:95
-msgid "30"
-msgstr "30"
+msgstr ""
 
 #: src/window.ui:110
+msgid "6"
+msgstr ""
+
+#: src/window.ui:111
+msgid "8"
+msgstr ""
+
+#: src/window.ui:112
+msgid "12"
+msgstr ""
+
+#: src/window.ui:113
+msgid "15"
+msgstr ""
+
+#: src/window.ui:114
+msgid "24"
+msgstr ""
+
+#: src/window.ui:115
+msgid "30"
+msgstr ""
+
+#: src/window.ui:130
 msgid "Beer bottle/can size:"
-msgstr "Tamanho da garrafa/lata:"
+msgstr ""
 
-#: src/window.ui:141
+#: src/window.ui:161
 msgid "Drinks more than moderate:"
-msgstr "Bebem mais que moderado:"
+msgstr ""
 
-#: src/window.ui:171
+#: src/window.ui:191
 msgid "Drinks alright:"
-msgstr "Bebem o normal:"
+msgstr ""
 
-#: src/window.ui:201
+#: src/window.ui:221
 msgid "Select the Unit:"
-msgstr "Selecione a Unidade de medida:"
+msgstr ""
 
-#: src/window.ui:212
+#: src/window.ui:232
 msgid "Liters"
-msgstr "Litros"
-
-#: src/window.ui:213
-msgid "Ounces"
-msgstr "Onças"
+msgstr ""
 
 #: src/window.ui:233
+msgid "Ounces"
+msgstr ""
+
+#: src/window.ui:253
 msgctxt "button2"
 msgid "Calculate"
-msgstr "Calcular"
+msgstr ""
 
-#: src/gears_menu.ui:6
+#: src/gears_menu.ui:24
 msgid "_Preferences"
-msgstr "_Preferências"
+msgstr ""
 
-#: src/gears_menu.ui:12
+#: src/gears_menu.ui:30
+msgid "_License"
+msgstr ""
+
+#: src/gears_menu.ui:36
 msgid "_Quit"
-msgstr "_Sair"
+msgstr ""
 
-#: src/prefs.ui:4
+#: src/prefs.ui:23
 msgid "Preferences"
-msgstr "Preferências"
+msgstr ""
+
+#: src/prefs.ui:37
+msgid "_Font:"
+msgstr ""
+
+#: src/prefs.ui:60
+msgid "_Transition:"
+msgstr ""
+
+#: src/prefs.ui:80
+msgid "Close"
+msgstr ""
+
+#: src/license.ui:24 src/license.ui:35
+msgid "License"
+msgstr ""

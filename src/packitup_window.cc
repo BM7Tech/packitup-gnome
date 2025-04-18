@@ -1,16 +1,22 @@
-/* **************************************************************************
- */
-/*                                                                            */
-/*                                                        :::      :::::::: */
-/*   packitup_window.cc                                 :+:      :+:    :+: */
-/*                                                    +:+ +:+         +:+ */
-/*   By: ebezerra <ebezerra@student.42sp.org.br>    +#+  +:+       +#+ */
-/*                                                +#+#+#+#+#+   +#+ */
-/*   Created: 2025/04/14 06:55:37 by ebezerra          #+#    #+# */
-/*   Updated: 2025/04/14 07:00:26 by ebezerra         ###   ########.fr */
-/*                                                                            */
-/* **************************************************************************
- */
+/*
+ * PackItUP! Never run out of beer again.
+ * Copyright (C) 2025  edu-bm7
+ *
+ * This file is part of PackItUP!.
+ *
+ * PackItUP! is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * PackItUP! is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with PackItUP!. If not, see <https://www.gnu.org/licenses/>.
+ * */
 
 #include "packitup_window.h"
 #include "giomm/settings.h"
@@ -124,18 +130,18 @@ PackitupWindow::PackitupWindow (BaseObjectType *cobject,
   auto m_refInfoBuffer = m_info_view->get_buffer ();
 
   // Bind font settings to infoTextBuffer
-  m_refSettings = Gio::Settings::create ("org.gtkmm.packitup");
+  m_refSettings = Gio::Settings::create ("dev.bm7.packitup");
   auto m_refTagInfoFont = m_refInfoBuffer->create_tag ();
   m_refSettings->bind ("font", m_refTagInfoFont->property_font ());
   m_refInfoBuffer->set_text (_ (
       "This is our application for how many packs of beer you and your "
-      "friends need to buy so you won't be short on beer :)\n\n"
+      "friends need to buy so you won't be out of beer :)\n\n"
       "The calculation takes how many people drinks more than moderated, and "
       "how many drinks alright\n\n"
       "More than moderated would be more than or equal to 2 packs that "
       "day(12 bottles "
       "of 269ml or 8oz, ~3.0L or ~96oz).\n\n"
-      "Keep in mind that in order to not let you go short on beer, this "
+      "Keep in mind that in order to not let you go out of beer this "
       "calculation will round up the amount of packs needed.\n\n"
       "The values in Liters and Ounces aren't direct convertable. It takes "
       "into account localization."));
@@ -190,12 +196,10 @@ PackitupWindow::PackitupWindow (BaseObjectType *cobject,
   if (!m_gears)
     throw std::runtime_error ("no \"gears\" object in window.ui");
 
-  m_gears->set_icon_name ("open-menu-symbolic");
-
   // Connect the menu(gears_menu.ui) to the MenuButton m_gears
   // The connection between action and menu item is specified in gears_menu.ui)
   auto menu_builder = Gtk::Builder::create_from_resource (
-      "/org/gtkmm/packitup/src/gears_menu.ui");
+      "/dev/bm7/packitup/src/gears_menu.ui");
   auto menu = menu_builder->get_object<Gio::MenuModel> ("menu");
   if (!menu)
     throw std::runtime_error ("No \"menu\" object in gears_menu.ui");
@@ -217,7 +221,7 @@ PackitupWindow::PackitupWindow (BaseObjectType *cobject,
       [] (const auto &section, const auto &error) {
         on_parsing_error (section, error);
       });
-  m_refCssProvider->load_from_resource ("/org/gtkmm/packitup/src/styles.css");
+  m_refCssProvider->load_from_resource ("/dev/bm7/packitup/src/styles.css");
 #if HAS_STYLE_PROVIDER_ADD_PROVIDER_FOR_DISPLAY
   Gtk::StyleProvider::add_provider_for_display (
       get_display (), m_refCssProvider, GTK_STYLE_PROVIDER_PRIORITY_USER);
@@ -256,8 +260,8 @@ PackitupWindow::on_parsing_error (
 PackitupWindow *
 PackitupWindow::create ()
 {
-  auto refBuilder = Gtk::Builder::create_from_resource (
-      "/org/gtkmm/packitup/src/window.ui");
+  auto refBuilder
+      = Gtk::Builder::create_from_resource ("/dev/bm7/packitup/src/window.ui");
 
   auto window = Gtk::Builder::get_widget_derived<PackitupWindow> (
       refBuilder, "app_window");

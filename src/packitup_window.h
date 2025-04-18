@@ -1,3 +1,23 @@
+/*
+ * PackItUP! Never run out of beer again.
+ * Copyright (C) 2025  edu-bm7
+ *
+ * This file is part of PackItUP!.
+ *
+ * PackItUP! is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * PackItUP! is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with PackItUP!. If not, see <https://www.gnu.org/licenses/>.
+ * */
+
 #ifndef GTKMM_PACKITUP_WINDOW_H
 #define GTKMM_PACKITUP_WINDOW_H
 
@@ -21,7 +41,6 @@ public:
 protected:
   Glib::RefPtr<Gtk::Builder> m_refBuilder;
   Glib::RefPtr<Gio::Settings> m_refSettings;
-  Glib::RefPtr<Gtk::TextMark> m_refMark;
   Glib::RefPtr<Gtk::TextTag> m_refTagFont;
   Glib::RefPtr<Gtk::TextBuffer> m_refBuffer;
   Glib::RefPtr<Gtk::CssProvider> m_refCssProvider;

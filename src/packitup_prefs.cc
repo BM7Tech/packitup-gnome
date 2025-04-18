@@ -1,6 +1,27 @@
+/*
+ * PackItUP! Never run out of beer again.
+ * Copyright (C) 2025  edu-bm7
+ *
+ * This file is part of PackItUP!.
+ *
+ * PackItUP! is free software: you can redistribute it and/or modify it
+ * under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * PackItUP! is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with PackItUP!. If not, see <https://www.gnu.org/licenses/>.
+ * */
+
 #include "packitup_prefs.h"
 #include "packitup_window.h"
 #include <array>
+#include <glibmm/i18n.h>
 #include <stdexcept>
 #include <string>
 
@@ -43,11 +64,11 @@ PackitupPrefs::PackitupPrefs (BaseObjectType *cobject,
 
   auto string_list = Gtk::StringList::create ();
   for (const auto &transitionType : transitionTypes)
-    string_list->append (transitionType.text);
+    string_list->append (_ (transitionType.text.c_str ()));
 
   m_transition->set_model (string_list);
 
-  m_settings = Gio::Settings::create ("org.gtkmm.packitup");
+  m_settings = Gio::Settings::create ("dev.bm7.packitup");
 
   // Connect preferences properties to the Gio::Settings.
 #if HAS_GIO_SETTINGS_BIND_WITH_MAPPING
@@ -83,8 +104,8 @@ PackitupPrefs::PackitupPrefs (BaseObjectType *cobject,
 PackitupPrefs *
 PackitupPrefs::create (Gtk::Window &parent)
 {
-  auto refBuilder = Gtk::Builder::create_from_resource (
-      "/org/gtkmm/packitup/src/prefs.ui");
+  auto refBuilder
+      = Gtk::Builder::create_from_resource ("/dev/bm7/packitup/src/prefs.ui");
 
   auto dialog = refBuilder->get_widget_derived<PackitupPrefs> (refBuilder,
                                                                "prefs_dialog");

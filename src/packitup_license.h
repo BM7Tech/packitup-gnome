@@ -3,7 +3,7 @@
  * Copyright (C) 2025  edu-bm7
  *
  * This file is part of PackItUP!.
- * 
+ *
  * PackItUP! is free software: you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
@@ -17,22 +17,24 @@
  * You should have received a copy of the GNU General Public License
  * along with PackItUP!. If not, see <https://www.gnu.org/licenses/>.
  * */
-windowcontrols.end>button.close {
-	margin: 14px 0px;
-	padding: 3px;
-	min-height: 16px;
-	min-width: 16px;
-	color: @theme_fg_color;
-	background-color: unset;
-}
 
-windowcontrols.end>button.close:hover {
-	margin: 14px 0px;
-	color: @theme_bg_color;
-	background-color: @theme_fg_color;
-}
+#ifndef PACKITUP_LICENSE_H
+#define PACKITUP_LICENSE_H
 
-windowcontrols.start>image {
-	min-height: 22px;
-	min-width: 22px;
-}
+#include <gtkmm.h>
+
+class PackitupLicense : public Gtk::Window
+{
+public:
+  PackitupLicense (BaseObjectType *cobject,
+                   const Glib::RefPtr<Gtk::Builder> &refBuilder);
+  static PackitupLicense *create (Gtk::Window &parent);
+  // void on_button_close ();
+
+protected:
+  Glib::RefPtr<Gtk::Builder> m_refLicenseBuilder;
+  Glib::RefPtr<Gtk::TextBuffer> m_refLicenseBuffer;
+};
+
+#endif // PACKITUP_LICENSE_H
+// vim: sts=2 sw=2 et

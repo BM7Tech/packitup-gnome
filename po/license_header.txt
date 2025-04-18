@@ -1,5 +1,5 @@
 # PackItUP! Never run out of beer again.
-# Copyright (C) 2025  edu-bm7
+# Copyright (C) 2025  edu-bm7 <edubm7@bm7.dev>
 # 
 # This file is part of PackItUP!.
 # 
@@ -15,18 +15,3 @@
 # 
 # You should have received a copy of the GNU General Public License
 # along with PackItUP!. If not, see <https://www.gnu.org/licenses/>.
-
-project('packitup', 'c', 'cpp',
-  version: '0.0.0',
-  license: 'GPL-3.0-or-later',
-  default_options: [
-    'cpp_std=c++17'
-  ]
-)
-install_data(
-  'LICENSE',
-  install_dir: get_option('datadir') / 'licenses' / meson.project_name()
-)
-subdir('po')
-subdir('src')
-

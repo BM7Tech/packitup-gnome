@@ -1,9 +1,26 @@
+# PackItUP! Never run out of beer again.
+# Copyright (C) 2025  edu-bm7
+# 
+# This file is part of PackItUP!.
+#
+# PackItUP! is free software: you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+# 
+# PackItUP! is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with PackItUP!. If not, see <https://www.gnu.org/licenses/>.
 
 program_name = 'packitup'
 
 schemas_dir =  get_option('prefix') / get_option('datadir') / 'glib-2.0' / 'schemas'
 install_data(
-  'org.gtkmm.packitup.gschema.xml',
+  'dev.bm7.packitup.gschema.xml',
   install_dir: schemas_dir )
 
 gnome = import('gnome')
@@ -13,7 +30,7 @@ resources = gnome.compile_resources('resources',
                                     'packitup.gresource.xml',
                                     source_dir: '.')
 
-schemas_file = files('org.gtkmm.packitup.gschema.xml')
+schemas_file = files('dev.bm7.packitup.gschema.xml')
 install_data(
   'icons/hicolor/16x16/apps/packitup.png',
   install_dir: get_option('datadir') / 'icons/hicolor/16x16/apps'
@@ -67,6 +84,7 @@ cpp_sources = [
   'packitup.cc',
   'packitup_window.cc',
   'packitup_prefs.cc',
+  'packitup_license.cc',
 ]
 
 executable(program_name,
@@ -98,6 +116,6 @@ run_target('install-desktop-file',
 run_target('install-gschema-file',
   command: [
     python3, install_cmd, 'gschema',
-    meson.current_source_dir() / 'org.gtkmm.packitup.gschema.xml',
+    meson.current_source_dir() / 'dev.bm7.packitup.gschema.xml',
   ]
 )
