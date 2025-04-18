@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 PackItUP! Never run out of beer again.
-Copyright (C) 2025  edu-bm7
+Copyright (C) 2025  edu-bm7 <edubm7@bm7.dev>
 
 This file is part of PackItUP!.
 
@@ -259,5 +259,5 @@ along with PackItUP!. If not, see <https://www.gnu.org/licenses/>.
       </object>
     </child>
   </object>
-</interface>
 <!-- vim: sts=2 sw=2 et -->
+</interface>

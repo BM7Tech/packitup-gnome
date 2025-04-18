@@ -1,6 +1,6 @@
 /*
  * PackItUP! Never run out of beer again.
- * Copyright (C) 2025  edu-bm7
+ * Copyright (C) 2025  edu-bm7 <edubm7@bm7.dev>
  *
  * This file is part of PackItUP!.
  *
@@ -18,8 +18,8 @@
  * along with PackItUP!. If not, see <https://www.gnu.org/licenses/>.
  * */
 
-#ifndef GTKMM_PACKITUP_WINDOW_H
-#define GTKMM_PACKITUP_WINDOW_H
+#ifndef PACKITUP_WINDOW_H
+#define PACKITUP_WINDOW_H
 
 #include "gtkmm/revealer.h"
 #include "gtkmm/stringlist.h"

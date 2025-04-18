@@ -1,6 +1,6 @@
 /*
  * PackItUP! Never run out of beer again.
- * Copyright (C) 2025  edu-bm7
+ * Copyright (C) 2025  edu-bm7 <edubm7@bm7.dev>
  *
  * This file is part of PackItUP!.
  *
@@ -43,8 +43,8 @@ private:
   PackitupWindow *create_appwindow ();
   void on_action_quit ();
   void on_action_preferences ();
-  void on_action_license ();
+  void on_action_about ();
 };
 
-#endif // GTKMM_PACKITUP_H
+#endif // PACKITUP_H
 // vim: sts=2 sw=2 et

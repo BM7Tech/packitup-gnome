@@ -1,6 +1,6 @@
 /*
  * PackItUP! Never run out of beer again.
- * Copyright (C) 2025  edu-bm7
+ * Copyright (C) 2025  edu-bm7 <edubm7@bm7.dev>
  *
  * This file is part of PackItUP!.
  *

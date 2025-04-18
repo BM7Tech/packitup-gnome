@@ -18,13 +18,9 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with PackItUP!. If not, see <https://www.gnu.org/licenses/>.
 -->
-<gresources>
-    <gresource prefix="/dev/bm7/packitup/src">
-    <file preprocess="xml-stripblanks">window.ui</file>
-    <file preprocess="xml-stripblanks">gears_menu.ui</file>
-    <file preprocess="xml-stripblanks">prefs.ui</file>
-    <file preprocess="xml-stripblanks">about.ui</file>
-    <file>packitup.png</file>
-    <file>styles.css</file>
-  </gresource>
-</gresources>
+
+<interface domain="packitup">
+  <object class="GtkAboutDialog" id="about_window">
+  </object>
+<!-- vim: sts=2 sw=2 et -->
+</interface>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 PackItUP! Never run out of beer again.
-Copyright (C) 2025  edu-bm7
+Copyright (C) 2025  edu-bm7 <edubm7@bm7.dev>
 
 This file is part of PackItUP!.
 PackItUP! is free software: you can redistribute it and/or modify it
@@ -27,8 +27,8 @@ along with PackItUP!. If not, see <https://www.gnu.org/licenses/>.
         </section>
         <section>
 	    <item>
-		<attribute name="label" translatable="yes">_License</attribute>
-		<attribute name="action">app.license</attribute>
+		<attribute name="label" translatable="yes">_About</attribute>
+		<attribute name="action">app.about</attribute>
 	    </item>
 	</section>
 	<section>

@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: packitup\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-17 19:34-0300\n"
+"POT-Creation-Date: 2025-04-18 00:22-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -130,6 +130,22 @@ msgstr ""
 msgid "%1 %2 of beer have %3%4."
 msgstr ""
 
+#: src/packitup_prefs.cc:65
+msgid "Fade"
+msgstr ""
+
+#: src/packitup_prefs.cc:66
+msgid "Slide Right"
+msgstr ""
+
+#: src/packitup_prefs.cc:67
+msgid "Slide Down"
+msgstr ""
+
+#: src/packitup.cc:128
+msgid "Never run out of beer again."
+msgstr ""
+
 #: src/window.ui:24 src/window.ui:33
 msgid "Pack It UP!"
 msgstr ""
@@ -204,7 +220,7 @@ msgid "_Preferences"
 msgstr ""
 
 #: src/gears_menu.ui:30
-msgid "_License"
+msgid "_About"
 msgstr ""
 
 #: src/gears_menu.ui:36
@@ -225,8 +241,4 @@ msgstr ""
 
 #: src/prefs.ui:80
 msgid "Close"
-msgstr ""
-
-#: src/license.ui:24 src/license.ui:35
-msgid "License"
 msgstr ""

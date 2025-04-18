@@ -1,5 +1,5 @@
 # PackItUP! Never run out of beer again.
-# Copyright (C) 2025  edu-bm7
+# Copyright (C) 2025  edu-bm7 <edubm7@bm7.dev>
 # 
 # This file is part of PackItUP!.
 #
@@ -84,7 +84,6 @@ cpp_sources = [
   'packitup.cc',
   'packitup_window.cc',
   'packitup_prefs.cc',
-  'packitup_license.cc',
 ]
 
 executable(program_name,

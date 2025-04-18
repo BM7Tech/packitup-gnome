@@ -1,6 +1,6 @@
 /*
  * PackItUP! Never run out of beer again.
- * Copyright (C) 2025  edu-bm7
+ * Copyright (C) 2025  edu-bm7 <edubm7@bm7.dev>
  *
  * This file is part of PackItUP!.
  *
@@ -19,10 +19,10 @@
  * */
 
 #include "packitup.h"
-#include "packitup_license.h"
 #include "packitup_prefs.h"
 #include "packitup_window.h"
 #include <exception>
+#include <glibmm/i18n.h>
 #include <iostream>
 
 Packitup::Packitup ()
@@ -57,13 +57,9 @@ Packitup::on_activate ()
 {
   try
     {
-      // The application has been started, so let's show a window.
       auto appwindow = create_appwindow ();
       appwindow->present ();
     }
-  // If create_appwindow() throws an exception (perhaps from Gtk::Builder),
-  // no window has been created, no window has been added to the application,
-  // and therefore the application will stop running.
   catch (const Glib::Error &ex)
     {
       std::cerr << "Glib::Error Packitup::on_activate(): " << ex.what ()
@@ -85,7 +81,7 @@ Packitup::on_startup ()
   // Actions and keyboard accelerators for the menu
   add_action ("preferences",
               sigc::mem_fun (*this, &Packitup::on_action_preferences));
-  add_action ("license", sigc::mem_fun (*this, &Packitup::on_action_license));
+  add_action ("about", sigc::mem_fun (*this, &Packitup::on_action_about));
   add_action ("quit", sigc::mem_fun (*this, &Packitup::on_action_quit));
   set_accel_for_action ("app.quit", "<Ctrl>Q");
 }
@@ -115,25 +111,39 @@ Packitup::on_action_preferences ()
 }
 
 void
-Packitup::on_action_license ()
+Packitup::on_action_about ()
 {
   try
     {
-      auto license_window = PackitupLicense::create (*get_active_window ());
-      license_window->present ();
+      auto refBuilder = Gtk::Builder::create_from_resource (
+          "/dev/bm7/packitup/src/about.ui");
+      auto dialog = refBuilder->get_widget<Gtk::AboutDialog> ("about_window");
 
-      // Delete when its hidden
-      license_window->signal_hide ().connect (
-          [license_window] () { delete license_window; });
+      dialog->set_transient_for (*get_active_window ());
+      dialog->set_program_name ("PackItUP!");
+      dialog->set_copyright ("Copyright (C) 2025  edu-bm7 <edubm7@bm7.dev>");
+      dialog->set_logo (Gdk::Texture::create_from_resource (
+          "/dev/bm7/packitup/src/packitup.png"));
+      dialog->set_license_type (Gtk::License::GPL_3_0);
+      dialog->set_wrap_license (true);
+      dialog->set_comments (_ ("Never run out of beer again."));
+      dialog->set_website ("https://github.com/edu-bm7/packitup.git");
+      dialog->set_website_label ("PackItUP! Website");
+      std::vector<Glib::ustring> list_authors;
+      list_authors.push_back ("edu-bm7 https://github.com/edu-bm7");
+      dialog->set_authors (list_authors);
+      dialog->set_visible (true);
+      dialog->present ();
+      dialog->signal_hide ().connect ([dialog] () { delete dialog; });
     }
   catch (const Glib::Error &ex)
     {
-      std::cerr << "Glib::Error: Packitup::on_action_license(): " << ex.what ()
+      std::cerr << "Glib::Error: Packitup::on_action_about(): " << ex.what ()
                 << std::endl;
     }
   catch (const std::exception &ex)
     {
-      std::cerr << "std::exception: Packitup::on_action_license(): "
+      std::cerr << "std::exception: Packitup::on_action_about(): "
                 << ex.what () << std::endl;
     }
 }

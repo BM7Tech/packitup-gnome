@@ -1,6 +1,6 @@
 /*
  * PackItUP! Never run out of beer again.
- * Copyright (C) 2025  edu-bm7
+ * Copyright (C) 2025  edu-bm7 <edubm7@bm7.dev>
  *
  * This file is part of PackItUP!.
  *
@@ -62,9 +62,15 @@ PackitupPrefs::PackitupPrefs (BaseObjectType *cobject,
   m_prefs_close->signal_clicked ().connect (
       sigc::mem_fun (*this, &PackitupPrefs::on_button_close));
 
+  const char *transition_fade = _ ("Fade");
+  const char *transition_slideRight = _ ("Slide Right");
+  const char *transition_slideDown = _ ("Slide Down");
+
   auto string_list = Gtk::StringList::create ();
-  for (const auto &transitionType : transitionTypes)
-    string_list->append (_ (transitionType.text.c_str ()));
+  // So we can translate the text
+  string_list->append (transition_fade);
+  string_list->append (transition_slideRight);
+  string_list->append (transition_slideDown);
 
   m_transition->set_model (string_list);
 

@@ -20,8 +20,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: packitup\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-17 19:34-0300\n"
-"PO-Revision-Date: 2025-04-17 21:09-0300\n"
+"POT-Creation-Date: 2025-04-18 00:22-0300\n"
+"PO-Revision-Date: 2025-04-18 00:24-0300\n"
 "Last-Translator:  <edubm7@bm7.dev>\n"
 "Language-Team: English\n"
 "Language: en_US\n"
@@ -146,6 +146,22 @@ msgstr "pack"
 msgid "%1 %2 of beer have %3%4."
 msgstr "%1 %2 of beer have %3%4."
 
+#: src/packitup_prefs.cc:65
+msgid "Fade"
+msgstr "Fade"
+
+#: src/packitup_prefs.cc:66
+msgid "Slide Right"
+msgstr "Slide Right"
+
+#: src/packitup_prefs.cc:67
+msgid "Slide Down"
+msgstr "Slide Down"
+
+#: src/packitup.cc:128
+msgid "Never run out of beer again."
+msgstr "Never run out of beer again."
+
 #: src/window.ui:24 src/window.ui:33
 msgid "Pack It UP!"
 msgstr "Pack It UP!"
@@ -220,8 +236,8 @@ msgid "_Preferences"
 msgstr "_Preferences"
 
 #: src/gears_menu.ui:30
-msgid "_License"
-msgstr "_License"
+msgid "_About"
+msgstr "_About"
 
 #: src/gears_menu.ui:36
 msgid "_Quit"
@@ -242,7 +258,3 @@ msgstr "_Transition:"
 #: src/prefs.ui:80
 msgid "Close"
 msgstr "Close"
-
-#: src/license.ui:24 src/license.ui:35
-msgid "License"
-msgstr "License"
