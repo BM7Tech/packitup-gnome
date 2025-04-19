@@ -215,21 +215,6 @@ PackitupWindow::PackitupWindow (BaseObjectType *cobject,
     {
       std::cerr << "Icon 'packitup' not found in theme!" << std::endl;
     }
-
-  m_refCssProvider = Gtk::CssProvider::create ();
-  m_refCssProvider->signal_parsing_error ().connect (
-      [] (const auto &section, const auto &error) {
-        on_parsing_error (section, error);
-      });
-  m_refCssProvider->load_from_resource ("/dev/bm7/packitup/src/styles.css");
-#if HAS_STYLE_PROVIDER_ADD_PROVIDER_FOR_DISPLAY
-  Gtk::StyleProvider::add_provider_for_display (
-      get_display (), m_refCssProvider, GTK_STYLE_PROVIDER_PRIORITY_USER);
-#else
-  Gtk::StyleContext::add_provider_for_display (
-      get_display (), m_refCssProvider,
-      GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-#endif
 }
 
 void

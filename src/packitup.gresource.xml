@@ -25,6 +25,5 @@ along with PackItUP!. If not, see <https://www.gnu.org/licenses/>.
     <file preprocess="xml-stripblanks">prefs.ui</file>
     <file preprocess="xml-stripblanks">about.ui</file>
     <file>packitup.png</file>
-    <file>styles.css</file>
   </gresource>
 </gresources>

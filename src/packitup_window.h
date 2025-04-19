@@ -43,7 +43,6 @@ protected:
   Glib::RefPtr<Gio::Settings> m_refSettings;
   Glib::RefPtr<Gtk::TextTag> m_refTagFont;
   Glib::RefPtr<Gtk::TextBuffer> m_refBuffer;
-  Glib::RefPtr<Gtk::CssProvider> m_refCssProvider;
   Glib::RefPtr<Gtk::StringList> m_bottle_size_list;
   Glib::RefPtr<Gtk::StringList> m_pack_size_list;
   Gtk::Revealer m_revealer;
