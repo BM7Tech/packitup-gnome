@@ -27,7 +27,7 @@ along with PackItUP!. If not, see <https://www.gnu.org/licenses/>.
     <property name="hide-on-close">True</property>
     <child type="titlebar">
       <object class="GtkHeaderBar" id="header">
-        <property name="decoration-layout">icon:close</property>
+        <property name="decoration-layout">icon:minimize,maximize,close</property>
         <property name="title-widget">
           <object class="GtkLabel">
             <property name="label" translatable="yes">Pack It UP!</property>

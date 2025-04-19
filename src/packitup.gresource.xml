@@ -24,6 +24,7 @@ along with PackItUP!. If not, see <https://www.gnu.org/licenses/>.
     <file preprocess="xml-stripblanks">gears_menu.ui</file>
     <file preprocess="xml-stripblanks">prefs.ui</file>
     <file preprocess="xml-stripblanks">about.ui</file>
+    <file>styles.css</file>
     <file>packitup.png</file>
   </gresource>
 </gresources>

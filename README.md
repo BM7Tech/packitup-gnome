@@ -9,10 +9,15 @@
 - You'll need a compositor to handle shadow, transparency, stacking and other effects.
 E.g. `picom`
 
+### Fonts
+- To run the app in a language that is not english(right now only pt-BR is available)
+you'll probally will need a font that supports it. E.g `noto-fonts`
+
 ### Ubuntu/Debian
 ```sh
 sudo apt update
 sudo apt install -y \
+  fonts-noto \
   libgtk-4-0 libgtk-4-dev \
   libgtkmm-4.0-1v5 libgtkmm-4.0-dev \
   build-essential meson ninja-build curl \
@@ -23,6 +28,7 @@ sudo apt install -y \
 ### Fedora/RHEL
 ```
 sudo dnf install -y \
+  google-noto-fonts-common \
   gtk4 gtk4-devel gtkmm4 gtkmm4-devel \
   meson ninja-build curl gcc-c++ pkgconf-pkg-config python3 \
   xdg-desktop-portal xdg-desktop-portal-gtk xdg-utils
@@ -32,6 +38,7 @@ sudo dnf install -y \
 ```
 sudo zypper refresh
 sudo zypper install -y \
+
   gtk4 gtk4-devel gtkmm4 gtkmm4-devel \
   meson ninja curl gcc-c++ pkg-config python3 \
   xdg-desktop-portal xdg-desktop-portal-gtk xdg-utils
@@ -40,6 +47,7 @@ sudo zypper install -y \
 ### Arch Linux
 ```
 sudo pacman -Syu --needed \
+  noto-fonts \
   base-devel meson ninja curl pkgconf python \
   gtk4 gtkmm-4.0 \
   xdg-desktop-portal xdg-desktop-portal-gtk xdg-utils
