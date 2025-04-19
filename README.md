@@ -1,5 +1,6 @@
 # Pack It UP!
 # ** WORK IN PROGRESS **
+## ** Packages names might be wrong, still testing ** 
 ### Build prerequisites
 
 - GCC 8+ or Clang 5+ (C++17 support)
@@ -40,7 +41,7 @@ sudo zypper install -y \
 ```
 sudo pacman -Syu --needed \
   base-devel meson ninja curl pkgconf python \
-  gtk4 gtkmm4 \
+  gtk4 gtkmm-4.0 \
   xdg-desktop-portal xdg-desktop-portal-gtk xdg-utils
 ```
 
