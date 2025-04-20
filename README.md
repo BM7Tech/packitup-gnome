@@ -1,4 +1,4 @@
-# Pack It UP!
+# Pack It UP! - Never run out of beer again.
 # ** WORK IN PROGRESS **
 ### ** Packages names might be wrong, still testing ** 
 ## Install
