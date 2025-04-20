@@ -1,7 +1,18 @@
 # Pack It UP!
 # ** WORK IN PROGRESS **
-## ** Packages names might be wrong, still testing ** 
-### Build prerequisites
+### ** Packages names might be wrong, still testing ** 
+## Install
+In the moment the only way to install is by cloning the repository:
+
+1. Install [Build prerequisites](#build-prerequisite)
+2. `git clone https://github.com/edu-bm7/packitup`
+3. `cd packitup`
+4. `meson setup builddir`
+    - At the moment you could install it with a custom location, but localization packages won't work(Translation packages). 
+    - If you wish to do it anyway, run `meson setup --prefix=YOUR_CUSTOM_INSTALL_PATH builddir`
+5. `sudo meson install -C builddir`
+
+### Build prerequisites {#build-prerequisite}
 
 - GCC 8+ or Clang 5+ (C++17 support)
 
@@ -38,7 +49,7 @@ sudo dnf install -y \
 ```
 sudo zypper refresh
 sudo zypper install -y \
-
+  google-noto-fonts \
   gtk4 gtk4-devel gtkmm4 gtkmm4-devel \
   meson ninja curl gcc-c++ pkg-config python3 \
   xdg-desktop-portal xdg-desktop-portal-gtk xdg-utils
@@ -56,6 +67,7 @@ sudo pacman -Syu --needed \
 ### Alpine Linux
 ```
 apk add \
+    font-noto-all
     build-base pkgconf meson ninja-build python3 curl \
     gtk4.0 gtk4.0-dev \
     xdg-desktop-portal xdg-desktop-portal-gtk xdg-utils
@@ -64,6 +76,7 @@ apk add \
 ### Void Linux
 ```
 sudo xbps-install -Sy \
+  noto-fonts-ttf \
   gtk4 gtk4-devel gtkmm4 gtkmm4-devel \
   base-devel meson ninja curl gcc pkgconf python3 \
   xdg-desktop-portal xdg-desktop-portal-gtk xdg-utils
