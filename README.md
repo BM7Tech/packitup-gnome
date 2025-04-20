@@ -4,7 +4,7 @@
 ## Install
 In the moment the only way to install is by cloning the repository:
 
-1. Install [Build prerequisites](#build-prerequisite)
+1. Install [Build prerequisites](#build-prerequisites)
 2. `git clone https://github.com/edu-bm7/packitup`
 3. `cd packitup`
 4. `meson setup builddir`
@@ -12,7 +12,7 @@ In the moment the only way to install is by cloning the repository:
     - If you wish to do it anyway, run `meson setup --prefix=YOUR_CUSTOM_INSTALL_PATH builddir`
 5. `sudo meson install -C builddir`
 
-### Build prerequisites {#build-prerequisite}
+### Build prerequisites
 
 - GCC 8+ or Clang 5+ (C++17 support)
 
