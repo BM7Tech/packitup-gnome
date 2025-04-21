@@ -1,8 +1,9 @@
-# Pack It UP! - Never run out of beer again.
-# WORK IN PROGRESS
+
+# Pack It UP! - Nunca mais fique sem cerveja.
+# Em Desenvolvimento
 [![English](https://img.shields.io/badge/README-en--US-blue)](./README.md)
 [![Português](https://img.shields.io/badge/README-pt--BR-green)](./README.pt-BR.md)
-### ***Packages names might be wrong, still testing*** 
+### ***Nomes dos pacotes podem estar errado, ainda estou testando*** 
 #### Tested on:
 - [ ] Ubuntu/Debian
 - [ ] Fedora Linux
@@ -12,26 +13,26 @@
 - [ ] Void Linux
 
 ## Install
-At the moment the only way to install is by cloning the repository:
+No momento a única maneira de instalar o nosso programa é clonando o repositório:
 
-1. Install [Build prerequisites](#build-prerequisites)
+1. Instale as [Dependências de compilação](#build-prerequisites)
 2. `git clone https://github.com/edu-bm7/packitup`
 3. `cd packitup`
 4. `meson setup builddir`
-    - At the moment you could install it with a custom location, but localization packages won't work(Translation packages). 
-    - If you wish to do it anyway, run `meson setup --prefix=YOUR_CUSTOM_INSTALL_PATH builddir`
+    - Se quiser você pode escolher um diretório customizado para instalação, porém, os pacotes de tradução não irão funcionar. 
+    - Se quiser faze-lo mesmo assim, `meson setup --prefix=SEU_DIRETORIO builddir`
 5. `ninja -C builddir`
 6. `sudo ninja -C builddir install`
 
 ## Uninstall
-To uninstall our program, if you have compiled it with `ninja` you can use:
+Para desinstalar nosso programa, caso tenha compilado com `ninja` você pode usar o comando:
 ```
 sudo ninja -C builddir uninstall
 ```
-Where `builddir` is the build directory you specified with `meson setup`
+Onde `builddir` é o diretório em que você especificou em `meson setup`
 
 
-## Build prerequisites
+## Requisítos para compilação
 
 - GCC 8+ or Clang 5+ (C++17 support)
 
@@ -91,12 +92,13 @@ sudo xbps-install -Sy \
   gtk4 gtk4-devel gtkmm4 gtkmm4-devel \
   base-devel meson ninja curl gcc pkgconf python3 \
   xdg-desktop-portal xdg-desktop-portal-gtk xdg-utils
+
 ```
 
-### Window Manager in X11
-- You'll need a compositor to handle shadow, transparency, stacking and other effects.
-E.g. `picom`
+### Gerenciadores de Janela no X11
+- Você irá precisar de um compositor para gerenciar sombras, transparência, stacking e outros efeitos.
+Ex: `picom`
 
-### Fonts
-- To run the app in a language that is not english(right now only pt-BR is available)
-you'll probally will need a font that supports it. E.g `noto-fonts`
+### Fontes
+- Para executar nosso aplicativo em uma lingaguem que não seja o inlês (no momento apenas português brasileiro é suportado) você provalvelmente precisará de um pacote de fontes que suportam os caracteres dessa lingua. Ex: `noto-fonts`
+
