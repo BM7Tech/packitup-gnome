@@ -1,6 +1,0 @@
-build
-builddir
-compile_commands.json
-.cache/
-hello-gtk
-objects/
