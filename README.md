@@ -14,7 +14,7 @@ In the moment the only way to install is by cloning the repository:
 6. `sudo ninja -C builddir install`
 
 ## Uninstall
-TO uninstall our program, if you have compiled it with `ninja` you can use:
+To uninstall our program, if you have compiled it with `ninja` you can use:
 ```
 sudo ninja -C builddir uninstall
 ```
