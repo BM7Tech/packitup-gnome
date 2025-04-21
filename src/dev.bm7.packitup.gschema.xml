@@ -21,7 +21,7 @@ along with PackItUP!. If not, see <https://www.gnu.org/licenses/>.
 <schemalist>
   <schema path="/dev/bm7/packitup/src/" id="dev.bm7.packitup">
     <key name="font" type="s">
-      <default>'Monospace 10'</default>
+      <default>'Noto Sans Regular 10'</default>
       <summary>Font</summary>
       <description>The font to be used for content.</description>
     </key>
