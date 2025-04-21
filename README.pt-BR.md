@@ -4,7 +4,7 @@
 [![English](https://img.shields.io/badge/README-en--US-blue)](./README.md)
 [![Português](https://img.shields.io/badge/README-pt--BR-green)](./README.pt-BR.md)
 ### ***Nomes dos pacotes podem estar errado, ainda estou testando*** 
-#### Tested on:
+#### Testado em:
 - [ ] Ubuntu/Debian
 - [ ] Fedora Linux
 - [ ] OpenSUSE
@@ -12,7 +12,7 @@
 - [x] Alpine Linux
 - [ ] Void Linux
 
-## Install
+## Instalar
 No momento a única maneira de instalar o nosso programa é clonando o repositório:
 
 1. Instale as [Dependências de compilação](#build-prerequisites)
@@ -24,7 +24,7 @@ No momento a única maneira de instalar o nosso programa é clonando o repositó
 5. `ninja -C builddir`
 6. `sudo ninja -C builddir install`
 
-## Uninstall
+## Desinstalar
 Para desinstalar nosso programa, caso tenha compilado com `ninja` você pode usar o comando:
 ```
 sudo ninja -C builddir uninstall
