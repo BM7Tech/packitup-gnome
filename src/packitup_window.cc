@@ -196,7 +196,8 @@ PackitupWindow::PackitupWindow (BaseObjectType *cobject,
                           m_refBuffer->end ());
   m_revealer.property_child_revealed ().signal_changed ().connect (
       sigc::mem_fun (*this, &PackitupWindow::on_result_changed));
-  //  App header menu, with preferences and quit button
+
+  // App Gears menu, with preferences, about and quit button
   m_gears = m_refBuilder->get_widget<Gtk::MenuButton> ("gears");
   if (!m_gears)
     throw std::runtime_error ("no \"gears\" object in window.ui");
@@ -334,44 +335,10 @@ PackitupWindow::on_result_clicked ()
 
   if (m_transition_in_progress)
     return;
-
   m_transition_in_progress = true;
 
+  // Start the hide animation
   m_revealer.set_reveal_child (false);
-  //  Get app values
-  auto more_Value = m_spin_button_more->get_value ();
-  auto alright_Value = m_spin_button_alright->get_value ();
-  auto unit_idx = m_unit_dropdown->get_selected ();
-  auto single_bottle_idx = m_bottle_size_dropdown->get_selected ();
-  auto pack_size_idx = m_pack_size_dropdown->get_selected ();
-  auto single_bottle
-      = std::stof (m_bottle_size_list->get_string (single_bottle_idx));
-  auto pack_size = std::stoi (m_pack_size_list->get_string (pack_size_idx));
-
-  // Set the Unit to use
-  if (unit_idx > 0)
-    unit = "oz";
-  else
-    {
-      unit = "L";
-      single_bottle /= 1000;
-    }
-
-  // Calculate the number of packs for that day they will have to buy
-  auto pack = single_bottle * pack_size;
-  float pack_size_max_value;
-  if (pack > 1.5)
-    pack_size_max_value = 1.5;
-  else
-    pack_size_max_value = pack;
-  amount_of_beer
-      = ((more_Value * 2 * pack_size_max_value) + more_Value * single_bottle)
-        + (pack_size_max_value * alright_Value
-           + (alright_Value * 2 * single_bottle));
-  number_of_packs = std::ceil (amount_of_beer / pack);
-  amount_of_beer_packs = pack * number_of_packs;
-  // The total number of people that will consume that amount of beer
-  total_people_number = more_Value + alright_Value;
 }
 
 void
@@ -379,6 +346,41 @@ PackitupWindow::on_result_changed ()
 {
   if (!m_revealer.get_reveal_child ())
     {
+      //  Get app values
+      auto more_Value = m_spin_button_more->get_value ();
+      auto alright_Value = m_spin_button_alright->get_value ();
+      auto unit_idx = m_unit_dropdown->get_selected ();
+      auto single_bottle_idx = m_bottle_size_dropdown->get_selected ();
+      auto pack_size_idx = m_pack_size_dropdown->get_selected ();
+      auto single_bottle
+          = std::stof (m_bottle_size_list->get_string (single_bottle_idx));
+      auto pack_size
+          = std::stoi (m_pack_size_list->get_string (pack_size_idx));
+
+      // Set the Unit to use
+      if (unit_idx > 0)
+        unit = "oz";
+      else
+        {
+          unit = "L";
+          single_bottle /= 1000;
+        }
+
+      // Calculate the number of packs for that day they will have to buy
+      auto pack = single_bottle * pack_size;
+      float pack_size_max_value;
+      if (pack > 1.5)
+        pack_size_max_value = 1.5;
+      else
+        pack_size_max_value = pack;
+      amount_of_beer = ((more_Value * 2 * pack_size_max_value)
+                        + more_Value * single_bottle)
+                       + (pack_size_max_value * alright_Value
+                          + (alright_Value * 2 * single_bottle));
+      number_of_packs = std::ceil (amount_of_beer / pack);
+      amount_of_beer_packs = pack * number_of_packs;
+      // The total number of people that will consume that amount of beer
+      total_people_number = more_Value + alright_Value;
 
       // Insert text with aproriate tags one at a time
       Glib::ustring initial_str
@@ -452,11 +454,8 @@ PackitupWindow::on_result_changed ()
 
       m_revealer.set_reveal_child (true);
     }
-  else if (m_revealer.get_reveal_child ())
-    {
-
-      m_transition_in_progress = false;
-    }
+  else
+    m_transition_in_progress = false;
 }
 
 // vim: sts=2 sw=2 et
