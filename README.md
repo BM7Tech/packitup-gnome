@@ -1,6 +1,13 @@
 # Pack It UP! - Never run out of beer again.
-# ** WORK IN PROGRESS **
-### ** Packages names might be wrong, still testing ** 
+# --- WORK IN PROGRESS ---
+### ***Packages names might be wrong, still testing*** 
+#### Tested on:
+- [ ] Ubuntu/Debian
+- [ ] Fedora Linux
+- [ ] OpenSUSE
+- [x] Arch Linux
+- [x] Alpine Linux
+- [ ] Void Linux
 ## Install
 In the moment the only way to install is by cloning the repository:
 
