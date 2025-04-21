@@ -52,7 +52,8 @@ sudo apt install -y \
 sudo dnf install -y \
   google-noto-fonts-common \
   gtk4 gtk4-devel gtkmm4 gtkmm4-devel \
-  meson ninja-build curl gcc-c++ pkgconf-pkg-config python3 \
+  @c-development @development-tools \
+  meson ninja-build curl pkgconf-pkg-config python3 \
   xdg-desktop-portal xdg-desktop-portal-gtk xdg-utils
 ```
 
