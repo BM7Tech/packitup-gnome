@@ -5,7 +5,7 @@
 ### ***Packages names might be wrong, still testing*** 
 #### Tested on:
 - [ ] Ubuntu/Debian
-- [ ] Fedora Linux
+- [x] Fedora Linux
 - [ ] OpenSUSE
 - [x] Arch Linux
 - [x] Alpine Linux

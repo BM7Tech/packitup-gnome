@@ -6,7 +6,7 @@
 ### ***Nomes dos pacotes podem estar errado, ainda estou testando*** 
 #### Testado em:
 - [ ] Ubuntu/Debian
-- [ ] Fedora Linux
+- [x] Fedora Linux
 - [ ] OpenSUSE
 - [x] Arch Linux
 - [x] Alpine Linux
