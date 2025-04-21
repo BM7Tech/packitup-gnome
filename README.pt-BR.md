@@ -20,7 +20,7 @@ No momento a única maneira de instalar o nosso programa é clonando o repositó
 3. `cd packitup`
 4. `meson setup builddir`
     - Se quiser você pode escolher um diretório customizado para instalação, porém, os pacotes de tradução não irão funcionar. 
-    - Se quiser faze-lo mesmo assim, `meson setup --prefix=SEU_DIRETORIO builddir`
+    - Se quiser fazê-lo mesmo assim, `meson setup --prefix=SEU_DIRETORIO builddir`
 5. `ninja -C builddir`
 6. `sudo ninja -C builddir install`
 
@@ -100,5 +100,5 @@ sudo xbps-install -Sy \
 Ex: `picom`
 
 ### Fontes
-- Para executar nosso aplicativo em uma lingaguem que não seja o inlês (no momento apenas português brasileiro é suportado) você provalvelmente precisará de um pacote de fontes que suportam os caracteres dessa lingua. Ex: `noto-fonts`
+- Para executar nosso aplicativo em uma lingaguem que não seja o inglês (no momento apenas português brasileiro é suportado) você provalvelmente precisará de um pacote de fontes que suportam os caracteres dessa lingua. Ex: `noto-fonts`
 
