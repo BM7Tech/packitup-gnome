@@ -19,6 +19,7 @@
  * */
 
 #include "packitup_window.h"
+#include "gio/gio.h"
 #include "giomm/settings.h"
 #include "glib/gi18n.h"
 #include "gtkmm/enums.h"
@@ -154,7 +155,15 @@ PackitupWindow::PackitupWindow (BaseObjectType *cobject,
                               m_refInfoBuffer->end ());
 
   // Bind settings menu to the TextView Revealer
-  m_refSettings->bind ("transition", m_revealer.property_transition_type ());
+  m_gnomeSettings = Gio::Settings::create ("org.gnome.desktop.interface");
+  m_refSettings->signal_changed ().connect (
+      sigc::mem_fun ((*this), &PackitupWindow::on_animation_changed));
+  m_gnomeSettings->signal_changed ().connect (
+      sigc::mem_fun ((*this), &PackitupWindow::on_animation_changed));
+  // m_refSettings->bind ("transition", m_revealer.property_transition_type
+  // ());
+
+  update_revealer_transition ();
 
   // App TextBuffer and TextView of the 'Calculate' button
   auto m_text_view = Gtk::make_managed<Gtk::TextView> ();
@@ -265,6 +274,24 @@ PackitupWindow::PackitupWindow (BaseObjectType *cobject,
       get_display (), m_refCssProvider,
       GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 #endif
+}
+
+void
+PackitupWindow::on_animation_changed (const Glib::ustring &key)
+{
+  if (key == "transition" || key == "enable-animations")
+    update_revealer_transition ();
+}
+
+void
+PackitupWindow::update_revealer_transition ()
+{
+  bool animations_on = m_gnomeSettings->get_boolean ("enable-animations");
+
+  if (animations_on)
+    m_refSettings->bind ("transition", m_revealer.property_transition_type ());
+  else
+    m_revealer.set_transition_type (Gtk::RevealerTransitionType::NONE);
 }
 
 void

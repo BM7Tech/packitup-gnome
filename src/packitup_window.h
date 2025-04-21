@@ -37,6 +37,8 @@ public:
   void on_result_clicked ();
   void on_result_changed ();
   void on_unit_dropdown_changed ();
+  void on_animation_changed (const Glib::ustring &key);
+  void update_revealer_transition ();
 
 protected:
   Glib::RefPtr<Gtk::Builder> m_refBuilder;
@@ -46,6 +48,7 @@ protected:
   Glib::RefPtr<Gtk::CssProvider> m_refCssProvider;
   Glib::RefPtr<Gtk::StringList> m_bottle_size_list;
   Glib::RefPtr<Gtk::StringList> m_pack_size_list;
+  Glib::RefPtr<Gio::Settings> m_gnomeSettings;
   Gtk::Revealer m_revealer;
   Gtk::Box *m_result_VBox{ nullptr };
   Gtk::Button *m_result_button{ nullptr };
