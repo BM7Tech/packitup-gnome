@@ -37,15 +37,19 @@ public:
   void on_result_clicked ();
   void on_result_changed ();
   void on_unit_dropdown_changed ();
-  void on_animation_changed (const Glib::ustring &key);
+  void on_any_settings_changed (const Glib::ustring &key);
   void update_revealer_transition ();
+  void reload_app_css ();
+  void reload_theme_css ();
+  Glib::ustring find_theme_css_path (const Glib::ustring &theme);
 
 protected:
   Glib::RefPtr<Gtk::Builder> m_refBuilder;
   Glib::RefPtr<Gio::Settings> m_refSettings;
   Glib::RefPtr<Gtk::TextTag> m_refTagFont;
   Glib::RefPtr<Gtk::TextBuffer> m_refBuffer;
-  Glib::RefPtr<Gtk::CssProvider> m_refCssProvider;
+  Glib::RefPtr<Gtk::CssProvider> m_refAppCssProvider;
+  Glib::RefPtr<Gtk::CssProvider> m_refThemeCssProvider;
   Glib::RefPtr<Gtk::StringList> m_bottle_size_list;
   Glib::RefPtr<Gtk::StringList> m_pack_size_list;
   Glib::RefPtr<Gio::Settings> m_gnomeSettings;

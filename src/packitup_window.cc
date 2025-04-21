@@ -22,6 +22,7 @@
 #include "gio/gio.h"
 #include "giomm/settings.h"
 #include "glib/gi18n.h"
+#include "glibmm/miscutils.h"
 #include "gtkmm/enums.h"
 #include "gtkmm/object.h"
 #include "gtkmm/scrolledwindow.h"
@@ -157,9 +158,9 @@ PackitupWindow::PackitupWindow (BaseObjectType *cobject,
   // Bind settings menu to the TextView Revealer
   m_gnomeSettings = Gio::Settings::create ("org.gnome.desktop.interface");
   m_refSettings->signal_changed ().connect (
-      sigc::mem_fun ((*this), &PackitupWindow::on_animation_changed));
+      sigc::mem_fun ((*this), &PackitupWindow::on_any_settings_changed));
   m_gnomeSettings->signal_changed ().connect (
-      sigc::mem_fun ((*this), &PackitupWindow::on_animation_changed));
+      sigc::mem_fun ((*this), &PackitupWindow::on_any_settings_changed));
   // m_refSettings->bind ("transition", m_revealer.property_transition_type
   // ());
 
@@ -260,25 +261,51 @@ PackitupWindow::PackitupWindow (BaseObjectType *cobject,
   else
     std::cerr << "Icon 'packitup' not found in theme!" << std::endl;
 
-  m_refCssProvider = Gtk::CssProvider::create ();
-  m_refCssProvider->signal_parsing_error ().connect (
+  m_refAppCssProvider = Gtk::CssProvider::create ();
+  m_refThemeCssProvider = Gtk::CssProvider::create ();
+  m_refAppCssProvider->signal_parsing_error ().connect (
       [] (const auto &section, const auto &error) {
         on_parsing_error (section, error);
       });
-  m_refCssProvider->load_from_resource ("/dev/bm7/packitup/src/styles.css");
+
 #if HAS_STYLE_PROVIDER_ADD_PROVIDER_FOR_DISPLAY
   Gtk::StyleProvider::add_provider_for_display (
-      get_display (), m_refCssProvider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+      get_display (), m_refAppCssProvider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+
+  Gtk::StyleProvider::add_provider_for_display (
+      get_display (), m_refThemeCssProvider, GTK_STYLE_PROVIDER_PRIORITY_USER);
 #else
   Gtk::StyleContext::add_provider_for_display (
-      get_display (), m_refCssProvider,
-      GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+      get_display (), m_refAppCssProvider, GTK_STYLE_PROVIDER_PRIORITY_THEME);
+  Gtk::StyleContext::add_provider_for_display (
+      get_display (), m_refThemeCssProvider,
+      GTK_STYLE_PROVIDER_PRIORITY_THEME);
 #endif
+  reload_theme_css ();
+  reload_app_css ();
 }
 
 void
-PackitupWindow::on_animation_changed (const Glib::ustring &key)
+PackitupWindow::reload_theme_css ()
 {
+  // Look up the current GTK theme name frok GtkSettings
+  auto theme = Gtk::Settings::get_default ()->property_gtk_theme_name ();
+  auto css_path = find_theme_css_path (theme);
+  m_refThemeCssProvider->load_from_path (css_path);
+}
+
+void
+PackitupWindow::reload_app_css ()
+{
+  // Reload our App CSS after we loaded the Theme CSS
+  m_refAppCssProvider->load_from_resource ("/dev/bm7/packitup/src/styles.css");
+}
+
+void
+PackitupWindow::on_any_settings_changed (const Glib::ustring &key)
+{
+  if (key == "color-scheme")
+    reload_theme_css ();
   if (key == "transition" || key == "enable-animations")
     update_revealer_transition ();
 }
@@ -287,11 +314,56 @@ void
 PackitupWindow::update_revealer_transition ()
 {
   bool animations_on = m_gnomeSettings->get_boolean ("enable-animations");
-
   if (animations_on)
     m_refSettings->bind ("transition", m_revealer.property_transition_type ());
   else
     m_revealer.set_transition_type (Gtk::RevealerTransitionType::NONE);
+}
+
+Glib::ustring
+PackitupWindow::find_theme_css_path (const Glib::ustring &theme)
+{
+  // Handle Dark Theme Switch
+  bool dark = (m_gnomeSettings->get_enum ("color-scheme") == 1);
+
+  // Split "Theme:dark" -> base="Theme" variant="dark"
+  auto sep = theme.find (":");
+  auto base = (sep == Glib::ustring::npos ? theme : theme.substr (0, sep));
+  auto variant = (sep == Glib::ustring::npos ? Glib::ustring{}
+                                             : theme.substr (sep + 1));
+  auto css_file = ((variant == "dark" || dark) ? "gtk-dark.css" : "gtk.css");
+
+  {
+    // User themes in ~/.config/gtk-4.0/gtk.css will always be applied
+    auto cfg = Glib::build_filename (Glib::get_user_config_dir (), "gtk-4.0",
+                                     css_file);
+    if (Gio::File::create_for_path (cfg)->query_exists ())
+      return cfg;
+  }
+
+  // helper to see if theme exist
+  auto exists = [&] (const Glib::ustring &p) {
+    return Gio::File::create_for_path (p)->query_exists ();
+  };
+
+  // User data dirs
+  {
+    auto user_data = Glib::build_filename (
+        Glib::get_user_data_dir (), "themes", base, "gtk-4.0", css_file);
+    if (exists (user_data))
+      return user_data;
+  }
+
+  // user system data dirs
+  for (auto &dir : Glib::get_system_data_dirs ())
+    {
+      auto path
+          = Glib::build_filename (dir, "themes", base, "gtk-4.0", css_file);
+      if (exists (path))
+        return path;
+    }
+
+  return {};
 }
 
 void
