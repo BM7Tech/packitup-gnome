@@ -24,6 +24,7 @@
 #include "gtkmm/enums.h"
 #include "gtkmm/object.h"
 #include "gtkmm/scrolledwindow.h"
+#include "gtkmm/settings.h"
 #include <glibmm/i18n.h>
 #include <iomanip>
 #include <iostream>
@@ -43,6 +44,10 @@ PackitupWindow::PackitupWindow (BaseObjectType *cobject,
       = m_refBuilder->get_widget<Gtk::SpinButton> ("spin_button_more");
   if (!m_spin_button_more)
     throw std::runtime_error ("no \"spin_button_more\" object in window.ui");
+
+  m_header = m_refBuilder->get_widget<Gtk::HeaderBar> ("header");
+  if (!m_header)
+    throw std::runtime_error ("no \"header\" object in window.ui");
 
   m_spin_button_alright
       = m_refBuilder->get_widget<Gtk::SpinButton> ("spin_button_alright");
@@ -195,7 +200,34 @@ PackitupWindow::PackitupWindow (BaseObjectType *cobject,
   m_gears = m_refBuilder->get_widget<Gtk::MenuButton> ("gears");
   if (!m_gears)
     throw std::runtime_error ("no \"gears\" object in window.ui");
+  // Ensure that the HeaderBar has at least icon:close decoration layout
+  auto gtk_Settings = Gtk::Settings::get_default ();
+  Glib::ustring default_layout
+      = gtk_Settings->property_gtk_decoration_layout ().get_value ();
 
+  Glib::ustring new_layout = default_layout;
+  // Split decoration layout into left/right around ':'
+  size_t pos = new_layout.find (":");
+  Glib::ustring left_side
+      = (pos == Glib::ustring::npos ? new_layout : new_layout.substr (0, pos));
+
+  Glib::ustring right_side
+      = (pos == Glib::ustring::npos ? "" : new_layout.substr (pos + 1));
+
+  size_t pos_r_close = right_side.find ("close");
+  size_t pos_l_close = left_side.find ("close");
+  bool close_on_left = false;
+  if (pos_r_close != Glib::ustring::npos)
+    new_layout = "icon:" + right_side;
+  else if (pos_l_close != Glib::ustring::npos)
+    {
+      new_layout = left_side + ":icon";
+      close_on_left = true;
+    }
+  else
+    new_layout = "icon:";
+
+  m_header->set_decoration_layout (new_layout);
   // Connect the menu(gears_menu.ui) to the MenuButton m_gears
   // The connection between action and menu item is specified in gears_menu.ui)
   auto menu_builder = Gtk::Builder::create_from_resource (
@@ -205,16 +237,18 @@ PackitupWindow::PackitupWindow (BaseObjectType *cobject,
     throw std::runtime_error ("No \"menu\" object in gears_menu.ui");
   m_gears->set_menu_model (menu);
 
+  // Pack the menu on the opposite side of the close menu
+  m_header->remove (*m_gears);
+  if (close_on_left)
+    m_header->pack_end (*m_gears);
+  else
+    m_header->pack_start (*m_gears);
   // Set the window icon from gresources
   auto icon_theme = Gtk::IconTheme::get_for_display (get_display ());
   if (icon_theme->has_icon ("packitup"))
-    {
-      set_icon_name ("packitup"); // Uses the theme icon
-    }
+    set_icon_name ("packitup"); // Uses the theme icon
   else
-    {
-      std::cerr << "Icon 'packitup' not found in theme!" << std::endl;
-    }
+    std::cerr << "Icon 'packitup' not found in theme!" << std::endl;
 
   m_refCssProvider = Gtk::CssProvider::create ();
   m_refCssProvider->signal_parsing_error ().connect (

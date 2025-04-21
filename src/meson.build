@@ -24,7 +24,8 @@ install_data(
   install_dir: schemas_dir )
 
 gnome = import('gnome')
-gtkmm_dep = dependency('gtkmm-4.0')
+
+
 
 resources = gnome.compile_resources('resources',
                                     'packitup.gresource.xml',
@@ -85,17 +86,20 @@ cpp_sources = [
   'packitup_window.cc',
   'packitup_prefs.cc',
 ]
+gtkmm_dep = dependency('gtkmm-4.0')
+glib_dep = dependency('glibmm-2.68')
+gio_dep = dependency('giomm-2.68')
+intl_dep = dependency('intl')
 
 executable(program_name,
   cpp_sources, resources, schemas,
-  dependencies: gtkmm_dep,
-  win_subsystem: 'windows',
   dependencies: [
-    dependency('glibmm-2.68'),
-    dependency('giomm-2.68'),
-    dependency('gtkmm-4.0'),
-    dependency('intl'),
+    gtkmm_dep,
+    glib_dep,
+    gio_dep,
+    intl_dep,
   ],
+  win_subsystem: 'windows',
   install: true
 )
 

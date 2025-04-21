@@ -52,6 +52,7 @@ protected:
   Gtk::DropDown *m_unit_dropdown{ nullptr };
   Gtk::DropDown *m_pack_size_dropdown{ nullptr };
   Gtk::DropDown *m_bottle_size_dropdown{ nullptr };
+  Gtk::HeaderBar *m_header{ nullptr };
 
   Gtk::MenuButton *m_gears{ nullptr };
   Gtk::SpinButton *m_spin_button_more{ nullptr };

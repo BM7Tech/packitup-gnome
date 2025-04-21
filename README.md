@@ -10,7 +10,16 @@ In the moment the only way to install is by cloning the repository:
 4. `meson setup builddir`
     - At the moment you could install it with a custom location, but localization packages won't work(Translation packages). 
     - If you wish to do it anyway, run `meson setup --prefix=YOUR_CUSTOM_INSTALL_PATH builddir`
-5. `sudo meson install -C builddir`
+5. `ninja -C builddir`
+6. `sudo ninja -C builddir install`
+
+## Uninstall
+TO uninstall our program, if you have compiled it with `ninja` you can use:
+```
+sudo ninja -C builddir uninstall
+```
+Where `builddir` is the build directory you specified with `meson setup`
+
 
 ### Build prerequisites
 
