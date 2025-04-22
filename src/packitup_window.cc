@@ -221,9 +221,9 @@ PackitupWindow::PackitupWindow (BaseObjectType *cobject,
   else
     std::cerr << "Icon 'packitup' not found in theme!" << std::endl;
 
-  m_refAppAdwaitaCssProvider = Gtk::CssProvider::create ();
+  m_refAppCustomCssProvider = Gtk::CssProvider::create ();
   m_refThemeCssProvider = Gtk::CssProvider::create ();
-  m_refAppAdwaitaCssProvider->signal_parsing_error ().connect (
+  m_refAppCustomCssProvider->signal_parsing_error ().connect (
       [] (const auto &section, const auto &error) {
         on_parsing_error (section, error);
       });
@@ -232,11 +232,11 @@ PackitupWindow::PackitupWindow (BaseObjectType *cobject,
   reload_all_css ();
 #if HAS_STYLE_PROVIDER_ADD_PROVIDER_FOR_DISPLAY
   Gtk::StyleProvider::add_provider_for_display (
-      get_display (), m_refAppAdwaitaCssProvider,
+      get_display (), m_refAppCustomCssProvider,
       GTK_STYLE_PROVIDER_PRIORITY_USER);
 #else
   Gtk::StyleContext::add_provider_for_display (
-      get_display (), m_refAppAdwaitaCssProvider,
+      get_display (), m_refAppCustomCssProvider,
       GTK_STYLE_PROVIDER_PRIORITY_USER);
 #endif
   m_providerAdded = true;
@@ -321,19 +321,22 @@ PackitupWindow::reload_theme_css ()
               get_display (), m_refThemeCssProvider,
               GTK_STYLE_PROVIDER_PRIORITY_USER);
           Gtk::StyleProvider::add_provider_for_display (
-              get_display (), m_refAppAdwaitaCssProvider,
+              get_display (), m_refAppCustomCssProvider,
               GTK_STYLE_PROVIDER_PRIORITY_USER);
 #else
           Gtk::StyleContext::add_provider_for_display (
               get_display (), m_refThemeCssProvider,
               GTK_STYLE_PROVIDER_PRIORITY_USER);
           Gtk::StyleContext::add_provider_for_display (
-              get_display (), m_refAppAdwaitaCssProvider,
+              get_display (), m_refApCustomCssProvider,
               GTK_STYLE_PROVIDER_PRIORITY_USER);
 #endif
           m_providerAdded = true;
         }
       m_refThemeCssProvider->load_from_path (css_path);
+      m_refAppCustomCssProvider->load_from_string (
+          "windowcontrols>image{ min-height:24px; min-width:24px; margin: "
+          "0px; }");
     }
   else
     {
@@ -343,39 +346,21 @@ PackitupWindow::reload_theme_css ()
           Gtk::StyleProvider::remove_provider_for_display (
               get_display (), m_refThemeCssProvider);
           // Gtk::StyleProvider::add_provider_for_display (
-          //     get_display (), m_refAppAdwaitaCssProvider,
+          //     get_display (), m_refAppCustomCssProvider,
           //     GTK_STYLE_PROVIDER_PRIORITY_USER);
 #else
           Gtk::StyleContext::remove_provider_for_display (
               get_display (), m_refThemeCssProvider);
           // Gtk::StyleContext::add_provider_for_display (
-          //     get_display (), m_refAppAdwaitaCssProvider,
+          //     get_display (), m_refAppCustomCssProvider,
           //     GTK_STYLE_PROVIDER_PRIORITY_USER);
 #endif
           m_providerAdded = false;
+          m_refAppCustomCssProvider->load_from_string (
+              "windowcontrols>image{ min-height:24px; min-width:24px; margin: "
+              "0px 0px 0px 6px; }");
         }
     }
-  reload_app_css ();
-}
-
-void
-PackitupWindow::reload_app_css ()
-{
-  // Reload our App CSS after we loaded the Theme CSS
-  m_refAppAdwaitaCssProvider->load_from_resource (
-      "/dev/bm7/packitup/src/styles.css");
-  auto refAppCustomCssProvider = Gtk::CssProvider::create ();
-  refAppCustomCssProvider->load_from_string (
-      "windowcontrols>image{ min-height:24px; min-width:24px; margin: 0px; }");
-#if HAS_STYLE_PROVIDER_ADD_PROVIDER_FOR_DISPLAY
-  Gtk::StyleProvider::add_provider_for_display (
-      get_display (), refAppCustomCssProvider,
-      GTK_STYLE_PROVIDER_PRIORITY_USER);
-#else
-  Gtk::StyleContext::add_provider_for_display (
-      get_display (), refAppCustomCssProvider,
-      GTK_STYLE_PROVIDER_PRIORITY_USER);
-#endif
 }
 
 void
