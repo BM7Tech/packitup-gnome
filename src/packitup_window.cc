@@ -359,7 +359,7 @@ PackitupWindow::reload_theme_css ()
           m_providerAdded = false;
         }
       Glib::ustring css = "windowcontrols>image{ min-height:24px; "
-                          "min-width:24px; margin: 0px 0px 0px 6px; }";
+                          "min-width:24px; margin: 0px 6px; }";
       m_refAppCustomCssProvider->load_from_string (css);
     }
 }
