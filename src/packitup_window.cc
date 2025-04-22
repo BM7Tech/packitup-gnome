@@ -269,14 +269,23 @@ PackitupWindow::PackitupWindow (BaseObjectType *cobject,
       [] (const auto &section, const auto &error) {
         on_parsing_error (section, error);
       });
-  m_providerAdded = false;
 
+  m_providerAdded = false;
   reload_all_css ();
+#if HAS_STYLE_PROVIDER_ADD_PROVIDER_FOR_DISPLAY
+  Gtk::StyleProvider::add_provider_for_display (
+      get_display (), m_refAppCssProvider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+#else
+  Gtk::StyleContext::add_provider_for_display (
+      get_display (), m_refAppCssProvider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+#endif
+  m_providerAdded = true;
   // GNOME Dark/Light theme switch
   auto gnome = Gio::Settings::create ("org.gnome.desktop.interface");
   gnome->signal_changed ().connect ([this] (const Glib::ustring &key) {
     if (key == "gtk-theme" || key == "color-scheme")
-      reload_all_css ();
+      std::cout << "Inside GNOME" << std::endl;
+    reload_all_css ();
   });
   m_gtkSettings->property_gtk_theme_name ().signal_changed ().connect (
       sigc::mem_fun (*this, &PackitupWindow::reload_all_css));
@@ -300,21 +309,17 @@ PackitupWindow::reload_theme_css ()
   auto css_path = find_theme_css_path (theme);
   if (!css_path.empty ())
     {
+      std::cout << "NOT EMPTY " << std::endl;
       if (!m_providerAdded)
         {
+          std::cout << "Adding provider " << std::endl;
 #if HAS_STYLE_PROVIDER_ADD_PROVIDER_FOR_DISPLAY
           Gtk::StyleProvider::add_provider_for_display (
               get_display (), m_refThemeCssProvider,
               GTK_STYLE_PROVIDER_PRIORITY_USER);
-          Gtk::StyleProvider::add_provider_for_display (
-              get_display (), m_refAppCssProvider,
-              GTK_STYLE_PROVIDER_PRIORITY_USER);
 #else
           Gtk::StyleContext::add_provider_for_display (
               get_display (), m_refThemeCssProvider,
-              GTK_STYLE_PROVIDER_PRIORITY_USER);
-          Gtk::StyleContext::add_provider_for_display (
-              get_display (), m_refAppCssProvider,
               GTK_STYLE_PROVIDER_PRIORITY_USER);
 #endif
           m_providerAdded = true;
@@ -323,8 +328,10 @@ PackitupWindow::reload_theme_css ()
     }
   else
     {
+      std::cout << "EMPTY " << std::endl;
       if (m_providerAdded)
         {
+          std::cout << "Removing provider" << std::endl;
 #if HAS_STYLE_PROVIDER_ADD_PROVIDER_FOR_DISPLAY
           Gtk::StyleProvider::remove_provider_for_display (
               get_display (), m_refThemeCssProvider);
