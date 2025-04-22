@@ -76,7 +76,7 @@ sudo pacman -Syu --needed \
   noto-fonts \
   base-devel meson ninja curl pkgconf python \
   gtk4 gtkmm-4.0 \
-  libxml gettext \
+  libxml2 gettext \
   xdg-desktop-portal xdg-desktop-portal-gtk xdg-utils
 ```
 
@@ -85,7 +85,8 @@ sudo pacman -Syu --needed \
 apk add \
     font-noto-all
     build-base pkgconf meson ninja-build python3 curl \
-    gtk4.0 gtk4.0-dev \
+    gtk4.0 gtk4.0-dev gtkmm4 gtkmm4-dev \
+    libxml2 gettext \
     xdg-desktop-portal xdg-desktop-portal-gtk xdg-utils
 ```
 
