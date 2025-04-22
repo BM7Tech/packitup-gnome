@@ -309,8 +309,8 @@ PackitupWindow::reload_theme_css ()
   auto css_path = find_theme_css_path (theme);
   if (css_path.empty ())
     {
-      auto resource = (dark ? "/org/gtk/libadwaita/gtm/4.0/libadwaita-dark.css"
-                            : "/org/gtk/libadwaita/gtm/4.0/libadwaita.css");
+      auto resource = (dark ? "/org/gtk/libadwaita/gtk/4.0/libadwaita-dark.css"
+                            : "/org/gtk/libadwaita/gtk/4.0/libadwaita.css");
       m_refThemeCssProvider->load_from_resource (resource);
       return;
     }
