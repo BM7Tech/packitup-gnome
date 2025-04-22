@@ -89,6 +89,7 @@ cpp_sources = [
 gtkmm_dep = dependency('gtkmm-4.0')
 glib_dep = dependency('glibmm-2.68')
 gio_dep = dependency('giomm-2.68')
+gettext_dep = dependency ('gettext')
 intl_dep = dependency('intl')
 
 executable(program_name,
@@ -97,6 +98,7 @@ executable(program_name,
     gtkmm_dep,
     glib_dep,
     gio_dep,
+    gettext_dep,
     intl_dep,
   ],
   win_subsystem: 'windows',
