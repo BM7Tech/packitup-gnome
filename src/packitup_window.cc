@@ -38,6 +38,8 @@
 #define HAS_STYLE_PROVIDER_ADD_PROVIDER_FOR_DISPLAY                           \
   GTKMM_CHECK_VERSION (4, 9, 1)
 
+#define HAS_LOAD_FROM_STRING GTKMM_CHECK_VERSION (4, 12, 0)
+
 PackitupWindow::PackitupWindow (BaseObjectType *cobject,
                                 const Glib::RefPtr<Gtk::Builder> &refBuilder)
     : Gtk::ApplicationWindow (cobject), m_refBuilder (refBuilder)
@@ -335,9 +337,16 @@ PackitupWindow::reload_theme_css ()
           m_providerAdded = true;
         }
       m_refThemeCssProvider->load_from_path (css_path);
+
+#if HAS_LOAD_FROM_STRING
       Glib::ustring css = "windowcontrols>image{ min-height:24px; "
                           "min-width:24px; margin: 0px; }";
       m_refAppCustomCssProvider->load_from_string (css);
+#else
+      std::string css = "windowcontrols>image{ min-height:24px; "
+                        "min-width:24px; margin: 0px; }";
+      m_refAppCustomCssProvider->load_from_data (css);
+#endif
     }
   else
     {
@@ -358,9 +367,15 @@ PackitupWindow::reload_theme_css ()
 #endif
           m_providerAdded = false;
         }
+#if HAS_LOAD_FROM_STRING
       Glib::ustring css = "windowcontrols>image{ min-height:24px; "
                           "min-width:24px; margin: 0px 6px; }";
       m_refAppCustomCssProvider->load_from_string (css);
+#else
+      std::string css = "windowcontrols>image{ min-height:24px; "
+                        "min-width:24px; margin: 0px 6px; }";
+      m_refAppCustomCssProvider->load_from_data (css);
+#endif
     }
 }
 
