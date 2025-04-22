@@ -17,7 +17,7 @@
 * along with PackItUP!. If not, see <https://www.gnu.org/licenses/\>.
 * */
 windowcontrols>image {
-	min-height: 22px;
-	min-width: 22px;
-	margin: 6px;
+	min-height: 24px;
+	min-width: 24px;
+	margin: 0px 0px 0px 6px;
 }

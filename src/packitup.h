@@ -21,7 +21,8 @@
 #ifndef PACKITUP_H
 #define PACKITUP_H
 
-#include <gtkmm.h>
+#include <gtkmm/application.h>
+#include <gtkmm/cssprovider.h>
 
 class PackitupWindow;
 

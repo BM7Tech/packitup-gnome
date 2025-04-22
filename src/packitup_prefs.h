@@ -21,7 +21,13 @@
 #ifndef PACKITUP_PREFS_H
 #define PACKITUP_PREFS_H
 
-#include <gtkmm.h>
+#include <giomm/settings.h>
+#include <glibmm/version.h>
+#include <gtkmm/builder.h>
+#include <gtkmm/button.h>
+#include <gtkmm/dropdown.h>
+#include <gtkmm/fontdialogbutton.h>
+#include <gtkmm/window.h>
 
 #ifdef GLIBMM_CHECK_VERSION
 #define HAS_GIO_SETTINGS_BIND_WITH_MAPPING GLIBMM_CHECK_VERSION (2, 75, 0)
