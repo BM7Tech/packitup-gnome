@@ -156,17 +156,9 @@ PackitupWindow::PackitupWindow (BaseObjectType *cobject,
   m_refInfoBuffer->apply_tag (m_refTagInfoFont, m_refInfoBuffer->begin (),
                               m_refInfoBuffer->end ());
 
-  // Bind settings menu to the TextView Revealer
-  // m_gnomeSettings = Gio::Settings::create ("org.gnome.desktop.interface");
-  // m_refSettings->signal_changed ().connect (
-  //    sigc::mem_fun ((*this), &PackitupWindow::on_any_settings_changed));
-  // m_gnomeSettings->signal_changed ().connect (
-  //    sigc::mem_fun ((*this), &PackitupWindow::on_any_settings_changed));
   m_gtkSettings = Gtk::Settings::get_default ();
   m_gtkSettings->property_gtk_enable_animations ().signal_changed ().connect (
       sigc::mem_fun ((*this), &PackitupWindow::update_revealer_transition));
-  // m_refSettings->bind ("transition", m_revealer.property_transition_type
-  // ());
 
   update_revealer_transition ();
 
@@ -193,7 +185,6 @@ PackitupWindow::PackitupWindow (BaseObjectType *cobject,
                                  Gtk::PolicyType::ALWAYS);
   m_scrolled_window->set_expand ();
   m_revealer.set_child (*m_scrolled_window);
-  // m_revealer.set_child (*m_text_view);
   m_scrolled_window->set_child (*m_text_view);
   m_revealer.set_reveal_child (true);
 
@@ -215,6 +206,9 @@ PackitupWindow::PackitupWindow (BaseObjectType *cobject,
   m_gears = m_refBuilder->get_widget<Gtk::MenuButton> ("gears");
   if (!m_gears)
     throw std::runtime_error ("no \"gears\" object in window.ui");
+
+  new_decoration_layout ();
+
   // Ensure that the HeaderBar has at least icon:close decoration layout
   m_gtkSettings->property_gtk_decoration_layout ().signal_changed ().connect (
       sigc::mem_fun (*this, &PackitupWindow::new_decoration_layout));
@@ -318,17 +312,21 @@ PackitupWindow::reload_theme_css ()
   auto css_path = find_theme_css_path (theme);
   if (!css_path.empty ())
     {
-      std::cout << "NOT EMPTY " << std::endl;
       if (!m_providerAdded)
         {
-          std::cout << "Adding provider " << std::endl;
 #if HAS_STYLE_PROVIDER_ADD_PROVIDER_FOR_DISPLAY
           Gtk::StyleProvider::add_provider_for_display (
               get_display (), m_refThemeCssProvider,
               GTK_STYLE_PROVIDER_PRIORITY_USER);
+          Gtk::StyleProvider::add_provider_for_display (
+              get_display (), m_refAppCssProvider,
+              GTK_STYLE_PROVIDER_PRIORITY_USER);
 #else
           Gtk::StyleContext::add_provider_for_display (
               get_display (), m_refThemeCssProvider,
+              GTK_STYLE_PROVIDER_PRIORITY_USER);
+          Gtk::StyleContext::add_provider_for_display (
+              get_display (), m_refAppCssProvider,
               GTK_STYLE_PROVIDER_PRIORITY_USER);
 #endif
           m_providerAdded = true;
@@ -337,16 +335,20 @@ PackitupWindow::reload_theme_css ()
     }
   else
     {
-      std::cout << "EMPTY " << std::endl;
       if (m_providerAdded)
         {
-          std::cout << "Removing provider" << std::endl;
 #if HAS_STYLE_PROVIDER_ADD_PROVIDER_FOR_DISPLAY
           Gtk::StyleProvider::remove_provider_for_display (
               get_display (), m_refThemeCssProvider);
+          Gtk::StyleProvider::add_provider_for_display (
+              get_display (), m_refThemeCssProvider,
+              GTK_STYLE_PROVIDER_PRIORITY_USER);
 #else
           Gtk::StyleContext::remove_provider_for_display (
               get_display (), m_refThemeCssProvider);
+          Gtk::StyleContext::add_provider_for_display (
+              get_display (), m_refAppCssProvider,
+              GTK_STYLE_PROVIDER_PRIORITY_USER);
 #endif
           m_providerAdded = false;
         }
