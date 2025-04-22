@@ -44,7 +44,7 @@ sudo apt install -y \
   libgtk-4-0-1 libgtk-4-dev \
   libgtkmm-4.0-0 libgtkmm-4.0-dev \
   build-essential meson ninja-build curl \
-  gettext \
+  gettext libxml2-utils \
   pkg-config python3 \
   xdg-desktop-portal xdg-desktop-portal-gtk xdg-utils
 ```
