@@ -264,7 +264,7 @@ PackitupWindow::PackitupWindow (BaseObjectType *cobject,
     std::cerr << "Icon 'packitup' not found in theme!" << std::endl;
 
   m_refAppCssProvider = Gtk::CssProvider::create ();
-  m_refThemeCssProvider = Gtk::CssProvider::create ();
+  // m_refThemeCssProvider = Gtk::CssProvider::create ();
   m_refAppCssProvider->signal_parsing_error ().connect (
       [] (const auto &section, const auto &error) {
         on_parsing_error (section, error);
@@ -275,22 +275,24 @@ PackitupWindow::PackitupWindow (BaseObjectType *cobject,
       get_display (), m_refAppCssProvider,
       GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 
-  Gtk::StyleProvider::add_provider_for_display (
-      get_display (), m_refThemeCssProvider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+  // Gtk::StyleProvider::add_provider_for_display (
+  //     get_display (), m_refThemeCssProvider,
+  //     GTK_STYLE_PROVIDER_PRIORITY_USER);
 #else
   Gtk::StyleContext::add_provider_for_display (
       get_display (), m_refAppCssProvider,
       GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-  Gtk::StyleContext::add_provider_for_display (
-      get_display (), m_refThemeCssProvider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+  // Gtk::StyleContext::add_provider_for_display (
+  //     get_display (), m_refThemeCssProvider,
+  //     GTK_STYLE_PROVIDER_PRIORITY_USER);
 #endif
 
   reload_all_css ();
   m_gtkSettings->property_gtk_theme_name ().signal_changed ().connect (
-      sigc::mem_fun (*this, &PackitupWindow::reload_all_css));
+      sigc::mem_fun (*this, &PackitupWindow::reload_app_css));
   m_gtkSettings->property_gtk_application_prefer_dark_theme ()
       .signal_changed ()
-      .connect (sigc::mem_fun (*this, &PackitupWindow::reload_all_css));
+      .connect (sigc::mem_fun (*this, &PackitupWindow::reload_app_css));
 }
 
 void
