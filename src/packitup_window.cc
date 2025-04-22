@@ -356,10 +356,10 @@ PackitupWindow::reload_theme_css ()
           //     GTK_STYLE_PROVIDER_PRIORITY_USER);
 #endif
           m_providerAdded = false;
-          m_refAppCustomCssProvider->load_from_string (
-              "windowcontrols>image{ min-height:24px; min-width:24px; margin: "
-              "0px 0px 0px 6px; }");
         }
+      m_refAppCustomCssProvider->load_from_string (
+          "windowcontrols>image{ min-height:24px; min-width:24px; margin: "
+          "0px 0px 0px 6px; }");
     }
 }
 
