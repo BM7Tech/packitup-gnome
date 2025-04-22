@@ -37,8 +37,8 @@ public:
   void on_result_clicked ();
   void on_result_changed ();
   void on_unit_dropdown_changed ();
-  void on_any_settings_changed (const Glib::ustring &key);
   void update_revealer_transition ();
+  void reload_all_css ();
   void reload_app_css ();
   void reload_theme_css ();
   Glib::ustring find_theme_css_path (const Glib::ustring &theme);
@@ -52,7 +52,7 @@ protected:
   Glib::RefPtr<Gtk::CssProvider> m_refThemeCssProvider;
   Glib::RefPtr<Gtk::StringList> m_bottle_size_list;
   Glib::RefPtr<Gtk::StringList> m_pack_size_list;
-  Glib::RefPtr<Gio::Settings> m_gnomeSettings;
+  Glib::RefPtr<Gtk::Settings> m_gtkSettings;
   Gtk::Revealer m_revealer;
   Gtk::Box *m_result_VBox{ nullptr };
   Gtk::Button *m_result_button{ nullptr };

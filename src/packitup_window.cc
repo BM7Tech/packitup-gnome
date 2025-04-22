@@ -156,11 +156,14 @@ PackitupWindow::PackitupWindow (BaseObjectType *cobject,
                               m_refInfoBuffer->end ());
 
   // Bind settings menu to the TextView Revealer
-  m_gnomeSettings = Gio::Settings::create ("org.gnome.desktop.interface");
-  m_refSettings->signal_changed ().connect (
-      sigc::mem_fun ((*this), &PackitupWindow::on_any_settings_changed));
-  m_gnomeSettings->signal_changed ().connect (
-      sigc::mem_fun ((*this), &PackitupWindow::on_any_settings_changed));
+  // m_gnomeSettings = Gio::Settings::create ("org.gnome.desktop.interface");
+  // m_refSettings->signal_changed ().connect (
+  //    sigc::mem_fun ((*this), &PackitupWindow::on_any_settings_changed));
+  // m_gnomeSettings->signal_changed ().connect (
+  //    sigc::mem_fun ((*this), &PackitupWindow::on_any_settings_changed));
+  m_gtkSettings = Gtk::Settings::get_default ();
+  m_gtkSettings->property_gtk_enable_animations ().signal_changed ().connect (
+      sigc::mem_fun ((*this), &PackitupWindow::update_revealer_transition));
   // m_refSettings->bind ("transition", m_revealer.property_transition_type
   // ());
 
@@ -212,9 +215,8 @@ PackitupWindow::PackitupWindow (BaseObjectType *cobject,
   if (!m_gears)
     throw std::runtime_error ("no \"gears\" object in window.ui");
   // Ensure that the HeaderBar has at least icon:close decoration layout
-  auto gtk_Settings = Gtk::Settings::get_default ();
   Glib::ustring default_layout
-      = gtk_Settings->property_gtk_decoration_layout ().get_value ();
+      = m_gtkSettings->property_gtk_decoration_layout ().get_value ();
 
   Glib::ustring new_layout = default_layout;
   // Split decoration layout into left/right around ':'
@@ -281,6 +283,18 @@ PackitupWindow::PackitupWindow (BaseObjectType *cobject,
       get_display (), m_refThemeCssProvider,
       GTK_STYLE_PROVIDER_PRIORITY_THEME);
 #endif
+
+  m_gtkSettings->property_gtk_theme_name ().signal_changed ().connect (
+      sigc::mem_fun (*this, &PackitupWindow::reload_all_css));
+  m_gtkSettings->property_gtk_application_prefer_dark_theme ()
+      .signal_changed ()
+      .connect (sigc::mem_fun (*this, &PackitupWindow::reload_all_css));
+  reload_all_css ();
+}
+
+void
+PackitupWindow::reload_all_css ()
+{
   reload_theme_css ();
   reload_app_css ();
 }
@@ -302,18 +316,9 @@ PackitupWindow::reload_app_css ()
 }
 
 void
-PackitupWindow::on_any_settings_changed (const Glib::ustring &key)
-{
-  if (key == "color-scheme")
-    reload_theme_css ();
-  if (key == "transition" || key == "enable-animations")
-    update_revealer_transition ();
-}
-
-void
 PackitupWindow::update_revealer_transition ()
 {
-  bool animations_on = m_gnomeSettings->get_boolean ("enable-animations");
+  bool animations_on = m_gtkSettings->property_gtk_enable_animations ();
   if (animations_on)
     m_refSettings->bind ("transition", m_revealer.property_transition_type ());
   else
@@ -324,8 +329,8 @@ Glib::ustring
 PackitupWindow::find_theme_css_path (const Glib::ustring &theme)
 {
   // Handle Dark Theme Switch
-  bool dark = (m_gnomeSettings->get_enum ("color-scheme") == 1);
-
+  auto dark = Gtk::Settings::get_default ()
+                  ->property_gtk_application_prefer_dark_theme ();
   // Split "Theme:dark" -> base="Theme" variant="dark"
   auto sep = theme.find (":");
   auto base = (sep == Glib::ustring::npos ? theme : theme.substr (0, sep));
