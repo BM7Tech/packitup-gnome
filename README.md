@@ -40,7 +40,7 @@ Where `builddir` is the build directory you specified with `meson setup`
 sudo apt update
 sudo apt install -y \
   fonts-noto \
-  libgtk-4-0-1 libgtk-4-dev \
+  libgtk-4-1 libgtk-4-dev \
   libgtkmm-4.0-0 libgtkmm-4.0-dev \
   build-essential meson ninja-build curl \
   gettext libxml2-utils \
