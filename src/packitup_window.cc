@@ -272,24 +272,25 @@ PackitupWindow::PackitupWindow (BaseObjectType *cobject,
 
 #if HAS_STYLE_PROVIDER_ADD_PROVIDER_FOR_DISPLAY
   Gtk::StyleProvider::add_provider_for_display (
-      get_display (), m_refAppCssProvider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+      get_display (), m_refAppCssProvider,
+      GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
 
   Gtk::StyleProvider::add_provider_for_display (
       get_display (), m_refThemeCssProvider, GTK_STYLE_PROVIDER_PRIORITY_USER);
 #else
   Gtk::StyleContext::add_provider_for_display (
-      get_display (), m_refAppCssProvider, GTK_STYLE_PROVIDER_PRIORITY_THEME);
+      get_display (), m_refAppCssProvider,
+      GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
   Gtk::StyleContext::add_provider_for_display (
-      get_display (), m_refThemeCssProvider,
-      GTK_STYLE_PROVIDER_PRIORITY_THEME);
+      get_display (), m_refThemeCssProvider, GTK_STYLE_PROVIDER_PRIORITY_USER);
 #endif
 
+  reload_all_css ();
   m_gtkSettings->property_gtk_theme_name ().signal_changed ().connect (
       sigc::mem_fun (*this, &PackitupWindow::reload_all_css));
   m_gtkSettings->property_gtk_application_prefer_dark_theme ()
       .signal_changed ()
       .connect (sigc::mem_fun (*this, &PackitupWindow::reload_all_css));
-  reload_all_css ();
 }
 
 void
