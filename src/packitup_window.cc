@@ -269,22 +269,8 @@ PackitupWindow::PackitupWindow (BaseObjectType *cobject,
       [] (const auto &section, const auto &error) {
         on_parsing_error (section, error);
       });
-
+  m_providerAdded = false;
   reload_all_css ();
-#if HAS_STYLE_PROVIDER_ADD_PROVIDER_FOR_DISPLAY
-  Gtk::StyleProvider::add_provider_for_display (
-      get_display (), m_refThemeCssProvider, GTK_STYLE_PROVIDER_PRIORITY_USER);
-  Gtk::StyleProvider::add_provider_for_display (
-      get_display (), m_refAppCssProvider, GTK_STYLE_PROVIDER_PRIORITY_USER);
-
-#else
-  Gtk::StyleContext::add_provider_for_display (
-      get_display (), m_refThemeCssProvider, GTK_STYLE_PROVIDER_PRIORITY_USER);
-  Gtk::StyleContext::add_provider_for_display (
-      get_display (), m_refAppCssProvider, GTK_STYLE_PROVIDER_PRIORITY_USER);
-
-#endif
-
   m_gtkSettings->property_gtk_theme_name ().signal_changed ().connect (
       sigc::mem_fun (*this, &PackitupWindow::reload_all_css));
   m_gtkSettings->property_gtk_application_prefer_dark_theme ()
@@ -303,18 +289,47 @@ void
 PackitupWindow::reload_theme_css ()
 {
   // Look up the current GTK theme name frok GtkSettings
-  auto dark = Gtk::Settings::get_default ()
-                  ->property_gtk_application_prefer_dark_theme ();
   auto theme = Gtk::Settings::get_default ()->property_gtk_theme_name ();
   auto css_path = find_theme_css_path (theme);
-  if (css_path.empty ())
+  if (!css_path.empty ())
     {
-      auto resource = (dark ? "/org/gtk/libadwaita/gtk/4.0/libadwaita-dark.css"
-                            : "/org/gtk/libadwaita/gtk/4.0/libadwaita.css");
-      m_refThemeCssProvider->load_from_resource (resource);
-      return;
+      if (!m_providerAdded)
+        {
+#if HAS_STYLE_PROVIDER_ADD_PROVIDER_FOR_DISPLAY
+          Gtk::StyleProvider::add_provider_for_display (
+              get_display (), m_refThemeCssProvider,
+              GTK_STYLE_PROVIDER_PRIORITY_USER);
+          Gtk::StyleProvider::add_provider_for_display (
+              get_display (), m_refAppCssProvider,
+              GTK_STYLE_PROVIDER_PRIORITY_USER);
+          m_providerAdded = true;
+#else
+          Gtk::StyleContext::add_provider_for_display (
+              get_display (), m_refThemeCssProvider,
+              GTK_STYLE_PROVIDER_PRIORITY_USER);
+          Gtk::StyleContext::add_provider_for_display (
+              get_display (), m_refAppCssProvider,
+              GTK_STYLE_PROVIDER_PRIORITY_USER);
+          m_providerAdded = true;
+#endif
+        }
+      m_refThemeCssProvider->load_from_path (css_path);
     }
-  m_refThemeCssProvider->load_from_path (css_path);
+  else
+    {
+      if (m_providerAdded)
+        {
+#if HAS_STYLE_PROVIDER_ADD_PROVIDER_FOR_DISPLAY
+          Gtk::StyleProvider::remove_provider_for_display (
+              get_display (), m_refThemeCssProvider);
+          m_providerAdded = false;
+#else
+          Gtk::StyleContext::remove_provider_for_display (
+              get_display (), m_refThemeCssProvider);
+          m_providerAdded = false;
+#endif
+        }
+    }
 }
 
 void

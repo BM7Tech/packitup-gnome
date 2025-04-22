@@ -44,6 +44,7 @@ public:
   Glib::ustring find_theme_css_path (const Glib::ustring &theme);
 
 protected:
+  bool m_providerAdded;
   Glib::RefPtr<Gtk::Builder> m_refBuilder;
   Glib::RefPtr<Gio::Settings> m_refSettings;
   Glib::RefPtr<Gtk::TextTag> m_refTagFont;
@@ -60,7 +61,6 @@ protected:
   Gtk::DropDown *m_pack_size_dropdown{ nullptr };
   Gtk::DropDown *m_bottle_size_dropdown{ nullptr };
   Gtk::HeaderBar *m_header{ nullptr };
-
   Gtk::MenuButton *m_gears{ nullptr };
   Gtk::SpinButton *m_spin_button_more{ nullptr };
   Gtk::SpinButton *m_spin_button_alright{ nullptr };
