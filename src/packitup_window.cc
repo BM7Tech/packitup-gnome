@@ -270,7 +270,14 @@ PackitupWindow::PackitupWindow (BaseObjectType *cobject,
         on_parsing_error (section, error);
       });
   m_providerAdded = false;
+
   reload_all_css ();
+  // GNOME Dark/Light theme switch
+  auto gnome = Gio::Settings::create ("org.gnome.desktop.interface");
+  gnome->signal_changed ().connect ([this] (const Glib::ustring &key) {
+    if (key == "gtk-theme" || key == "color-scheme")
+      reload_all_css ();
+  });
   m_gtkSettings->property_gtk_theme_name ().signal_changed ().connect (
       sigc::mem_fun (*this, &PackitupWindow::reload_all_css));
   m_gtkSettings->property_gtk_application_prefer_dark_theme ()
@@ -302,7 +309,6 @@ PackitupWindow::reload_theme_css ()
           Gtk::StyleProvider::add_provider_for_display (
               get_display (), m_refAppCssProvider,
               GTK_STYLE_PROVIDER_PRIORITY_USER);
-          m_providerAdded = true;
 #else
           Gtk::StyleContext::add_provider_for_display (
               get_display (), m_refThemeCssProvider,
@@ -310,8 +316,8 @@ PackitupWindow::reload_theme_css ()
           Gtk::StyleContext::add_provider_for_display (
               get_display (), m_refAppCssProvider,
               GTK_STYLE_PROVIDER_PRIORITY_USER);
-          m_providerAdded = true;
 #endif
+          m_providerAdded = true;
         }
       m_refThemeCssProvider->load_from_path (css_path);
     }
@@ -322,12 +328,11 @@ PackitupWindow::reload_theme_css ()
 #if HAS_STYLE_PROVIDER_ADD_PROVIDER_FOR_DISPLAY
           Gtk::StyleProvider::remove_provider_for_display (
               get_display (), m_refThemeCssProvider);
-          m_providerAdded = false;
 #else
           Gtk::StyleContext::remove_provider_for_display (
               get_display (), m_refThemeCssProvider);
-          m_providerAdded = false;
 #endif
+          m_providerAdded = false;
         }
     }
 }
