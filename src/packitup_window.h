@@ -41,6 +41,7 @@ public:
   void reload_all_css ();
   void reload_app_css ();
   void reload_theme_css ();
+  void new_decoration_layout ();
   Glib::ustring find_theme_css_path (const Glib::ustring &theme);
 
 protected:

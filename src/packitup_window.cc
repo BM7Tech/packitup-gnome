@@ -27,6 +27,7 @@
 #include "gtkmm/object.h"
 #include "gtkmm/scrolledwindow.h"
 #include "gtkmm/settings.h"
+#include "packitup.h"
 #include <glibmm/i18n.h>
 #include <iomanip>
 #include <iostream>
@@ -215,32 +216,9 @@ PackitupWindow::PackitupWindow (BaseObjectType *cobject,
   if (!m_gears)
     throw std::runtime_error ("no \"gears\" object in window.ui");
   // Ensure that the HeaderBar has at least icon:close decoration layout
-  Glib::ustring default_layout
-      = m_gtkSettings->property_gtk_decoration_layout ().get_value ();
-
-  Glib::ustring new_layout = default_layout;
-  // Split decoration layout into left/right around ':'
-  size_t pos = new_layout.find (":");
-  Glib::ustring left_side
-      = (pos == Glib::ustring::npos ? new_layout : new_layout.substr (0, pos));
-
-  Glib::ustring right_side
-      = (pos == Glib::ustring::npos ? "" : new_layout.substr (pos + 1));
-
-  size_t pos_r_close = right_side.find ("close");
-  size_t pos_l_close = left_side.find ("close");
-  bool close_on_left = false;
-  if (pos_r_close != Glib::ustring::npos)
-    new_layout = "icon:" + right_side;
-  else if (pos_l_close != Glib::ustring::npos)
-    {
-      new_layout = left_side + ":icon";
-      close_on_left = true;
-    }
-  else
-    new_layout = "icon:";
-
-  m_header->set_decoration_layout (new_layout);
+  m_gtkSettings->property_gtk_decoration_layout().signal_changed().connect(
+    sigc::mem_fun(*this, PackitupWindow::new_decoration_layout);
+  
   // Connect the menu(gears_menu.ui) to the MenuButton m_gears
   // The connection between action and menu item is specified in gears_menu.ui)
   auto menu_builder = Gtk::Builder::create_from_resource (
@@ -267,7 +245,7 @@ PackitupWindow::PackitupWindow (BaseObjectType *cobject,
   m_refThemeCssProvider = Gtk::CssProvider::create ();
   m_refAppCssProvider->signal_parsing_error ().connect (
       [] (const auto &section, const auto &error) {
-        on_parsing_error (section, error);
+    on_parsing_error (section, error);
       });
 
   m_providerAdded = false;
@@ -284,14 +262,44 @@ PackitupWindow::PackitupWindow (BaseObjectType *cobject,
   auto gnome = Gio::Settings::create ("org.gnome.desktop.interface");
   gnome->signal_changed ().connect ([this] (const Glib::ustring &key) {
     if (key == "gtk-theme" || key == "color-scheme")
-      std::cout << "Inside GNOME" << std::endl;
-    reload_all_css ();
+      reload_all_css ();
   });
   m_gtkSettings->property_gtk_theme_name ().signal_changed ().connect (
       sigc::mem_fun (*this, &PackitupWindow::reload_all_css));
   m_gtkSettings->property_gtk_application_prefer_dark_theme ()
       .signal_changed ()
       .connect (sigc::mem_fun (*this, &PackitupWindow::reload_all_css));
+}
+
+void
+PackitupWindow::new_decoration_layout ()
+{
+  Glib::ustring default_layout
+      = m_gtkSettings->property_gtk_decoration_layout ().get_value ();
+
+  Glib::ustring new_layout = default_layout;
+  // Split decoration layout into left/right around ':'
+  size_t pos = new_layout.find (":");
+  Glib::ustring left_side
+      = (pos == Glib::ustring::npos ? new_layout : new_layout.substr (0, pos));
+
+  Glib::ustring right_side
+      = (pos == Glib::ustring::npos ? "" : new_layout.substr (pos + 1));
+
+  size_t pos_r_close = right_side.find ("close");
+  size_t pos_l_close = left_side.find ("close");
+  bool close_on_left = false;
+  if (pos_r_close != Glib::ustring::npos)
+    new_layout = "icon:" + right_side;
+  else if (pos_l_close != Glib::ustring::npos)
+    {
+      new_layout = left_side + ":icon";
+      close_on_left = true;
+    }
+  else
+    new_layout = "icon:";
+
+  m_header->set_decoration_layout (new_layout);
 }
 
 void
