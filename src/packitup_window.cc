@@ -216,24 +216,9 @@ PackitupWindow::PackitupWindow (BaseObjectType *cobject,
   if (!m_gears)
     throw std::runtime_error ("no \"gears\" object in window.ui");
   // Ensure that the HeaderBar has at least icon:close decoration layout
-  m_gtkSettings->property_gtk_decoration_layout().signal_changed().connect(
-    sigc::mem_fun(*this, PackitupWindow::new_decoration_layout);
-  
-  // Connect the menu(gears_menu.ui) to the MenuButton m_gears
-  // The connection between action and menu item is specified in gears_menu.ui)
-  auto menu_builder = Gtk::Builder::create_from_resource (
-      "/dev/bm7/packitup/src/gears_menu.ui");
-  auto menu = menu_builder->get_object<Gio::MenuModel> ("menu");
-  if (!menu)
-    throw std::runtime_error ("No \"menu\" object in gears_menu.ui");
-  m_gears->set_menu_model (menu);
+  m_gtkSettings->property_gtk_decoration_layout ().signal_changed ().connect (
+      sigc::mem_fun (*this, &PackitupWindow::new_decoration_layout));
 
-  // Pack the menu on the opposite side of the close menu
-  m_header->remove (*m_gears);
-  if (close_on_left)
-    m_header->pack_end (*m_gears);
-  else
-    m_header->pack_start (*m_gears);
   // Set the window icon from gresources
   auto icon_theme = Gtk::IconTheme::get_for_display (get_display ());
   if (icon_theme->has_icon ("packitup"))
@@ -245,7 +230,7 @@ PackitupWindow::PackitupWindow (BaseObjectType *cobject,
   m_refThemeCssProvider = Gtk::CssProvider::create ();
   m_refAppCssProvider->signal_parsing_error ().connect (
       [] (const auto &section, const auto &error) {
-    on_parsing_error (section, error);
+        on_parsing_error (section, error);
       });
 
   m_providerAdded = false;
@@ -300,6 +285,22 @@ PackitupWindow::new_decoration_layout ()
     new_layout = "icon:";
 
   m_header->set_decoration_layout (new_layout);
+
+  // Connect the menu(gears_menu.ui) to the MenuButton m_gears
+  // The connection between action and menu item is specified in gears_menu.ui)
+  auto menu_builder = Gtk::Builder::create_from_resource (
+      "/dev/bm7/packitup/src/gears_menu.ui");
+  auto menu = menu_builder->get_object<Gio::MenuModel> ("menu");
+  if (!menu)
+    throw std::runtime_error ("No \"menu\" object in gears_menu.ui");
+  m_gears->set_menu_model (menu);
+
+  // Pack the menu on the opposite side of the close menu
+  m_header->remove (*m_gears);
+  if (close_on_left)
+    m_header->pack_end (*m_gears);
+  else
+    m_header->pack_start (*m_gears);
 }
 
 void
