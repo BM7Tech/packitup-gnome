@@ -93,7 +93,7 @@ PackitupPrefs::PackitupPrefs (BaseObjectType *cobject,
   m_settings->signal_changed ("font").connect (
       sigc::mem_fun (*this, &PackitupPrefs::on_font_setting_changed));
   m_font->property_font_desc ().signal_changed ().connect (
-      sigc::mem_fun (*this, &PackitupPrefs::on_font_setting_changed));
+      sigc::mem_fun (*this, &PackitupPrefs::on_font_selection_changed));
 
   m_settings->signal_changed ("transition")
       .connect (sigc::mem_fun (*this,
@@ -102,7 +102,7 @@ PackitupPrefs::PackitupPrefs (BaseObjectType *cobject,
       sigc::mem_fun (*this, &PackitupPrefs::on_transition_selection_changed));
 
   on_font_setting_changed ("font");
-  on_transition_seletion_changed ("transition");
+  on_transition_setting_changed ("transition");
 #endif
 }
 
@@ -152,7 +152,7 @@ PackitupPrefs::map_from_int_to_ustring (const unsigned int &pos)
 }
 #else
 void
-PackitupPrefs::on_font_setting_changed (const Glib::ustring & /* key */)
+PackitupPrefs::on_font_setting_changed (const Glib::ustring &key)
 {
   const auto font_settings = m_settings->get_string ("font");
   const auto font_button = m_font->get_font_desc ().to_string ();
@@ -168,7 +168,7 @@ PackitupPrefs::on_font_selection_changed ()
     m_settings->set_string ("font", font_button);
 }
 void
-PackitupPrefs::on_transition_setting_changed (const Glib::ustring & /* key */)
+PackitupPrefs::on_transition_setting_changed (const Glib::ustring &key)
 {
   const auto transition_setting = m_settings->get_string ("transition");
   const auto transition_button

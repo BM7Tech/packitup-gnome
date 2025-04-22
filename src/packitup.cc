@@ -23,6 +23,7 @@
 #include "packitup_window.h"
 #include <exception>
 #include <glibmm/i18n.h>
+#include <gtkmm/aboutdialog.h>
 #include <iostream>
 
 Packitup::Packitup ()
