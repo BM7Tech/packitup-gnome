@@ -264,35 +264,32 @@ PackitupWindow::PackitupWindow (BaseObjectType *cobject,
     std::cerr << "Icon 'packitup' not found in theme!" << std::endl;
 
   m_refAppCssProvider = Gtk::CssProvider::create ();
-  // m_refThemeCssProvider = Gtk::CssProvider::create ();
+  m_refThemeCssProvider = Gtk::CssProvider::create ();
   m_refAppCssProvider->signal_parsing_error ().connect (
       [] (const auto &section, const auto &error) {
         on_parsing_error (section, error);
       });
 
+  reload_all_css ();
 #if HAS_STYLE_PROVIDER_ADD_PROVIDER_FOR_DISPLAY
   Gtk::StyleProvider::add_provider_for_display (
-      get_display (), m_refAppCssProvider,
-      GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
+      get_display (), m_refThemeCssProvider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+  Gtk::StyleProvider::add_provider_for_display (
+      get_display (), m_refAppCssProvider, GTK_STYLE_PROVIDER_PRIORITY_USER);
 
-  // Gtk::StyleProvider::add_provider_for_display (
-  //     get_display (), m_refThemeCssProvider,
-  //     GTK_STYLE_PROVIDER_PRIORITY_USER);
 #else
   Gtk::StyleContext::add_provider_for_display (
-      get_display (), m_refAppCssProvider,
-      GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-  // Gtk::StyleContext::add_provider_for_display (
-  //     get_display (), m_refThemeCssProvider,
-  //     GTK_STYLE_PROVIDER_PRIORITY_USER);
+      get_display (), m_refThemeCssProvider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+  Gtk::StyleContext::add_provider_for_display (
+      get_display (), m_refAppCssProvider, GTK_STYLE_PROVIDER_PRIORITY_USER);
+
 #endif
 
-  reload_all_css ();
   m_gtkSettings->property_gtk_theme_name ().signal_changed ().connect (
-      sigc::mem_fun (*this, &PackitupWindow::reload_app_css));
+      sigc::mem_fun (*this, &PackitupWindow::reload_all_css));
   m_gtkSettings->property_gtk_application_prefer_dark_theme ()
       .signal_changed ()
-      .connect (sigc::mem_fun (*this, &PackitupWindow::reload_app_css));
+      .connect (sigc::mem_fun (*this, &PackitupWindow::reload_all_css));
 }
 
 void
@@ -306,8 +303,17 @@ void
 PackitupWindow::reload_theme_css ()
 {
   // Look up the current GTK theme name frok GtkSettings
+  auto dark = Gtk::Settings::get_default ()
+                  ->property_gtk_application_prefer_dark_theme ();
   auto theme = Gtk::Settings::get_default ()->property_gtk_theme_name ();
   auto css_path = find_theme_css_path (theme);
+  if (css_path.empty ())
+    {
+      auto resource = (dark ? "/org/gtk/libadwaita/gtm/4.0/libadwaita-dark.css"
+                            : "/org/gtk/libadwaita/gtm/4.0/libadwaita.css");
+      m_refThemeCssProvider->load_from_resource (resource);
+      return;
+    }
   m_refThemeCssProvider->load_from_path (css_path);
 }
 
