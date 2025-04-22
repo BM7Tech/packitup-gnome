@@ -40,8 +40,8 @@ Where `builddir` is the build directory you specified with `meson setup`
 sudo apt update
 sudo apt install -y \
   fonts-noto \
-  libgtk-4-0 libgtk-4-dev \
-  libgtkmm-4.0-1v5 libgtkmm-4.0-dev \
+  libgtk-4-0-1 libgtk-4-dev \
+  libgtkmm-4.0-0 libgtkmm-4.0-dev \
   build-essential meson ninja-build curl \
   pkg-config python3 \
   xdg-desktop-portal xdg-desktop-portal-gtk xdg-utils
