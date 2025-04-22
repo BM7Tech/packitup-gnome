@@ -54,6 +54,7 @@ sudo dnf install -y \
   google-noto-fonts-common \
   gtk4 gtk4-devel gtkmm4.0 gtkmm4.0-devel \
   @c-development @development-tools \
+  libxml2 gettext \
   meson ninja-build curl pkgconf-pkg-config python3 \
   xdg-desktop-portal xdg-desktop-portal-gtk xdg-utils
 ```
@@ -74,6 +75,7 @@ sudo pacman -Syu --needed \
   noto-fonts \
   base-devel meson ninja curl pkgconf python \
   gtk4 gtkmm-4.0 \
+  libxml gettext \
   xdg-desktop-portal xdg-desktop-portal-gtk xdg-utils
 ```
 
