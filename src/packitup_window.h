@@ -50,6 +50,7 @@ protected:
   Glib::RefPtr<Gio::Settings> m_refSettings;
   Glib::RefPtr<Gtk::TextTag> m_refTagFont;
   Glib::RefPtr<Gtk::TextBuffer> m_refBuffer;
+  Glib::RefPtr<Gtk::CssProvider> m_refAppAdwaitaCssProvider;
   Glib::RefPtr<Gtk::CssProvider> m_refAppCssProvider;
   Glib::RefPtr<Gtk::CssProvider> m_refThemeCssProvider;
   Glib::RefPtr<Gtk::StringList> m_bottle_size_list;
