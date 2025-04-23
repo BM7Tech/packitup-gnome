@@ -1,5 +1,6 @@
 # Pack It UP! - Never run out of beer again.
 # WORK IN PROGRESS
+[![License](https://img.shields.io/badge/License-GPLv3-blue)](./LICENSE)
 [![English](https://img.shields.io/badge/README-en--US-blue)](./README.md)
 [![Português](https://img.shields.io/badge/README-pt--BR-green)](./README.pt-BR.md)
 ### ***Packages names might be wrong, still testing*** 

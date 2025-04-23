@@ -1,6 +1,7 @@
 
 # Pack It UP! - Nunca mais fique sem cerveja.
 # Em Desenvolvimento
+[![License](https://img.shields.io/badge/License-GPLv3-blue)](./LICENSE)
 [![English](https://img.shields.io/badge/README-en--US-blue)](./README.md)
 [![Português](https://img.shields.io/badge/README-pt--BR-green)](./README.pt-BR.md)
 ### ***Nomes dos pacotes podem estar errado, ainda estou testando*** 
