@@ -5,7 +5,7 @@
 [![Português](https://img.shields.io/badge/README-pt--BR-green)](./README.pt-BR.md)
 ### ***Packages names might be wrong, still testing*** 
 #### Tested on:
-- [ ] Ubuntu
+- [x] Ubuntu
 - [x] Fedora Linux
 - [ ] OpenSUSE
 - [x] Arch Linux
