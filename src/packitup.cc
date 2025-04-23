@@ -1,6 +1,6 @@
 /*
  * PackItUP! Never run out of beer again.
- * Copyright (C) 2025  edu-bm7 <edubm7@bm7.dev>
+ * Copyright (C) 2025  edu-bm7 <edubm7@bm7.tech>
  *
  * This file is part of PackItUP!.
  *
@@ -27,7 +27,7 @@
 #include <iostream>
 
 Packitup::Packitup ()
-    : Gtk::Application ("dev.bm7.packitup",
+    : Gtk::Application ("tech.bm7.packitup",
                         Gio::Application::Flags::HANDLES_OPEN)
 {
 }
@@ -117,21 +117,22 @@ Packitup::on_action_about ()
   try
     {
       auto refBuilder = Gtk::Builder::create_from_resource (
-          "/dev/bm7/packitup/src/about.ui");
+          "/tech/bm7/packitup/src/about.ui");
       auto dialog = refBuilder->get_widget<Gtk::AboutDialog> ("about_window");
 
       dialog->set_transient_for (*get_active_window ());
       dialog->set_program_name ("PackItUP!");
-      dialog->set_copyright ("Copyright (C) 2025  edu-bm7 <edubm7@bm7.dev>");
+      dialog->set_copyright ("Copyright (C) 2025  edu-bm7 <edubm7@bm7.tech>");
       dialog->set_logo (Gdk::Texture::create_from_resource (
-          "/dev/bm7/packitup/src/packitup.png"));
+          "/tech/bm7/packitup/src/packitup.png"));
       dialog->set_license_type (Gtk::License::GPL_3_0);
       dialog->set_wrap_license (true);
       dialog->set_comments (_ ("Never run out of beer again."));
-      dialog->set_website ("https://github.com/edu-bm7/packitup.git");
+      dialog->set_website ("https://github.com/BM7Tech/packitup.git");
       dialog->set_website_label ("PackItUP! Website");
       std::vector<Glib::ustring> list_authors;
       list_authors.push_back ("edu-bm7 https://github.com/edu-bm7");
+      list_authors.push_back ("BM7Tech https://github.com/BM7Tech");
       dialog->set_authors (list_authors);
       dialog->set_visible (true);
       dialog->present ();

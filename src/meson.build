@@ -1,5 +1,5 @@
 # PackItUP! Never run out of beer again.
-# Copyright (C) 2025  edu-bm7 <edubm7@bm7.dev>
+# Copyright (C) 2025  edu-bm7 <edubm7@bm7.tech>
 # 
 # This file is part of PackItUP!.
 #
@@ -20,7 +20,7 @@ program_name = 'packitup'
 
 schemas_dir =  get_option('prefix') / get_option('datadir') / 'glib-2.0' / 'schemas'
 install_data(
-  'dev.bm7.packitup.gschema.xml',
+  'tech.bm7.packitup.gschema.xml',
   install_dir: schemas_dir )
 
 gnome = import('gnome')
@@ -31,7 +31,7 @@ resources = gnome.compile_resources('resources',
                                     'packitup.gresource.xml',
                                     source_dir: '.')
 
-schemas_file = files('dev.bm7.packitup.gschema.xml')
+schemas_file = files('tech.bm7.packitup.gschema.xml')
 install_data(
   'icons/hicolor/16x16/apps/packitup.png',
   install_dir: get_option('datadir') / 'icons/hicolor/16x16/apps'

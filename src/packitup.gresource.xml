@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
 PackItUP! Never run out of beer again.
-Copyright (C) 2025  edu-bm7 <edubm7@bm7.dev>
+Copyright (C) 2025  edu-bm7 <edubm7@bm7.tech>
 
 This file is part of PackItUP!.
 
@@ -19,12 +19,11 @@ You should have received a copy of the GNU General Public License
 along with PackItUP!. If not, see <https://www.gnu.org/licenses/>.
 -->
 <gresources>
-    <gresource prefix="/dev/bm7/packitup/src">
+    <gresource prefix="/tech/bm7/packitup/src">
     <file preprocess="xml-stripblanks">window.ui</file>
     <file preprocess="xml-stripblanks">gears_menu.ui</file>
     <file preprocess="xml-stripblanks">prefs.ui</file>
     <file preprocess="xml-stripblanks">about.ui</file>
-    <file>styles.css</file>
     <file>packitup.png</file>
   </gresource>
 </gresources>

@@ -1,6 +1,6 @@
 /*
  * PackItUP! Never run out of beer again.
- * Copyright (C) 2025  edu-bm7 <edubm7@bm7.dev>
+ * Copyright (C) 2025  edu-bm7 <edubm7@bm7.tech>
  *
  * This file is part of PackItUP!.
  *
@@ -74,7 +74,7 @@ PackitupPrefs::PackitupPrefs (BaseObjectType *cobject,
 
   m_transition->set_model (string_list);
 
-  m_settings = Gio::Settings::create ("dev.bm7.packitup");
+  m_settings = Gio::Settings::create ("tech.bm7.packitup");
 
   // Connect preferences properties to the Gio::Settings.
 #if HAS_GIO_SETTINGS_BIND_WITH_MAPPING
@@ -111,7 +111,7 @@ PackitupPrefs *
 PackitupPrefs::create (Gtk::Window &parent)
 {
   auto refBuilder
-      = Gtk::Builder::create_from_resource ("/dev/bm7/packitup/src/prefs.ui");
+      = Gtk::Builder::create_from_resource ("/tech/bm7/packitup/src/prefs.ui");
 
   auto dialog = refBuilder->get_widget_derived<PackitupPrefs> (refBuilder,
                                                                "prefs_dialog");

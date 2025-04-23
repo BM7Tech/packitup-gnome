@@ -1,6 +1,6 @@
 /*
  * PackItUP! Never run out of beer again.
- * Copyright (C) 2025  edu-bm7 <edubm7@bm7.dev>
+ * Copyright (C) 2025  edu-bm7 <edubm7@bm7.tech>
  *
  * This file is part of PackItUP!.
  *
@@ -141,7 +141,7 @@ PackitupWindow::PackitupWindow (BaseObjectType *cobject,
   auto m_refInfoBuffer = m_info_view->get_buffer ();
 
   // Bind font settings to infoTextBuffer
-  m_refSettings = Gio::Settings::create ("dev.bm7.packitup");
+  m_refSettings = Gio::Settings::create ("tech.bm7.packitup");
   auto m_refTagInfoFont = m_refInfoBuffer->create_tag ();
   m_refSettings->bind ("font", m_refTagInfoFont->property_font ());
   m_refInfoBuffer->set_text (_ (
@@ -295,7 +295,7 @@ PackitupWindow::new_decoration_layout ()
   // Connect the menu(gears_menu.ui) to the MenuButton m_gears
   // The connection between action and menu item is specified in gears_menu.ui)
   auto menu_builder = Gtk::Builder::create_from_resource (
-      "/dev/bm7/packitup/src/gears_menu.ui");
+      "/tech/bm7/packitup/src/gears_menu.ui");
   auto menu = menu_builder->get_object<Gio::MenuModel> ("menu");
   if (!menu)
     throw std::runtime_error ("No \"menu\" object in gears_menu.ui");
@@ -471,8 +471,8 @@ PackitupWindow::on_parsing_error (
 PackitupWindow *
 PackitupWindow::create ()
 {
-  auto refBuilder
-      = Gtk::Builder::create_from_resource ("/dev/bm7/packitup/src/window.ui");
+  auto refBuilder = Gtk::Builder::create_from_resource (
+      "/tech/bm7/packitup/src/window.ui");
 
   auto window = Gtk::Builder::get_widget_derived<PackitupWindow> (
       refBuilder, "app_window");

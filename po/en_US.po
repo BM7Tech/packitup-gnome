@@ -1,5 +1,5 @@
 # PackItUP! Never run out of beer again.
-# Copyright (C) 2025  edu-bm7 <edubm7@bm7.dev>
+# Copyright (C) 2025  edu-bm7 <edubm7@bm7.tech>
 #
 # This file is part of PackItUP!.
 #
@@ -22,7 +22,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-04-18 00:22-0300\n"
 "PO-Revision-Date: 2025-04-18 00:24-0300\n"
-"Last-Translator:  <edubm7@bm7.dev>\n"
+"Last-Translator:  <edubm7@bm7.tecg>\n"
 "Language-Team: English\n"
 "Language: en_US\n"
 "MIME-Version: 1.0\n"
