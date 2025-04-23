@@ -5,7 +5,7 @@
 [![Português](https://img.shields.io/badge/README-pt--BR-green)](./README.pt-BR.md)
 ### ***Packages names might be wrong, still testing*** 
 #### Tested on:
-- [ ] Ubuntu/Debian
+- [ ] Ubuntu
 - [x] Fedora Linux
 - [ ] OpenSUSE
 - [x] Arch Linux
@@ -36,7 +36,7 @@ Where `builddir` is the build directory you specified with `meson setup`
 
 - GCC 8+ or Clang 5+ (C++17 support)
 
-### Ubuntu/Debian
+### Ubuntu
 ```sh
 sudo apt update
 sudo apt install -y \
