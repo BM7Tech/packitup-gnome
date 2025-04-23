@@ -5,13 +5,14 @@
 [![Português](https://img.shields.io/badge/README-pt--BR-green)](./README.pt-BR.md)
 ### ***Packages names might be wrong, still testing*** 
 #### Tested on:
-- [x] Ubuntu
-- [x] Fedora Linux
+- [x] Ubuntu/Kubuntu
+- [x] Fedora Workstation/KDE Plasma
 - [ ] OpenSUSE
 - [x] Arch Linux
 - [x] Alpine Linux
 - [ ] Void Linux
-
+## KDE Plasma/Kubuntu
+Although the app work in KDE environment, theming it might be tricky and it might contain minor glitches. It doesn't contain LibAdwaita though, making KDE lovers life easier.
 ## Install
 At the moment the only way to install is by cloning the repository:
 

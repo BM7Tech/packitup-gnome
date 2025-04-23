@@ -6,13 +6,14 @@
 [![Português](https://img.shields.io/badge/README-pt--BR-green)](./README.pt-BR.md)
 ### ***Nomes dos pacotes podem estar errado, ainda estou testando*** 
 #### Testado em:
-- [x] Ubuntu
-- [x] Fedora Linux
+- [x] Ubuntu/Kubuntu
+- [x] Fedora Workstation/KDE Plasma
 - [ ] OpenSUSE
 - [x] Arch Linux
 - [x] Alpine Linux
 - [ ] Void Linux
-
+## KDE Plasma/Kubuntu
+Apesar do aplicativo funcionar no ambiente Desktop KDE, mudar a aparência da aplicação para combinar com o seu Desktop pode ser um tanto quanto complicado e conter alguns pequenos bugs. Entretando o aplicativo não contém a livraria LibAdwaita, facilitando a vida daqueles que amam KDE.
 ## Instalar
 No momento a única maneira de instalar o nosso programa é clonando o repositório:
 
