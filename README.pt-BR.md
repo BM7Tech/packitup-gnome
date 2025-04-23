@@ -39,7 +39,7 @@ Onde `builddir` é o diretório em que você especificou em `meson setup`
 
 ### Ubuntu
 ```sh
-sudo apt update
+sudo apt update && \
 sudo apt install -y \
   fonts-noto \
   libgtk-4-1 libgtk-4-dev \
