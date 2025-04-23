@@ -21,8 +21,13 @@
 #ifndef PACKITUP_PREFS_H
 #define PACKITUP_PREFS_H
 
-#include <giomm/settings.h>
+// This are for compatibility with Debian, because of missing headers
+#include <glibmmconfig.h>
+#if __has_include(<glibmm/version.h>)
 #include <glibmm/version.h>
+#endif
+// normal headers
+#include <giomm/settings.h>
 #include <gtkmm/builder.h>
 #include <gtkmm/button.h>
 #include <gtkmm/dropdown.h>

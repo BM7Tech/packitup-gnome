@@ -86,7 +86,7 @@ cpp_sources = [
   'packitup_window.cc',
   'packitup_prefs.cc',
 ]
-gtkmm_dep = dependency('gtkmm-4.0')
+gtkmm_dep = dependency('gtkmm-4.0', version='>=4.10', required: true)
 glib_dep = dependency('glibmm-2.68')
 gio_dep = dependency('giomm-2.68')
 intl_dep = dependency('intl')
