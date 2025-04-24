@@ -8,7 +8,7 @@
 #### Testado em:
 - [x] Ubuntu/Kubuntu
 - [x] Fedora Workstation/KDE Plasma
-- [ ] OpenSUSE
+- [x] OpenSUSE Tumbleweed
 - [x] Arch Linux
 - [x] Alpine Linux
 - [ ] Void Linux
@@ -62,12 +62,12 @@ sudo dnf install -y \
   xdg-desktop-portal xdg-desktop-portal-gtk xdg-utils
 ```
 
-### OpenSUSE
+### OpenSUSE Tumbleweed
 ```
 sudo zypper refresh
 sudo zypper install -y \
   google-noto-fonts \
-  gtk4 gtk4-devel gtkmm4 gtkmm4-devel \
+  gtk4 gtkmm4 \
   meson ninja curl gcc-c++ pkg-config python3 \
   xdg-desktop-portal xdg-desktop-portal-gtk xdg-utils
 ```
