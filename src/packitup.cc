@@ -28,7 +28,7 @@
 
 Packitup::Packitup ()
     : Gtk::Application ("tech.bm7.packitup",
-                        Gio::Application::Flags::HANDLES_OPEN)
+                        Gio::Application::Flags::DEFAULT_FLAGS)
 {
 }
 
