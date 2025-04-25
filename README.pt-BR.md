@@ -1,5 +1,6 @@
 
 # Pack It UP! - Nunca mais fique sem cerveja.
+# ESSA FORK SERA UM PROJETO FEITO COM COMPATIBILIDADE PARA LIBADWAITA GNOME
 # Em Desenvolvimento
 [![License](https://img.shields.io/badge/License-GPLv3-blue)](./LICENSE)
 [![English](https://img.shields.io/badge/README-en--US-blue)](./README.md)
