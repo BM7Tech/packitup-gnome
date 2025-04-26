@@ -307,7 +307,8 @@ void
 PackitupWindow::register_with (AdwApplication *app)
 {
   // same as set_application, manages lifecycle of windows
-  gtk_application_add_window (GTK_APPLICATION (app), GTK_WINDOW (window_));
+  gtk_window_set_application (GTK_WINDOW (window_), GTK_APPLICATION (app));
+  // gtk_window_present (GTK_WINDOW (window_));
 }
 
 void

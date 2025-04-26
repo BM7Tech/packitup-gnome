@@ -21,177 +21,176 @@ along with PackItUP!. If not, see <https://www.gnu.org/licenses/>.
 
 <interface domain="packitup">
   <requires lib="gtk" version="4.0"/>
-  <requires lib="libadwaita" version="1.0"/>
+  <requires lib="adw" version="1.0"/>
   <object class="AdwApplicationWindow" id="app_window">
     <property name="title" translatable="yes">Pack It UP!</property>
-    <property name="default-width">800</property>
-    <property name="default-height">1000</property>
+    <property name="default-width">700</property>
+    <property name="default-height">800</property>
     <property name="hide-on-close">True</property>
-    <property name="titlebar">
-      <object class="AdwHeaderBar" id="header">
-        <property name="title-widget">
-          <object class="GtkLabel">
-            <property name="label" translatable="yes">Pack It UP!</property>
-            <property name="single-line-mode">True</property>
-            <property name="ellipsize">end</property>
-            <property name="width-chars">5</property>
-            <style>
-              <class name="title"/>
-            </style>
-          </object>
-        </property>
-        <child>
-          <object class="GtkMenuButton" id="gears">
-            <property name="direction">none</property>
-          </object>
-        </child>
-      </object>
-    </property>
-    <child>
-      <object class="GtkBox" id="application_box_layout">
-        <property name="orientation">vertical</property>
-        <property name="spacing">7</property>
-        <property name="margin-top">7</property>
-        <property name="margin-bottom">7</property>
-        <property name="margin-start">7</property>
-        <property name="margin-end">7</property>
-        <child>
-          <object class="GtkFrame" id="info_frame">
-            <property name="label" translatable="yes">About</property>
-            <property name="label-xalign">0.5</property>
-            <property name="vexpand">False</property>
-            <property name="hexpand">True</property>
+    <property name="content">
+      <object class="AdwToolbarView" id="toolview">
+        <child type="top">
+          <object class="AdwHeaderBar" id="header">
+            <property name="title-widget">
+              <object class="AdwWindowTitle">
+                <property name="title" translatable="yes">Pack It UP!</property>
+              </object>
+            </property>
             <child>
-              <object class="GtkBox" id="info_box">
-                <property name="orientation">vertical</property>
-                <property name="spacing">2</property>
-                <property name="margin-top">5</property>
-                <property name="margin-bottom">5</property>
-                <property name="margin-start">5</property>
-                <property name="margin-end">5</property>
+              <object class="GtkMenuButton" id="gears">
+                <property name="direction">none</property>
               </object>
             </child>
           </object>
         </child>
-        <child>
-          <object class="GtkFrame" id="user_calculator_frame">
-            <property name="label" translatable="yes">Packs Calculator</property>
-            <property name="label-xalign">0.5</property>
-            <property name="vexpand">True</property>
-            <property name="hexpand">True</property>
+
+        <property name="content">
+          <object class="GtkBox" id="application_box_layout">
+            <property name="orientation">vertical</property>
+            <property name="spacing">7</property>
+            <property name="margin-top">7</property>
+            <property name="margin-bottom">7</property>
+            <property name="margin-start">7</property>
+            <property name="margin-end">7</property>
             <child>
-              <object class="AdwPreferencesPage" id="buttons_box">
-
+              <object class="GtkFrame" id="info_frame">
+                <property name="label" translatable="yes">About</property>
+                <property name="label-xalign">0.5</property>
+                <property name="vexpand">False</property>
+                <property name="hexpand">True</property>
                 <child>
-                  <object class="AdwPreferencesGroup" id="buttons_size_group">
-                    <child> 
-                      <object class="AdwComboRow" id="pack_size_comborow">
-                        <property name="title"
-                        translatable="yes">Pack size:</property>
-                        <property name="model">
-                          <object class="GtkStringList" id="pack_size_list">
-                            <items>
-                              <item translatable="yes">6</item>
-                              <item translatable="yes">8</item>
-                              <item translatable="yes">12</item>
-                              <item translatable="yes">15</item>
-                              <item translatable="yes">24</item>
-                              <item translatable="yes">30</item>
-                            </items>
-                          </object>
-                        </property>
-                      </object>
-                    </child>
-
-                    <child>
-                      <object class="AdwComboRow" id="bottle_size_comborow">
-                        <property name="title"
-                          translatable="yes">Beer bottle/can size:</property>
-                        <property name="model">
-                          <object class="GtkStringList" id="bottle_size_list">
-                            <items>
-                              <item translatable="yes">250ml</item>
-                              <item translatable="yes">269ml</item>
-                              <item translatable="yes">330ml</item>
-                              <item translatable="yes">355ml</item>
-                            </items>
-                          </object>
-                        </property>
-                      </object>
-                    </child>
+                  <object class="GtkBox" id="info_box">
+                    <property name="orientation">vertical</property>
+                    <property name="spacing">2</property>
+                    <property name="margin-top">5</property>
+                    <property name="margin-bottom">5</property>
+                    <property name="margin-start">5</property>
+                    <property name="margin-end">5</property>
                   </object>
                 </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkFrame" id="user_calculator_frame">
+                <property name="label" translatable="yes">Packs Calculator</property>
+                <property name="label-xalign">0.5</property>
+                <property name="vexpand">True</property>
+                <property name="hexpand">True</property>
                 <child>
-                  <object class="AdwPreferencesGroup" id="spin_group">
+                  <object class="AdwPreferencesPage" id="buttons_box">
 
                     <child>
-                      <object class="AdwSpinRow" id="spin_row_more">
-                        <property name="title"
-                          translatable="yes">Drinks more than moderate:</property>
-                        <property name="adjustment">
-                          <object class="GtkAdjustment" id="spin_more_adjustment">
-                            <property name="lower">0</property>
-                            <property name="upper">100000</property>
-                            <property name="step-increment">1</property>
-                            <property name="page-increment">5</property>
-                            <property name="value">0</property>
+                      <object class="AdwPreferencesGroup" id="buttons_size_group">
+                        <child> 
+                          <object class="AdwComboRow" id="pack_size_comborow">
+                            <property name="title"
+                            translatable="yes">Pack size:</property>
+                            <property name="model">
+                              <object class="GtkStringList" id="pack_size_list">
+                                <items>
+                                  <item translatable="yes">6</item>
+                                  <item translatable="yes">8</item>
+                                  <item translatable="yes">12</item>
+                                  <item translatable="yes">15</item>
+                                  <item translatable="yes">24</item>
+                                  <item translatable="yes">30</item>
+                                </items>
+                              </object>
+                            </property>
                           </object>
-                        </property>
-                        <property name="hexpand">True</property>
-                        <property name="wrap">True</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="AdwSpinRow" id="spin_row_alright">
-                        <property name="title"
-                                  translatable="yes">Drinks alright:</property>
-                        <property name="adjustment">
-                          <object class="GtkAdjustment" id="spin_alright_adjustment">
-                            <property name="lower">0</property>
-                            <property name="upper">100000</property>
-                            <property name="step-increment">1</property>
-                            <property name="page-increment">5</property>
-                            <property name="value">0</property>
-                          </object>
-                        </property>
-                        <property name="hexpand">True</property>
-                        <property name="wrap">True</property>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-                <child>
-                  <object class="AdwPreferencesGroup" id="unit_group">
+                        </child>
 
-                    <child>
-                      <object class="AdwComboRow" id="unit_comborow">
-                        <property name="title"
-                                  translatable="yes">Select the Unit:</property>
-                        <property name="model">
-                          <object class="GtkStringList" id="unit_list">
-                            <items>
-                              <item translatable="yes">Liters</item>
-                              <item translatable="yes">Ounces</item>
-                            </items>
-                          </object>
-                        </property>
-                      </object>
-                    </child>
-                  </object>
-                </child>
-                <child>
-                  <object class="AdwPreferencesGroup" id="result_group">
-
-                    <child>
-                      <object class="GtkBox" id="result_VBox">
-                        <property name="orientation">vertical</property>
-                        <property name="spacing">7</property>
                         <child>
-                          <object class="GtkButton" id="result_button">
-                            <property name="label"
-                                    translatable="yes"
-                                    context="button2">Calculate</property>
+                          <object class="AdwComboRow" id="bottle_size_comborow">
+                            <property name="title"
+                              translatable="yes">Beer bottle/can size:</property>
+                            <property name="model">
+                              <object class="GtkStringList" id="bottle_size_list">
+                                <items>
+                                  <item translatable="yes">250ml</item>
+                                  <item translatable="yes">269ml</item>
+                                  <item translatable="yes">330ml</item>
+                                  <item translatable="yes">355ml</item>
+                                </items>
+                              </object>
+                            </property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="AdwPreferencesGroup" id="spin_group">
+
+                        <child>
+                          <object class="AdwSpinRow" id="spin_row_more">
+                            <property name="title"
+                              translatable="yes">Drinks more than moderate:</property>
+                            <property name="adjustment">
+                              <object class="GtkAdjustment" id="spin_more_adjustment">
+                                <property name="lower">0</property>
+                                <property name="upper">100000</property>
+                                <property name="step-increment">1</property>
+                                <property name="page-increment">5</property>
+                                <property name="value">0</property>
+                              </object>
+                            </property>
                             <property name="hexpand">True</property>
+                            <property name="wrap">True</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="AdwSpinRow" id="spin_row_alright">
+                            <property name="title"
+                                      translatable="yes">Drinks alright:</property>
+                            <property name="adjustment">
+                              <object class="GtkAdjustment" id="spin_alright_adjustment">
+                                <property name="lower">0</property>
+                                <property name="upper">100000</property>
+                                <property name="step-increment">1</property>
+                                <property name="page-increment">5</property>
+                                <property name="value">0</property>
+                              </object>
+                            </property>
+                            <property name="hexpand">True</property>
+                            <property name="wrap">True</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="AdwPreferencesGroup" id="unit_group">
+
+                        <child>
+                          <object class="AdwComboRow" id="unit_comborow">
+                            <property name="title"
+                                      translatable="yes">Select the Unit:</property>
+                            <property name="model">
+                              <object class="GtkStringList" id="unit_list">
+                                <items>
+                                  <item translatable="yes">Liters</item>
+                                  <item translatable="yes">Ounces</item>
+                                </items>
+                              </object>
+                            </property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="AdwPreferencesGroup" id="result_group">
+
+                        <child>
+                          <object class="GtkBox" id="result_VBox">
+                            <property name="orientation">vertical</property>
+                            <property name="spacing">7</property>
+                            <child>
+                              <object class="GtkButton" id="result_button">
+                                <property name="label"
+                                        translatable="yes"
+                                        context="button2">Calculate</property>
+                                <property name="hexpand">True</property>
+                              </object>
+                            </child>
                           </object>
                         </child>
                       </object>
@@ -201,9 +200,9 @@ along with PackItUP!. If not, see <https://www.gnu.org/licenses/>.
               </object>
             </child>
           </object>
-        </child>
+        </property>
       </object>
-    </child>
+    </property>
   </object>
 <!-- vim: sts=2 sw=2 et -->
 </interface>
