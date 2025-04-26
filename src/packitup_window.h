@@ -89,6 +89,7 @@ protected:
   AdwHeaderBar *m_rawHeader;
   GtkCssProvider *AppCustomCssProvider;
   GtkCssProvider *ThemeCssProvider;
+  GtkStringList *bottleSizeList;
   static void
   on_parsing_error (const Glib::RefPtr<const Gtk::CssSection> &section,
                     const Glib::Error &error);

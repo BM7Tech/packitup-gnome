@@ -53,7 +53,6 @@ main (int argc, char *argv[])
   bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
   textdomain (GETTEXT_PACKAGE);
 
-  adw_init ();
   Gtk::init_gtkmm_internals ();
   g_autoptr (AdwApplication) app = NULL;
 

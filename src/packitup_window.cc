@@ -34,6 +34,7 @@ extern "C"
 {
 #include <adwaita.h>
 #include <gdk/gdk.h>
+#include <gio/gio.h>
 #include <gtk/gtk.h>
 }
 #include <iomanip>
@@ -46,7 +47,8 @@ extern "C"
 
 #define HAS_LOAD_FROM_STRING GTKMM_CHECK_VERSION (4, 12, 0)
 
-static void on_unit_changed_callback (GApplication * /* app */,
+static void on_unit_changed_callback (GObject * /*combo_row*/,
+                                      GParamSpec * /*pspec*/,
                                       gpointer user_data);
 
 PackitupWindow::PackitupWindow (AdwApplicationWindow *win) : window_ (win)
@@ -98,6 +100,16 @@ PackitupWindow::PackitupWindow (AdwApplicationWindow *win) : window_ (win)
       = ADW_COMBO_ROW (gtk_builder_get_object (c_builder, "unit_comborow"));
   if (!m_rawUnitComboRow)
     throw std::runtime_error ("no \"unit_comborow\" object in window.ui");
+
+  auto *unitList
+      = GTK_STRING_LIST (gtk_builder_get_object (c_builder, "unit_list"));
+  gsize n = g_list_model_get_n_items (G_LIST_MODEL (unitList));
+  g_print ("[DEBUG] bottle_size_list has %zu items\n", n);
+
+  adw_combo_row_set_model (m_rawUnitComboRow, G_LIST_MODEL (unitList));
+  // after you get the comborow:
+  g_print ("[DEBUG] combo row is a %s\n",
+           G_OBJECT_TYPE_NAME (m_rawUnitComboRow));
   g_signal_connect (m_rawUnitComboRow, "notify::selected",
                     G_CALLBACK (on_unit_changed_callback), this);
 
@@ -125,22 +137,22 @@ PackitupWindow::PackitupWindow (AdwApplicationWindow *win) : window_ (win)
     throw std::runtime_error (
         "no \"Adwaita Combo Row bottle_size_comborow\" object in window.ui");
 
-  adw_combo_row_set_selected (m_rawBottleSizeComboRow, 0);
-
   // Bottle size dropdown menu
-  auto bottleSizeList = GTK_STRING_LIST (
+  bottleSizeList = GTK_STRING_LIST (
       gtk_builder_get_object (c_builder, "bottle_size_list"));
   m_refBottleSizeList = Glib::wrap (bottleSizeList);
   if (!m_refBottleSizeList)
     throw std::runtime_error ("no \"bottle_size_list\" object in window.ui");
 
+  adw_combo_row_set_selected (m_rawBottleSizeComboRow, 0);
+  adw_combo_row_set_model (m_rawBottleSizeComboRow,
+                           G_LIST_MODEL (bottleSizeList));
   // Bottle size dropdown menu
-  auto packSizeList
+  auto *packSizeList
       = GTK_STRING_LIST (gtk_builder_get_object (c_builder, "pack_size_list"));
   m_refPackSizeList = Glib::wrap (packSizeList);
   if (!m_refPackSizeList)
     throw std::runtime_error ("no \"pack_size_list\" object in window.ui");
-
   // Pack size Adwaita Combo Row
   m_rawPackSizeComboRow = ADW_COMBO_ROW (
       gtk_builder_get_object (c_builder, "pack_size_comborow"));
@@ -149,7 +161,7 @@ PackitupWindow::PackitupWindow (AdwApplicationWindow *win) : window_ (win)
         "no \"Adwaita Combo Row pack_size_comborow\" object in window.ui");
 
   adw_combo_row_set_selected (m_rawPackSizeComboRow, 0);
-
+  adw_combo_row_set_model (m_rawPackSizeComboRow, G_LIST_MODEL (packSizeList));
   // App info box
   auto infoBox = GTK_BOX (gtk_builder_get_object (c_builder, "info_box"));
   auto m_info_VBox = Glib::wrap (infoBox);
@@ -511,9 +523,11 @@ PackitupWindow::create ()
 }
 
 static void
-on_unit_changed_callback (GApplication * /* app */, gpointer user_data)
+on_unit_changed_callback (GObject * /*combo_row*/, GParamSpec * /*pspec*/,
+                          gpointer user_data)
 {
-  static_cast<PackitupWindow *> (user_data)->on_unit_dropdown_changed ();
+  auto *self = static_cast<PackitupWindow *> (user_data);
+  self->on_unit_dropdown_changed ();
 }
 
 AdwApplicationWindow *
