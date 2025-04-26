@@ -22,20 +22,23 @@
 #include "packitup_prefs.h"
 #include "packitup_window.h"
 #include <exception>
+#include <glibmm.h>
 #include <glibmm/i18n.h>
 #include <gtkmm/aboutdialog.h>
 #include <iostream>
-
-Packitup::Packitup ()
-    : Gtk::Application ("tech.bm7.packitup",
-                        Gio::Application::Flags::DEFAULT_FLAGS)
+#include <memory>
+extern "C"
 {
+#include <adwaita.h>
+#include <gtk/gtk.h>
 }
 
-Glib::RefPtr<Packitup>
-Packitup::create ()
+Packitup::Packitup (AdwApplication *app) : app_ (app) {}
+
+std::unique_ptr<Packitup>
+Packitup::create (AdwApplication *app)
 {
-  return Glib::make_refptr_for_instance<Packitup> (new Packitup ());
+  return std::make_unique<Packitup> (app);
 }
 
 PackitupWindow *
@@ -43,12 +46,7 @@ Packitup::create_appwindow ()
 {
   auto packitup_window = PackitupWindow::create ();
 
-  // same as set_application, manages lifecycle of windows
-  add_window (*packitup_window);
-
-  // Closes app when all windows are gone
-  packitup_window->signal_hide ().connect (
-      [packitup_window] () { delete packitup_window; });
+  packitup_window->register_with (app_);
 
   return packitup_window;
 }
@@ -58,8 +56,8 @@ Packitup::on_activate ()
 {
   try
     {
-      auto appwindow = create_appwindow ();
-      appwindow->present ();
+      win_ = create_appwindow ();
+      win_->present ();
     }
   catch (const Glib::Error &ex)
     {
@@ -76,23 +74,32 @@ Packitup::on_activate ()
 void
 Packitup::on_startup ()
 {
-  // base class implementation
-  Gtk::Application::on_startup ();
 
-  // Actions and keyboard accelerators for the menu
-  add_action ("preferences",
-              sigc::mem_fun (*this, &Packitup::on_action_preferences));
-  add_action ("about", sigc::mem_fun (*this, &Packitup::on_action_about));
-  add_action ("quit", sigc::mem_fun (*this, &Packitup::on_action_quit));
-  set_accel_for_action ("app.quit", "<Ctrl>Q");
+  static GActionEntry app_entries[] = {
+    { "preferences", on_action_preferences, NULL, NULL, NULL },
+    { "about", on_action_about, NULL, NULL, NULL },
+    { "quit", on_action_quit, NULL, NULL, NULL },
+  };
+  g_action_map_add_action_entries (G_ACTION_MAP (app_), app_entries,
+                                   G_N_ELEMENTS (app_entries), app_);
+
+  const char *quit_accels[2] = { "<Ctrl>Q", NULL };
+  gtk_application_set_accels_for_action (GTK_APPLICATION (app_), "app.quit",
+                                         quit_accels);
 }
 
 void
-Packitup::on_action_preferences ()
+Packitup::on_action_preferences (GSimpleAction *action, GVariant *state,
+                                 gpointer user_data)
 {
   try
     {
-      auto prefs_dialog = PackitupPrefs::create (*get_active_window ());
+      GtkApplication *app = GTK_APPLICATION (user_data);
+      GtkWindow *window_ref
+          = gtk_application_get_active_window (GTK_APPLICATION (app));
+
+      auto cpp_wrap = Glib::wrap (window_ref);
+      auto prefs_dialog = PackitupPrefs::create (*cpp_wrap);
       prefs_dialog->present ();
 
       // Delete when its hidden
@@ -112,19 +119,25 @@ Packitup::on_action_preferences ()
 }
 
 void
-Packitup::on_action_about ()
+Packitup::on_action_about (GSimpleAction *action, GVariant *state,
+                           gpointer user_data)
 {
   try
     {
       auto refBuilder = Gtk::Builder::create_from_resource (
-          "/tech/bm7/packitup/src/about.ui");
+          "/tech/bm7/packitup-gnome/src/about.ui");
       auto dialog = refBuilder->get_widget<Gtk::AboutDialog> ("about_window");
 
-      dialog->set_transient_for (*get_active_window ());
+      GtkApplication *app = GTK_APPLICATION (user_data);
+      GtkWindow *active_window
+          = gtk_application_get_active_window (GTK_APPLICATION (app));
+      auto cpp_wrap = Glib::wrap (active_window);
+
+      dialog->set_transient_for (*cpp_wrap);
       dialog->set_program_name ("PackItUP!");
       dialog->set_copyright ("Copyright (C) 2025  edu-bm7 <edubm7@bm7.tech>");
       dialog->set_logo (Gdk::Texture::create_from_resource (
-          "/tech/bm7/packitup/src/packitup.png"));
+          "/tech/bm7/packitup-gnome/src/packitup.png"));
       dialog->set_license_type (Gtk::License::GPL_3_0);
       dialog->set_wrap_license (true);
       dialog->set_comments (_ ("Never run out of beer again."));
@@ -151,13 +164,20 @@ Packitup::on_action_about ()
 }
 
 void
-Packitup::on_action_quit ()
+Packitup::on_action_quit (GSimpleAction *action, GVariant *state,
+                          gpointer user_data)
 {
-  auto windows = get_windows ();
-  for (auto window : windows)
-    window->set_visible (false);
+  GtkApplication *app = GTK_APPLICATION (user_data);
+  auto windows = gtk_application_get_windows (app);
+  GList *window;
+  window = windows;
+  while (window)
+    {
+      gtk_widget_set_visible (GTK_WIDGET (window), false);
+      window = window->next;
+    }
 
-  quit ();
+  g_application_quit (G_APPLICATION (app));
 }
 
 // vim: sts=2 sw=2 et

@@ -33,6 +33,11 @@
 #include <gtkmm/dropdown.h>
 #include <gtkmm/fontdialogbutton.h>
 #include <gtkmm/window.h>
+extern "C"
+{
+#include <adwaita.h>
+#include <gtk/gtk.h>
+}
 
 #ifdef GLIBMM_CHECK_VERSION
 #define HAS_GIO_SETTINGS_BIND_WITH_MAPPING GLIBMM_CHECK_VERSION (2, 75, 0)
@@ -64,10 +69,11 @@ protected:
   void on_transition_selection_changed ();
 #endif
   Glib::RefPtr<Gtk::Builder> m_refBuilder;
-  Glib::RefPtr<Gio::Settings> m_settings;
+  Glib::RefPtr<Gio::Settings> m_font_settings;
   Gtk::FontDialogButton *m_font{ nullptr };
-  Gtk::DropDown *m_transition{ nullptr };
+  Gtk::Widget *m_transition{ nullptr };
   Gtk::Button *m_prefs_close{ nullptr };
+  AdwComboRow *m_rawTransition;
 };
 
 #endif // PACKITUP_PREFS_H

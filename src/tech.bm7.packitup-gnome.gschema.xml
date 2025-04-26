@@ -19,7 +19,7 @@ You should have received a copy of the GNU General Public License
 along with PackItUP!. If not, see <https://www.gnu.org/licenses/>.
 -->
 <schemalist>
-  <schema path="/tech/bm7/packitup/src/" id="tech.bm7.packitup">
+  <schema path="/tech/bm7/packitup-gnome/src/" id="tech.bm7.packitup-gnome">
     <key name="font" type="s">
       <default>'Noto Sans Regular 10'</default>
       <summary>Font</summary>

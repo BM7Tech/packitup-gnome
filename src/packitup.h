@@ -23,28 +23,38 @@
 
 #include <gtkmm/application.h>
 #include <gtkmm/cssprovider.h>
+extern "C"
+{
+#include <adwaita.h>
+}
 
 class PackitupWindow;
 
-class Packitup : public Gtk::Application
+class Packitup
 {
-protected:
-  Packitup (); // Canonical Default Constructor
-
 public:
-  static Glib::RefPtr<Packitup> create ();
+  Packitup (AdwApplication *app);
+  static std::unique_ptr<Packitup> create (AdwApplication *app);
 
 protected:
   // Override default signal handlers
-  void on_startup () override;
-  void on_activate () override;
+  void on_startup ();
+  void on_activate ();
   Glib::RefPtr<Gtk::CssProvider> m_refCssProvider;
 
+  // Grant callbacks access
+  friend void startup_callback (GApplication *, gpointer);
+  friend void activate_callback (GApplication *, gpointer);
+
 private:
+  AdwApplication *const app_;
   PackitupWindow *create_appwindow ();
-  void on_action_quit ();
-  void on_action_preferences ();
-  void on_action_about ();
+  PackitupWindow *win_;
+  static void on_action_quit (GSimpleAction *, GVariant *, gpointer user_data);
+  static void on_action_preferences (GSimpleAction *, GVariant *,
+                                     gpointer user_data);
+  static void on_action_about (GSimpleAction *, GVariant *,
+                               gpointer user_data);
 };
 
 #endif // PACKITUP_H

@@ -19,7 +19,7 @@ You should have received a copy of the GNU General Public License
 along with PackItUP!. If not, see <https://www.gnu.org/licenses/>.
 -->
 <interface domain="packitup">
-  <object class="GtkWindow" id="prefs_dialog">
+  <object class="AdwWindow" id="prefs_dialog">
     <property name="title" translatable="yes">Preferences</property>
     <property name="resizable">False</property>
     <property name="modal">True</property>
@@ -68,7 +68,7 @@ along with PackItUP!. If not, see <https://www.gnu.org/licenses/>.
           </object>
         </child>
         <child>
-          <object class="GtkDropDown" id="transition">
+          <object class="AdwComboRow" id="transition">
             <layout>
               <property name="column">1</property>
               <property name="row">1</property>

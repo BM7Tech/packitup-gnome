@@ -19,7 +19,7 @@ You should have received a copy of the GNU General Public License
 along with PackItUP!. If not, see <https://www.gnu.org/licenses/>.
 -->
 <gresources>
-    <gresource prefix="/tech/bm7/packitup/src">
+    <gresource prefix="/tech/bm7/packitup-gnome/src">
     <file preprocess="xml-stripblanks">window.ui</file>
     <file preprocess="xml-stripblanks">gears_menu.ui</file>
     <file preprocess="xml-stripblanks">prefs.ui</file>

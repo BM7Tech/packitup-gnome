@@ -16,11 +16,11 @@
 # You should have received a copy of the GNU General Public License
 # along with PackItUP!. If not, see <https://www.gnu.org/licenses/>.
 
-program_name = 'packitup'
+program_name = 'packitup-gnome'
 
 schemas_dir =  get_option('prefix') / get_option('datadir') / 'glib-2.0' / 'schemas'
 install_data(
-  'tech.bm7.packitup.gschema.xml',
+  'tech.bm7.packitup-gnome.gschema.xml',
   install_dir: schemas_dir )
 
 gnome = import('gnome')
@@ -28,10 +28,10 @@ gnome = import('gnome')
 
 
 resources = gnome.compile_resources('resources',
-                                    'packitup.gresource.xml',
+                                    'packitup-gnome.gresource.xml',
                                     source_dir: '.')
 
-schemas_file = files('tech.bm7.packitup.gschema.xml')
+schemas_file = files('tech.bm7.packitup-gnome.gschema.xml')
 install_data(
   'icons/hicolor/16x16/apps/packitup.png',
   install_dir: get_option('datadir') / 'icons/hicolor/16x16/apps'
@@ -86,10 +86,13 @@ cpp_sources = [
   'packitup_window.cc',
   'packitup_prefs.cc',
 ]
+
+gtk_dep = dependency ('gtk4')
 gtkmm_dep = dependency('gtkmm-4.0', version:'>=4.10', required: true)
 glib_dep = dependency('glibmm-2.68')
 gio_dep = dependency('giomm-2.68')
 intl_dep = dependency('intl')
+adwaita_dep = dependency('libadwaita-1')
 
 executable(program_name,
   cpp_sources, resources, schemas,
@@ -98,6 +101,8 @@ executable(program_name,
     glib_dep,
     gio_dep,
     intl_dep,
+    adwaita_dep,
+    gtk_dep
   ],
   win_subsystem: 'windows',
   install: true
@@ -108,7 +113,7 @@ bin_dir = get_option('prefix') / get_option('bindir')
 conf_data = configuration_data()
 conf_data.set('bindir', bin_dir)
 desktop_file = configure_file(
-  input: 'packitup.desktop.in',
+  input: 'packitup-gnome.desktop.in',
   output: '@BASENAME@',
   configuration: conf_data,
 )

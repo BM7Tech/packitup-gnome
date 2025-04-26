@@ -35,14 +35,20 @@
 #include <gtkmm/spinbutton.h>
 #include <gtkmm/stringlist.h>
 #include <gtkmm/textbuffer.h>
-
-class PackitupWindow : public Gtk::ApplicationWindow
+extern "C"
+{
+#include <adwaita.h>
+}
+class PackitupWindow
 {
 public:
-  PackitupWindow (BaseObjectType *cobject,
-                  const Glib::RefPtr<Gtk::Builder> &refBuilder);
+  PackitupWindow (AdwApplicationWindow *win);
 
   static PackitupWindow *create ();
+
+  void present ();
+  void register_with (AdwApplication *app);
+  AdwApplicationWindow *raw ();
 
   void open_result_view ();
   void on_result_clicked ();
@@ -54,6 +60,7 @@ public:
   Glib::ustring find_theme_css_path (const Glib::ustring &theme);
 
 protected:
+  AdwApplicationWindow *window_;
   bool m_providerAdded;
   Glib::RefPtr<Gtk::Builder> m_refBuilder;
   Glib::RefPtr<Gio::Settings> m_refSettings;
@@ -67,13 +74,21 @@ protected:
   Gtk::Revealer m_revealer;
   Gtk::Box *m_resultVBox{ nullptr };
   Gtk::Button *m_resultButton{ nullptr };
-  Gtk::DropDown *m_unitDropDown{ nullptr };
-  Gtk::DropDown *m_packSizeDropDown{ nullptr };
-  Gtk::DropDown *m_bottleSizeDropDown{ nullptr };
-  Gtk::HeaderBar *m_header{ nullptr };
-  Gtk::MenuButton *m_gears{ nullptr };
-  Gtk::SpinButton *m_spinButtonMore{ nullptr };
-  Gtk::SpinButton *m_spinButtonAlright{ nullptr };
+  Gtk::Widget *m_unitDropDown{ nullptr };
+  Gtk::Widget *m_packSizeDropDown{ nullptr };
+  Gtk::Widget *m_bottleSizeDropDown{ nullptr };
+  Gtk::Widget *m_header{ nullptr };
+  Gtk::MenuButton *m_gears;
+  Gtk::Widget *m_spinButtonMore{ nullptr };
+  Gtk::Widget *m_spinButtonAlright{ nullptr };
+  AdwSpinRow *m_rawSpinRowMore;
+  AdwSpinRow *m_rawSpinRowAlright;
+  AdwComboRow *m_rawUnitComboRow;
+  AdwComboRow *m_rawBottleSizeComboRow;
+  AdwComboRow *m_rawPackSizeComboRow;
+  AdwHeaderBar *m_rawHeader;
+  GtkCssProvider *AppCustomCssProvider;
+  GtkCssProvider *ThemeCssProvider;
   static void
   on_parsing_error (const Glib::RefPtr<const Gtk::CssSection> &section,
                     const Glib::Error &error);

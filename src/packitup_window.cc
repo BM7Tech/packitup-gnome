@@ -30,6 +30,12 @@
 #include <gtkmm/scrolledwindow.h>
 #include <gtkmm/textview.h>
 #include <gtkmm/version.h>
+extern "C"
+{
+#include <adwaita.h>
+#include <gdk/gdk.h>
+#include <gtk/gtk.h>
+}
 #include <iomanip>
 #include <iostream>
 #include <stdexcept>
@@ -40,51 +46,65 @@
 
 #define HAS_LOAD_FROM_STRING GTKMM_CHECK_VERSION (4, 12, 0)
 
-PackitupWindow::PackitupWindow (BaseObjectType *cobject,
-                                const Glib::RefPtr<Gtk::Builder> &refBuilder)
-    : Gtk::ApplicationWindow (cobject), m_refBuilder (refBuilder)
+static void on_unit_changed_callback (GApplication * /* app */,
+                                      gpointer user_data);
+
+PackitupWindow::PackitupWindow (AdwApplicationWindow *win) : window_ (win)
 {
+  m_refBuilder = Gtk::Builder::create_from_resource (
+      "/tech/bm7/packitup-gnome/src/window.ui");
+  // For adwaita widgets we need the gtk C style builder
+  auto *c_builder = m_refBuilder->gobj ();
 
-  //  The app buttons to calculate the result
-  m_spinButtonMore
-      = m_refBuilder->get_widget<Gtk::SpinButton> ("spin_button_more");
-  if (!m_spinButtonMore)
-    throw std::runtime_error ("no \"spin_button_more\" object in window.ui");
+  // SpinRow raw pointers Adwaita fix
+  m_rawSpinRowMore
+      = ADW_SPIN_ROW (gtk_builder_get_object (c_builder, "spin_row_more"));
+  if (!m_rawSpinRowMore)
+    throw std::runtime_error ("no \"spin_row_more\" object in window.ui");
 
-  m_header = m_refBuilder->get_widget<Gtk::HeaderBar> ("header");
-  if (!m_header)
-    throw std::runtime_error ("no \"header\" object in window.ui");
+  m_rawSpinRowAlright
+      = ADW_SPIN_ROW (gtk_builder_get_object (c_builder, "spin_row_alright"));
+  if (!m_rawSpinRowAlright)
+    throw std::runtime_error ("no \"spin_row_alright\" object in window.ui");
 
-  m_spinButtonAlright
-      = m_refBuilder->get_widget<Gtk::SpinButton> ("spin_button_alright");
-  if (!m_spinButtonAlright)
+  adw_spin_row_set_numeric (m_rawSpinRowMore, true);
+  adw_spin_row_set_numeric (m_rawSpinRowAlright, true);
+
+  m_rawHeader = ADW_HEADER_BAR (gtk_builder_get_object (c_builder, "header"));
+  if (!m_rawHeader)
     throw std::runtime_error (
-        "no \"spin_button_alright\" object in window.ui");
-  m_spinButtonAlright->set_numeric ();
-  m_spinButtonMore->set_numeric ();
+        "no \"header\" object in window.ui"); // Add scrollable window to the
+                                              // whole application for WM
+                                              // support
 
-  // Add scrollable window to the whole application for WM support
-  auto applicationBoxLayout
-      = m_refBuilder->get_widget<Gtk::Box> ("application_box_layout");
+  auto layoutBox
+      = gtk_builder_get_object (c_builder, "application_box_layout");
+  auto applicationBoxLayout = Glib::wrap (GTK_BOX (layoutBox));
   if (!applicationBoxLayout)
     throw std::runtime_error (
         "no \"application_box_layout\" object in window.ui");
-  auto app_scrooledWindow = Gtk::make_managed<Gtk::ScrolledWindow> ();
-  app_scrooledWindow->set_policy (Gtk::PolicyType::AUTOMATIC,
-                                  Gtk::PolicyType::AUTOMATIC);
-  app_scrooledWindow->set_expand ();
 
-  set_child (*app_scrooledWindow);
-  app_scrooledWindow->set_child (*applicationBoxLayout);
+  auto app_scrolledWindow = gtk_scrolled_window_new ();
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (app_scrolledWindow),
+                                  GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+  applicationBoxLayout->unparent ();
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (app_scrolledWindow),
+                                 GTK_WIDGET (layoutBox));
 
-  m_unitDropDown = m_refBuilder->get_widget<Gtk::DropDown> ("unit_dropdown");
-  if (!m_unitDropDown)
-    throw std::runtime_error ("no \"unit_dropdown\" object in window.ui");
+  adw_application_window_set_content (window_, app_scrolledWindow);
 
-  m_unitDropDown->property_selected ().signal_changed ().connect (
-      sigc::mem_fun (*this, &PackitupWindow::on_unit_dropdown_changed));
-  m_resultButton = m_refBuilder->get_widget<Gtk::Button> ("result_button");
-  if (!m_resultButton)
+  // Adwaita ComboRow
+  m_rawUnitComboRow
+      = ADW_COMBO_ROW (gtk_builder_get_object (c_builder, "unit_comborow"));
+  if (!m_rawUnitComboRow)
+    throw std::runtime_error ("no \"unit_comborow\" object in window.ui");
+  g_signal_connect (m_rawUnitComboRow, "notify::selected",
+                    G_CALLBACK (on_unit_changed_callback), this);
+
+  auto resultBtn
+      = GTK_BUTTON (gtk_builder_get_object (c_builder, "result_button"));
+  m_resultButton = Glib::wrap (resultBtn);
+  if (!resultBtn)
     throw std::runtime_error ("no \"result_button\" object in window.ui");
 
   // Bind Button
@@ -92,41 +112,47 @@ PackitupWindow::PackitupWindow (BaseObjectType *cobject,
       sigc::mem_fun (*this, &PackitupWindow::on_result_clicked));
 
   // App results scrolled window
-  m_resultVBox = m_refBuilder->get_widget<Gtk::Box> ("result_VBox");
-  if (!m_resultVBox)
+  auto resultVBox
+      = GTK_BOX (gtk_builder_get_object (c_builder, "result_VBox"));
+  m_resultVBox = Glib::wrap (resultVBox);
+  if (!resultVBox)
     throw std::runtime_error ("no \"result_VBox\" object in window.ui");
 
-  // Bottle size dropdown menu
-  m_bottleSizeDropDown
-      = m_refBuilder->get_widget<Gtk::DropDown> ("bottle_size_dropdown");
-  if (!m_bottleSizeDropDown)
+  // Adwaita ComboRow
+  m_rawBottleSizeComboRow = ADW_COMBO_ROW (
+      gtk_builder_get_object (c_builder, "bottle_size_comborow"));
+  if (!m_rawBottleSizeComboRow)
     throw std::runtime_error (
-        "no \"bottle_size_dropdown\" object in window.ui");
+        "no \"Adwaita Combo Row bottle_size_comborow\" object in window.ui");
 
-  m_bottleSizeDropDown->set_selected (0);
+  adw_combo_row_set_selected (m_rawBottleSizeComboRow, 0);
 
   // Bottle size dropdown menu
-  m_refBottleSizeList
-      = m_refBuilder->get_object<Gtk::StringList> ("bottle_size_list");
+  auto bottleSizeList = GTK_STRING_LIST (
+      gtk_builder_get_object (c_builder, "bottle_size_list"));
+  m_refBottleSizeList = Glib::wrap (bottleSizeList);
   if (!m_refBottleSizeList)
     throw std::runtime_error ("no \"bottle_size_list\" object in window.ui");
 
   // Bottle size dropdown menu
-  m_refPackSizeList
-      = m_refBuilder->get_object<Gtk::StringList> ("pack_size_list");
+  auto packSizeList
+      = GTK_STRING_LIST (gtk_builder_get_object (c_builder, "pack_size_list"));
+  m_refPackSizeList = Glib::wrap (packSizeList);
   if (!m_refPackSizeList)
     throw std::runtime_error ("no \"pack_size_list\" object in window.ui");
 
-  // Pack size dropdown menu
-  m_packSizeDropDown
-      = m_refBuilder->get_widget<Gtk::DropDown> ("pack_size_dropdown");
-  if (!m_packSizeDropDown)
-    throw std::runtime_error ("no \"pack_size_dropdown\" object in window.ui");
+  // Pack size Adwaita Combo Row
+  m_rawPackSizeComboRow = ADW_COMBO_ROW (
+      gtk_builder_get_object (c_builder, "pack_size_comborow"));
+  if (!m_rawPackSizeComboRow)
+    throw std::runtime_error (
+        "no \"Adwaita Combo Row pack_size_comborow\" object in window.ui");
 
-  m_packSizeDropDown->set_selected (0);
+  adw_combo_row_set_selected (m_rawPackSizeComboRow, 0);
 
   // App info box
-  auto m_info_VBox = m_refBuilder->get_widget<Gtk::Box> ("info_box");
+  auto infoBox = GTK_BOX (gtk_builder_get_object (c_builder, "info_box"));
+  auto m_info_VBox = Glib::wrap (infoBox);
   if (!m_info_VBox)
     throw std::runtime_error ("no \"info_box\" object in window.ui");
 
@@ -141,7 +167,7 @@ PackitupWindow::PackitupWindow (BaseObjectType *cobject,
   auto m_refInfoBuffer = m_info_view->get_buffer ();
 
   // Bind font settings to infoTextBuffer
-  m_refSettings = Gio::Settings::create ("tech.bm7.packitup");
+  m_refSettings = Gio::Settings::create ("tech.bm7.packitup-gnome");
   auto m_refTagInfoFont = m_refInfoBuffer->create_tag ();
   m_refSettings->bind ("font", m_refTagInfoFont->property_font ());
   m_refInfoBuffer->set_text (_ (
@@ -208,7 +234,8 @@ PackitupWindow::PackitupWindow (BaseObjectType *cobject,
       sigc::mem_fun (*this, &PackitupWindow::on_result_changed));
 
   // App Gears menu, with preferences, about and quit button
-  m_gears = m_refBuilder->get_widget<Gtk::MenuButton> ("gears");
+  auto gears = GTK_MENU_BUTTON (gtk_builder_get_object (c_builder, "gears"));
+  m_gears = Glib::wrap (gears);
   if (!m_gears)
     throw std::runtime_error ("no \"gears\" object in window.ui");
 
@@ -220,35 +247,31 @@ PackitupWindow::PackitupWindow (BaseObjectType *cobject,
       .connect (sigc::mem_fun (*this, &PackitupWindow::new_decoration_layout));
 
   // Set the window icon from gresources
-  auto icon_theme = Gtk::IconTheme::get_for_display (get_display ());
-  if (icon_theme->has_icon ("packitup"))
-    set_icon_name ("packitup"); // Uses the theme icon
+  auto icon_theme = gtk_icon_theme_get_for_display (
+      gtk_widget_get_display (GTK_WIDGET (window_)));
+  if (gtk_icon_theme_has_icon (icon_theme, "packitup"))
+    gtk_window_set_icon_name (GTK_WINDOW (window_),
+                              "packitup"); // Uses the theme icon
   else
     std::cerr << "Icon 'packitup' not found in theme!" << std::endl;
 
-  m_refAppCustomCssProvider = Gtk::CssProvider::create ();
-  m_refThemeCssProvider = Gtk::CssProvider::create ();
-  m_refAppCustomCssProvider->signal_parsing_error ().connect (
-      [] (const auto &section, const auto &error) {
-        on_parsing_error (section, error);
-      });
+  AppCustomCssProvider = gtk_css_provider_new ();
+  ThemeCssProvider = gtk_css_provider_new ();
+  // AppCustomCssProvider->signal_parsing_error ().connect (
+  //     [] (const auto &section, const auto &error) {
+  //       on_parsing_error (section, error);
+  //     });
 
   m_providerAdded = false;
   reload_theme_css ();
-#if HAS_STYLE_PROVIDER_ADD_PROVIDER_FOR_DISPLAY
-  Gtk::StyleProvider::add_provider_for_display (
-      get_display (), m_refThemeCssProvider, GTK_STYLE_PROVIDER_PRIORITY_USER);
-  Gtk::StyleProvider::add_provider_for_display (
-      get_display (), m_refAppCustomCssProvider,
+  GdkDisplay *display = gtk_widget_get_display (GTK_WIDGET (window_));
+
+  gtk_style_context_add_provider_for_display (
+      display, GTK_STYLE_PROVIDER (ThemeCssProvider),
       GTK_STYLE_PROVIDER_PRIORITY_USER);
-#else
-  Gtk::StyleContext::add_provider_for_display (
-      get_display (), m_refThemeCssProvider,
-      GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-  Gtk::StyleContext::add_provider_for_display (
-      get_display (), m_refAppCustomCssProvider,
+  gtk_style_context_add_provider_for_display (
+      display, GTK_STYLE_PROVIDER (AppCustomCssProvider),
       GTK_STYLE_PROVIDER_PRIORITY_USER);
-#endif
   // GNOME Dark/Light theme switch
   auto gnome = Gio::Settings::create ("org.gnome.desktop.interface");
   gnome->signal_changed ().connect ([this] (const Glib::ustring &key) {
@@ -263,26 +286,39 @@ PackitupWindow::PackitupWindow (BaseObjectType *cobject,
 }
 
 void
+PackitupWindow::present ()
+{
+  gtk_window_present (GTK_WINDOW (window_));
+}
+
+void
+PackitupWindow::register_with (AdwApplication *app)
+{
+  // same as set_application, manages lifecycle of windows
+  gtk_application_add_window (GTK_APPLICATION (app), GTK_WINDOW (window_));
+}
+
+void
 PackitupWindow::new_decoration_layout ()
 {
-  Glib::ustring default_layout
+  std::string default_layout
       = m_refGtkSettings->property_gtk_decoration_layout ().get_value ();
 
-  Glib::ustring new_layout = default_layout;
+  std::string new_layout = default_layout;
   // Split decoration layout into left/right around ':'
   size_t pos = new_layout.find (":");
-  Glib::ustring left_side
-      = (pos == Glib::ustring::npos ? new_layout : new_layout.substr (0, pos));
+  std::string left_side
+      = (pos == std::string::npos ? new_layout : new_layout.substr (0, pos));
 
-  Glib::ustring right_side
-      = (pos == Glib::ustring::npos ? "" : new_layout.substr (pos + 1));
+  std::string right_side
+      = (pos == std::string::npos ? "" : new_layout.substr (pos + 1));
 
   size_t pos_r_close = right_side.find ("close");
   size_t pos_l_close = left_side.find ("close");
   bool close_on_left = false;
-  if (pos_r_close != Glib::ustring::npos)
+  if (pos_r_close != std::string::npos)
     new_layout = "icon:" + right_side;
-  else if (pos_l_close != Glib::ustring::npos)
+  else if (pos_l_close != std::string::npos)
     {
       new_layout = left_side + ":icon";
       close_on_left = true;
@@ -290,23 +326,25 @@ PackitupWindow::new_decoration_layout ()
   else
     new_layout = "icon:";
 
-  m_header->set_decoration_layout (new_layout);
+  adw_header_bar_set_decoration_layout (m_rawHeader, new_layout.c_str ());
 
   // Connect the menu(gears_menu.ui) to the MenuButton m_gears
   // The connection between action and menu item is specified in gears_menu.ui)
   auto menu_builder = Gtk::Builder::create_from_resource (
-      "/tech/bm7/packitup/src/gears_menu.ui");
+      "/tech/bm7/packitup-gnome/src/gears_menu.ui");
   auto menu = menu_builder->get_object<Gio::MenuModel> ("menu");
   if (!menu)
     throw std::runtime_error ("No \"menu\" object in gears_menu.ui");
   m_gears->set_menu_model (menu);
 
+  auto m_rawGears = GTK_WIDGET (m_gears->gobj ());
+
   // Pack the menu on the opposite side of the close menu
-  m_header->remove (*m_gears);
+  adw_header_bar_remove (m_rawHeader, m_rawGears);
   if (close_on_left)
-    m_header->pack_end (*m_gears);
+    adw_header_bar_pack_end (m_rawHeader, m_rawGears);
   else
-    m_header->pack_start (*m_gears);
+    adw_header_bar_pack_start (m_rawHeader, m_rawGears);
 }
 
 void
@@ -315,66 +353,45 @@ PackitupWindow::reload_theme_css ()
   // Look up the current GTK theme name frok GtkSettings
   auto theme = Gtk::Settings::get_default ()->property_gtk_theme_name ();
   auto css_path = find_theme_css_path (theme);
+  GdkDisplay *display = gtk_widget_get_display (GTK_WIDGET (window_));
   if (!css_path.empty ())
     {
       if (!m_providerAdded)
         {
-#if HAS_STYLE_PROVIDER_ADD_PROVIDER_FOR_DISPLAY
-          Gtk::StyleProvider::add_provider_for_display (
-              get_display (), m_refThemeCssProvider,
-              GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-          Gtk::StyleProvider::add_provider_for_display (
-              get_display (), m_refAppCustomCssProvider,
+          gtk_style_context_add_provider_for_display (
+              display, GTK_STYLE_PROVIDER (AppCustomCssProvider),
               GTK_STYLE_PROVIDER_PRIORITY_USER);
-#else
-          Gtk::StyleContext::add_provider_for_display (
-              get_display (), m_refThemeCssProvider,
-              GTK_STYLE_PROVIDER_PRIORITY_APPLICATION);
-          Gtk::StyleContext::add_provider_for_display (
-              get_display (), m_refAppCustomCssProvider,
-              GTK_STYLE_PROVIDER_PRIORITY_USER);
-#endif
           m_providerAdded = true;
         }
-      m_refThemeCssProvider->load_from_path (css_path);
+      gtk_css_provider_load_from_path (ThemeCssProvider, css_path.c_str ());
 
 #if HAS_LOAD_FROM_STRING
-      Glib::ustring css = "windowcontrols>image{ min-height:24px; "
-                          "min-width:24px; margin: 0px; }";
-      m_refAppCustomCssProvider->load_from_string (css);
-#else
-      std::string css = "windowcontrols>image{ min-height:24px; "
+      const char *css = "windowcontrols>image{ min-height:24px; "
                         "min-width:24px; margin: 0px; }";
-      m_refAppCustomCssProvider->load_from_data (css);
+      gtk_css_provider_load_from_string (AppCustomCssProvider, css);
+#else
+      const char *css = "windowcontrols>image{ min-height:24px; "
+                        "min-width:24px; margin: 0px; }";
+      gtk_css_provider_load_from_data (AppCustomCssProvider, css);
 #endif
     }
   else
     {
       if (m_providerAdded)
         {
-#if HAS_STYLE_PROVIDER_ADD_PROVIDER_FOR_DISPLAY
-          Gtk::StyleProvider::remove_provider_for_display (
-              get_display (), m_refThemeCssProvider);
-          // Gtk::StyleProvider::add_provider_for_display (
-          //     get_display (), m_refAppCustomCssProvider,
-          //     GTK_STYLE_PROVIDER_PRIORITY_USER);
-#else
-          Gtk::StyleContext::remove_provider_for_display (
-              get_display (), m_refThemeCssProvider);
-          // Gtk::StyleContext::add_provider_for_display (
-          //     get_display (), m_refAppCustomCssProvider,
-          //     GTK_STYLE_PROVIDER_PRIORITY_USER);
-#endif
+          gtk_style_context_add_provider_for_display (
+              display, GTK_STYLE_PROVIDER (ThemeCssProvider),
+              GTK_STYLE_PROVIDER_PRIORITY_USER);
           m_providerAdded = false;
         }
 #if HAS_LOAD_FROM_STRING
       Glib::ustring css = "windowcontrols>image{ min-height:24px; "
                           "min-width:24px; margin: 0px 6px; }";
-      m_refAppCustomCssProvider->load_from_string (css);
+      gtk_css_provider_load_from_string (AppCustomCssProvider, css.c_str ());
 #else
       std::string css = "windowcontrols>image{ min-height:24px; "
                         "min-width:24px; margin: 0px 6px; }";
-      m_refAppCustomCssProvider->load_from_data (css);
+      gtk_css_provicer_load_from_data (AppCustomCssProvider, css);
 #endif
     }
 }
@@ -468,19 +485,41 @@ PackitupWindow::on_parsing_error (
     }
 }
 
+extern "C" void
+on_packitup_window_hide (GtkWidget * /* widget */, gpointer user_data)
+{
+  delete static_cast<PackitupWindow *> (user_data);
+}
+
 PackitupWindow *
 PackitupWindow::create ()
 {
-  auto refBuilder = Gtk::Builder::create_from_resource (
-      "/tech/bm7/packitup/src/window.ui");
-
-  auto window = Gtk::Builder::get_widget_derived<PackitupWindow> (
-      refBuilder, "app_window");
-
-  if (!window)
+  auto c_builder = gtk_builder_new_from_resource (
+      "/tech/bm7/packitup-gnome/src/window.ui");
+  auto c_window = gtk_builder_get_object (c_builder, "app_window");
+  if (!c_window)
     throw std::runtime_error ("No \"app_window\" object in window.ui");
 
-  return window;
+  AdwApplicationWindow *raw_window = ADW_APPLICATION_WINDOW (c_window);
+  g_object_ref (raw_window);
+
+  auto *self = new PackitupWindow (raw_window);
+  g_signal_connect (raw_window, "hide", G_CALLBACK (on_packitup_window_hide),
+                    self);
+
+  return self;
+}
+
+static void
+on_unit_changed_callback (GApplication * /* app */, gpointer user_data)
+{
+  static_cast<PackitupWindow *> (user_data)->on_unit_dropdown_changed ();
+}
+
+AdwApplicationWindow *
+PackitupWindow::raw ()
+{
+  return window_;
 }
 
 void
@@ -488,7 +527,7 @@ PackitupWindow::on_unit_dropdown_changed ()
 {
   while (m_refBottleSizeList->get_n_items ())
     m_refBottleSizeList->remove (0);
-  auto unit_idx = m_unitDropDown->get_selected ();
+  auto unit_idx = adw_combo_row_get_selected (m_rawUnitComboRow);
   if (unit_idx > 0)
     {
       m_refBottleSizeList->append (_ ("8oz"));
@@ -523,11 +562,12 @@ PackitupWindow::on_result_changed ()
   if (!m_revealer.get_reveal_child ())
     {
       //  Get app values
-      auto more_Value = m_spinButtonMore->get_value ();
-      auto alright_Value = m_spinButtonAlright->get_value ();
-      auto unit_idx = m_unitDropDown->get_selected ();
-      auto single_bottle_idx = m_bottleSizeDropDown->get_selected ();
-      auto pack_size_idx = m_packSizeDropDown->get_selected ();
+      auto more_Value = adw_spin_row_get_value (m_rawSpinRowMore);
+      auto alright_Value = adw_spin_row_get_value (m_rawSpinRowAlright);
+      auto unit_idx = adw_combo_row_get_selected (m_rawUnitComboRow);
+      auto single_bottle_idx
+          = adw_combo_row_get_selected (m_rawBottleSizeComboRow);
+      auto pack_size_idx = adw_combo_row_get_selected (m_rawPackSizeComboRow);
       auto single_bottle
           = std::stof (m_refBottleSizeList->get_string (single_bottle_idx));
       auto pack_size

@@ -16,7 +16,7 @@
 # You should have received a copy of the GNU General Public License
 # along with PackItUP!. If not, see <https://www.gnu.org/licenses/>.
 
-project('packitup', 'c', 'cpp',
+project('packitup-gnome', 'c', 'cpp',
   version: '0.0.0',
   license: 'GPL-3.0-or-later',
   default_options: [
