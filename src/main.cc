@@ -19,11 +19,13 @@
  * */
 
 #include "packitup.h"
+#include "packitup_prefs.h"
 #include <giomm.h>
 #include <glibconfig.h>
 #include <glibmm.h>
 #include <glibmm/i18n.h>
 #include <gtkmm.h>
+#include <iostream>
 #include <stdexcept>
 extern "C"
 {
@@ -32,15 +34,104 @@ extern "C"
 }
 #include <gtkmm/init.h>
 
-void
-startup_callback (GApplication * /*app*/, gpointer user_data)
+static void
+on_action_preferences (GSimpleAction *action, GVariant *state,
+                       gpointer user_data)
 {
-  static_cast<Packitup *> (user_data)->on_startup ();
+  try
+    {
+      GtkApplication *app = GTK_APPLICATION (user_data);
+      GtkWindow *window_ref
+          = gtk_application_get_active_window (GTK_APPLICATION (app));
+
+      auto cpp_wrap = Glib::wrap (window_ref);
+      auto prefs_dialog = PackitupPrefs::create (*cpp_wrap);
+      prefs_dialog->present ();
+
+      // Delete when its hidden
+      prefs_dialog->signal_hide ().connect (
+          [prefs_dialog] () { delete prefs_dialog; });
+    }
+  catch (const Glib::Error &ex)
+    {
+      std::cerr << "Glib::Error: Packitup::on_action_preferences(): "
+                << ex.what () << std::endl;
+    }
+  catch (const std::exception &ex)
+    {
+      std::cerr << "std::exception: Packitup::on_action_preferences(): "
+                << ex.what () << std::endl;
+    }
 }
 
-void
-activate_callback (GApplication * /*app*/, gpointer user_data)
+static void
+on_action_about (GSimpleAction *action, GVariant *state, gpointer user_data)
 {
+  try
+    {
+      auto refBuilder = Gtk::Builder::create_from_resource (
+          "/tech/bm7/packitup-gnome/src/about.ui");
+      auto dialog = refBuilder->get_widget<Gtk::AboutDialog> ("about_window");
+
+      GtkApplication *app = GTK_APPLICATION (user_data);
+      GtkWindow *active_window
+          = gtk_application_get_active_window (GTK_APPLICATION (app));
+      auto cpp_wrap = Glib::wrap (active_window);
+
+      dialog->set_transient_for (*cpp_wrap);
+      dialog->set_program_name ("PackItUP!");
+      dialog->set_copyright ("Copyright (C) 2025  edu-bm7 <edubm7@bm7.tech>");
+      dialog->set_logo (Gdk::Texture::create_from_resource (
+          "/tech/bm7/packitup-gnome/src/packitup.png"));
+      dialog->set_license_type (Gtk::License::GPL_3_0);
+      dialog->set_wrap_license (true);
+      dialog->set_comments (_ ("Never run out of beer again."));
+      dialog->set_website ("https://github.com/BM7Tech/packitup.git");
+      dialog->set_website_label ("PackItUP! Website");
+      std::vector<Glib::ustring> list_authors;
+      list_authors.push_back ("edu-bm7 https://github.com/edu-bm7");
+      list_authors.push_back ("BM7Tech https://github.com/BM7Tech");
+      dialog->set_authors (list_authors);
+      dialog->set_visible (true);
+      dialog->present ();
+      dialog->signal_hide ().connect ([dialog] () { delete dialog; });
+    }
+  catch (const Glib::Error &ex)
+    {
+      std::cerr << "Glib::Error: Packitup::on_action_about(): " << ex.what ()
+                << std::endl;
+    }
+  catch (const std::exception &ex)
+    {
+      std::cerr << "std::exception: Packitup::on_action_about(): "
+                << ex.what () << std::endl;
+    }
+}
+
+static void
+on_action_quit (GSimpleAction *action, GVariant *state, gpointer user_data)
+{
+  GtkApplication *app = GTK_APPLICATION (user_data);
+  auto windows = gtk_application_get_windows (app);
+  GList *window;
+  window = windows;
+  while (window)
+    {
+      gtk_widget_set_visible (GTK_WIDGET (window), false);
+      window = window->next;
+    }
+
+  g_application_quit (G_APPLICATION (app));
+}
+
+static void
+activate_callback (GApplication *gapp, gpointer user_data)
+{
+  // GObjectClass *klass = G_OBJECT_GET_CLASS (gapp);
+
+  // GApplicationClass *parent_class
+  //     = G_APPLICATION_CLASS (g_type_class_peek_parent (klass));
+  // parent_class->activate (gapp);
   static_cast<Packitup *> (user_data)->on_activate ();
 }
 
@@ -53,18 +144,27 @@ main (int argc, char *argv[])
   bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
   textdomain (GETTEXT_PACKAGE);
 
+  g_autoptr (AdwApplication) app = NULL;
+  static GActionEntry app_entries[] = {
+    { "preferences", on_action_preferences, NULL, NULL, NULL },
+    { "about", on_action_about, NULL, NULL, NULL },
+    { "quit", on_action_quit, NULL, NULL, NULL },
+  };
+  const char *quit_accels[2] = { "<Ctrl>Q", NULL };
+
   gtk_init ();
   Gtk::init_gtkmm_internals ();
-  adw_init ();
-  g_autoptr (AdwApplication) app = NULL;
-
   app = adw_application_new ("tech.bm7.packitup-gnome",
                              G_APPLICATION_DEFAULT_FLAGS);
 
   auto packitup = Packitup::create (app);
 
-  g_signal_connect (app, "startup", G_CALLBACK (startup_callback),
-                    packitup.get ());
+  g_action_map_add_action_entries (G_ACTION_MAP (app), app_entries,
+                                   G_N_ELEMENTS (app_entries), app);
+
+  gtk_application_set_accels_for_action (GTK_APPLICATION (app), "app.quit",
+                                         quit_accels);
+
   g_signal_connect (app, "activate", G_CALLBACK (activate_callback),
                     packitup.get ());
 

@@ -95,6 +95,7 @@ protected:
                     const Glib::Error &error);
 
 private:
+  bool header_added;
   int m_totalPeopleNumber;
   float m_amountOfBeer;
   float m_amountOfBeerPacks;

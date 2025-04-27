@@ -78,6 +78,7 @@ PackitupWindow::PackitupWindow (AdwApplicationWindow *win) : window_ (win)
         "no \"header\" object in window.ui"); // Add scrollable window to the
                                               // whole application for WM
                                               // support
+  header_added = false;
 
   auto layoutBox
       = gtk_builder_get_object (c_builder, "application_box_layout");
@@ -85,15 +86,6 @@ PackitupWindow::PackitupWindow (AdwApplicationWindow *win) : window_ (win)
   if (!applicationBoxLayout)
     throw std::runtime_error (
         "no \"application_box_layout\" object in window.ui");
-
-  auto app_scrolledWindow = gtk_scrolled_window_new ();
-  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (app_scrolledWindow),
-                                  GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-  applicationBoxLayout->unparent ();
-  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (app_scrolledWindow),
-                                 GTK_WIDGET (layoutBox));
-
-  adw_application_window_set_content (window_, app_scrolledWindow);
 
   // Adwaita ComboRow
   m_rawUnitComboRow
@@ -129,6 +121,9 @@ PackitupWindow::PackitupWindow (AdwApplicationWindow *win) : window_ (win)
   m_resultVBox = Glib::wrap (resultVBox);
   if (!resultVBox)
     throw std::runtime_error ("no \"result_VBox\" object in window.ui");
+
+  gtk_widget_set_hexpand (GTK_WIDGET (resultVBox), TRUE);
+  gtk_widget_set_vexpand (GTK_WIDGET (resultVBox), TRUE);
 
   // Adwaita ComboRow
   m_rawBottleSizeComboRow = ADW_COMBO_ROW (
@@ -245,12 +240,6 @@ PackitupWindow::PackitupWindow (AdwApplicationWindow *win) : window_ (win)
   m_revealer.property_child_revealed ().signal_changed ().connect (
       sigc::mem_fun (*this, &PackitupWindow::on_result_changed));
 
-  // App Gears menu, with preferences, about and quit button
-  auto gears = GTK_MENU_BUTTON (gtk_builder_get_object (c_builder, "gears"));
-  m_gears = Glib::wrap (gears);
-  if (!m_gears)
-    throw std::runtime_error ("no \"gears\" object in window.ui");
-
   new_decoration_layout ();
 
   // Ensure that the HeaderBar has at least icon:close decoration layout
@@ -307,7 +296,16 @@ void
 PackitupWindow::register_with (AdwApplication *app)
 {
   // same as set_application, manages lifecycle of windows
-  gtk_window_set_application (GTK_WINDOW (window_), GTK_APPLICATION (app));
+  gtk_application_add_window (GTK_APPLICATION (app), GTK_WINDOW (window_));
+
+  // when the user clicks "close" button
+  g_signal_connect (
+      window_, "close-request",
+      G_CALLBACK (+[] (GtkWindow *win, gpointer user_data) -> gboolean {
+        g_application_quit (G_APPLICATION (user_data));
+        return GDK_EVENT_STOP;
+      }),
+      app);
   // gtk_window_present (GTK_WINDOW (window_));
 }
 
@@ -341,23 +339,34 @@ PackitupWindow::new_decoration_layout ()
 
   adw_header_bar_set_decoration_layout (m_rawHeader, new_layout.c_str ());
 
+  auto c_builder = m_refBuilder->gobj ();
+
+  // App Gears menu, with preferences, about and quit button
+  auto gears = gtk_builder_get_object (c_builder, "gears");
+
   // Connect the menu(gears_menu.ui) to the MenuButton m_gears
   // The connection between action and menu item is specified in gears_menu.ui)
   auto menu_builder = Gtk::Builder::create_from_resource (
       "/tech/bm7/packitup-gnome/src/gears_menu.ui");
-  auto menu = menu_builder->get_object<Gio::MenuModel> ("menu");
+  auto c_menu_builder = menu_builder->gobj ();
+  auto menu = gtk_builder_get_object (c_menu_builder, "menu");
   if (!menu)
     throw std::runtime_error ("No \"menu\" object in gears_menu.ui");
-  m_gears->set_menu_model (menu);
 
-  auto m_rawGears = GTK_WIDGET (m_gears->gobj ());
+  auto m_rawGears = GTK_WIDGET (gears);
 
-  // Pack the menu on the opposite side of the close menu
-  adw_header_bar_remove (m_rawHeader, m_rawGears);
+  gtk_menu_button_set_menu_model (GTK_MENU_BUTTON (gears),
+                                  G_MENU_MODEL (menu));
+
+  if (header_added)
+    adw_header_bar_remove (m_rawHeader, m_rawGears);
+  //  adw_header_bar_add_action_widget(m_rawHeader, m_rawGears);
+  //   Pack the menu on the opposite side of the close menu
   if (close_on_left)
     adw_header_bar_pack_end (m_rawHeader, m_rawGears);
   else
     adw_header_bar_pack_start (m_rawHeader, m_rawGears);
+  header_added = true;
 }
 
 void

@@ -36,25 +36,16 @@ public:
   Packitup (AdwApplication *app);
   static std::unique_ptr<Packitup> create (AdwApplication *app);
 
-protected:
   // Override default signal handlers
-  void on_startup ();
   void on_activate ();
-  Glib::RefPtr<Gtk::CssProvider> m_refCssProvider;
 
-  // Grant callbacks access
-  friend void startup_callback (GApplication *, gpointer);
-  friend void activate_callback (GApplication *, gpointer);
+protected:
+  Glib::RefPtr<Gtk::CssProvider> m_refCssProvider;
 
 private:
   AdwApplication *const app_;
   PackitupWindow *create_appwindow ();
   PackitupWindow *win_;
-  static void on_action_quit (GSimpleAction *, GVariant *, gpointer user_data);
-  static void on_action_preferences (GSimpleAction *, GVariant *,
-                                     gpointer user_data);
-  static void on_action_about (GSimpleAction *, GVariant *,
-                               gpointer user_data);
 };
 
 #endif // PACKITUP_H
