@@ -19,6 +19,7 @@
  * */
 
 #include "packitup_window.h"
+#include "gdkmm/event.h"
 #include "packitup.h"
 #include <glib/gi18n.h>
 #include <glibmm/i18n.h>
@@ -78,7 +79,6 @@ PackitupWindow::PackitupWindow (AdwApplicationWindow *win) : window_ (win)
         "no \"header\" object in window.ui"); // Add scrollable window to the
                                               // whole application for WM
                                               // support
-  header_added = false;
 
   auto layoutBox
       = gtk_builder_get_object (c_builder, "application_box_layout");
@@ -87,6 +87,22 @@ PackitupWindow::PackitupWindow (AdwApplicationWindow *win) : window_ (win)
     throw std::runtime_error (
         "no \"application_box_layout\" object in window.ui");
 
+  auto app_clampWindow = adw_clamp_new ();
+  auto app_scrolledWindow = gtk_scrolled_window_new ();
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (app_scrolledWindow),
+                                  GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+  adw_clamp_set_maximum_size (ADW_CLAMP (app_clampWindow), 700);
+  applicationBoxLayout->unparent ();
+  auto toolview = gtk_builder_get_object (c_builder, "toolview");
+  gtk_widget_unparent (GTK_WIDGET (toolview));
+  adw_application_window_set_content (window_, GTK_WIDGET (toolview));
+  adw_toolbar_view_set_content (ADW_TOOLBAR_VIEW (toolview), app_clampWindow);
+  // gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (app_scrolledWindow),
+  //                                GTK_WIDGET (layoutBox));
+  adw_clamp_set_child (ADW_CLAMP (app_clampWindow),
+                       GTK_WIDGET (app_scrolledWindow));
+  gtk_scrolled_window_set_child (GTK_SCROLLED_WINDOW (app_scrolledWindow),
+                                 GTK_WIDGET (layoutBox));
   // Adwaita ComboRow
   m_rawUnitComboRow
       = ADW_COMBO_ROW (gtk_builder_get_object (c_builder, "unit_comborow"));
@@ -95,13 +111,8 @@ PackitupWindow::PackitupWindow (AdwApplicationWindow *win) : window_ (win)
 
   auto *unitList
       = GTK_STRING_LIST (gtk_builder_get_object (c_builder, "unit_list"));
-  gsize n = g_list_model_get_n_items (G_LIST_MODEL (unitList));
-  g_print ("[DEBUG] bottle_size_list has %zu items\n", n);
 
   adw_combo_row_set_model (m_rawUnitComboRow, G_LIST_MODEL (unitList));
-  // after you get the comborow:
-  g_print ("[DEBUG] combo row is a %s\n",
-           G_OBJECT_TYPE_NAME (m_rawUnitComboRow));
   g_signal_connect (m_rawUnitComboRow, "notify::selected",
                     G_CALLBACK (on_unit_changed_callback), this);
 
@@ -121,9 +132,6 @@ PackitupWindow::PackitupWindow (AdwApplicationWindow *win) : window_ (win)
   m_resultVBox = Glib::wrap (resultVBox);
   if (!resultVBox)
     throw std::runtime_error ("no \"result_VBox\" object in window.ui");
-
-  gtk_widget_set_hexpand (GTK_WIDGET (resultVBox), TRUE);
-  gtk_widget_set_vexpand (GTK_WIDGET (resultVBox), TRUE);
 
   // Adwaita ComboRow
   m_rawBottleSizeComboRow = ADW_COMBO_ROW (
@@ -239,6 +247,16 @@ PackitupWindow::PackitupWindow (AdwApplicationWindow *win) : window_ (win)
                           m_refBuffer->end ());
   m_revealer.property_child_revealed ().signal_changed ().connect (
       sigc::mem_fun (*this, &PackitupWindow::on_result_changed));
+  // App Gears menu, with preferences, about and quit button
+  // auto gears = gtk_builder_get_object (c_builder, "gears");
+  // auto gtkmm_MenuBuilder = Gtk::Builder::create_from_resource (
+  //    "/tech/bm7/packitup-gnome/src/menu_button.ui");
+  // auto c_gtkmmMenuBuilder = gtkmm_MenuBuilder->gobj ();
+  // auto rawGears = gtk_builder_get_object (c_gtkmmMenuBuilder, "gears");
+  gears = gtk_menu_button_new ();
+  gtk_menu_button_set_direction (GTK_MENU_BUTTON (gears), GTK_ARROW_NONE);
+  gtk_menu_button_set_icon_name (GTK_MENU_BUTTON (gears),
+                                 "open-menu-symbolic");
 
   new_decoration_layout ();
 
@@ -306,7 +324,6 @@ PackitupWindow::register_with (AdwApplication *app)
         return GDK_EVENT_STOP;
       }),
       app);
-  // gtk_window_present (GTK_WINDOW (window_));
 }
 
 void
@@ -339,34 +356,28 @@ PackitupWindow::new_decoration_layout ()
 
   adw_header_bar_set_decoration_layout (m_rawHeader, new_layout.c_str ());
 
-  auto c_builder = m_refBuilder->gobj ();
-
-  // App Gears menu, with preferences, about and quit button
-  auto gears = gtk_builder_get_object (c_builder, "gears");
-
   // Connect the menu(gears_menu.ui) to the MenuButton m_gears
   // The connection between action and menu item is specified in gears_menu.ui)
   auto menu_builder = Gtk::Builder::create_from_resource (
       "/tech/bm7/packitup-gnome/src/gears_menu.ui");
   auto c_menu_builder = menu_builder->gobj ();
+  // auto c_menu_builder = menu_builder->gobj ();
   auto menu = gtk_builder_get_object (c_menu_builder, "menu");
   if (!menu)
     throw std::runtime_error ("No \"menu\" object in gears_menu.ui");
 
-  auto m_rawGears = GTK_WIDGET (gears);
-
   gtk_menu_button_set_menu_model (GTK_MENU_BUTTON (gears),
                                   G_MENU_MODEL (menu));
-
-  if (header_added)
-    adw_header_bar_remove (m_rawHeader, m_rawGears);
-  //  adw_header_bar_add_action_widget(m_rawHeader, m_rawGears);
-  //   Pack the menu on the opposite side of the close menu
+  if (close_on_left == currently_on_left)
+    return;
+  if (gtk_widget_get_parent (gears) != NULL)
+    adw_header_bar_remove (m_rawHeader, gears);
   if (close_on_left)
-    adw_header_bar_pack_end (m_rawHeader, m_rawGears);
+    adw_header_bar_pack_end (m_rawHeader, gears);
   else
-    adw_header_bar_pack_start (m_rawHeader, m_rawGears);
-  header_added = true;
+    adw_header_bar_pack_start (m_rawHeader, gears);
+
+  currently_on_left = close_on_left;
 }
 
 void

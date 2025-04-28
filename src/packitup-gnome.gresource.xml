@@ -22,6 +22,7 @@ along with PackItUP!. If not, see <https://www.gnu.org/licenses/>.
     <gresource prefix="/tech/bm7/packitup-gnome/src">
     <file preprocess="xml-stripblanks">window.ui</file>
     <file preprocess="xml-stripblanks">gears_menu.ui</file>
+    <file preprocess="xml-stripblanks">menu_button.ui</file>
     <file preprocess="xml-stripblanks">prefs.ui</file>
     <file preprocess="xml-stripblanks">about.ui</file>
     <file>packitup.png</file>

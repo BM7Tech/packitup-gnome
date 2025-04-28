@@ -56,6 +56,7 @@ Packitup::on_activate ()
     {
       win_ = create_appwindow ();
       win_->register_with (app_);
+
       win_->present ();
     }
   catch (const Glib::Error &ex)

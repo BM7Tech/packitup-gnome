@@ -45,14 +45,15 @@ extern "C"
 #define HAS_GIO_SETTINGS_BIND_WITH_MAPPING 0
 #endif
 
-class PackitupPrefs : public Gtk::Window
+class PackitupPrefs
 {
 public:
-  PackitupPrefs (BaseObjectType *cobject,
-                 const Glib::RefPtr<Gtk::Builder> &refBuilder);
+  PackitupPrefs (AdwApplicationWindow *parent, AdwDialog *dialog,
+                 const Glib::RefPtr<Gtk::Builder> &builder);
 
-  static PackitupPrefs *create (Gtk::Window &parent);
+  static PackitupPrefs *create (AdwApplicationWindow *parent);
   void on_button_close ();
+  void present ();
 
 protected:
 #if HAS_GIO_SETTINGS_BIND_WITH_MAPPING
@@ -68,12 +69,13 @@ protected:
   void on_transition_setting_changed (const Glib::ustring &key);
   void on_transition_selection_changed ();
 #endif
+  AdwApplicationWindow *parent_;
+  AdwDialog *dialog_;
   Glib::RefPtr<Gtk::Builder> m_refBuilder;
-  Glib::RefPtr<Gio::Settings> m_font_settings;
+  Glib::RefPtr<Gio::Settings> m_settings;
   Gtk::FontDialogButton *m_font{ nullptr };
-  Gtk::Widget *m_transition{ nullptr };
+  Gtk::DropDown *m_transition{ nullptr };
   Gtk::Button *m_prefs_close{ nullptr };
-  AdwComboRow *m_rawTransition;
 };
 
 #endif // PACKITUP_PREFS_H

@@ -78,7 +78,6 @@ protected:
   Gtk::Widget *m_packSizeDropDown{ nullptr };
   Gtk::Widget *m_bottleSizeDropDown{ nullptr };
   Gtk::Widget *m_header{ nullptr };
-  Gtk::MenuButton *m_gears;
   Gtk::Widget *m_spinButtonMore{ nullptr };
   Gtk::Widget *m_spinButtonAlright{ nullptr };
   AdwSpinRow *m_rawSpinRowMore;
@@ -90,12 +89,14 @@ protected:
   GtkCssProvider *AppCustomCssProvider;
   GtkCssProvider *ThemeCssProvider;
   GtkStringList *bottleSizeList;
+  GtkMenuButton *m_gears;
+  GtkWidget *gears;
   static void
   on_parsing_error (const Glib::RefPtr<const Gtk::CssSection> &section,
                     const Glib::Error &error);
 
 private:
-  bool header_added;
+  bool button_removed = false;
   int m_totalPeopleNumber;
   float m_amountOfBeer;
   float m_amountOfBeerPacks;
@@ -103,6 +104,7 @@ private:
   std::string m_unit;
   std::string m_buffer;
   bool m_transitionInProgress = false;
+  bool currently_on_left = true;
 };
 
 #endif // PACKITUPWINDOW_H

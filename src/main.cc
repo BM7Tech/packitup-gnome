@@ -44,13 +44,9 @@ on_action_preferences (GSimpleAction *action, GVariant *state,
       GtkWindow *window_ref
           = gtk_application_get_active_window (GTK_APPLICATION (app));
 
-      auto cpp_wrap = Glib::wrap (window_ref);
-      auto prefs_dialog = PackitupPrefs::create (*cpp_wrap);
-      prefs_dialog->present ();
-
-      // Delete when its hidden
-      prefs_dialog->signal_hide ().connect (
-          [prefs_dialog] () { delete prefs_dialog; });
+      auto adw_window = ADW_APPLICATION_WINDOW (window_ref);
+      auto prefs = PackitupPrefs::create (adw_window);
+      prefs->present ();
     }
   catch (const Glib::Error &ex)
     {
