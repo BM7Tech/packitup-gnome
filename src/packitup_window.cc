@@ -368,16 +368,30 @@ PackitupWindow::new_decoration_layout ()
 
   adw_header_bar_set_decoration_layout (m_rawHeader, new_layout.c_str ());
 
-  if (close_on_left == currently_on_left)
-    return;
-  if (gtk_widget_get_parent (gears) != NULL)
-    adw_header_bar_remove (m_rawHeader, gears);
+  // Check if is a valid widget
+  if (!GTK_IS_WIDGET (gears))
+    {
+      g_warning ("Attempted to move invalid button widget");
+      return;
+    }
+
+  // Remove from parent if any
+  GtkWidget *parent = gtk_widget_get_parent (gears);
+  if (parent)
+    {
+      if (ADW_IS_HEADER_BAR (parent))
+        {
+          adw_header_bar_remove (m_rawHeader, gears);
+        }
+      else
+        {
+          gtk_widget_unparent (gears);
+        }
+    }
   if (close_on_left)
     adw_header_bar_pack_end (m_rawHeader, gears);
   else
     adw_header_bar_pack_start (m_rawHeader, gears);
-
-  currently_on_left = close_on_left;
 }
 
 void
