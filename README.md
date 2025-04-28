@@ -69,7 +69,8 @@ sudo dnf install -y \
 sudo zypper refresh
 sudo zypper install -y \
   google-noto-fonts \
-  gtk4 gtkmm4 gtkmm4 \
+  gtk4 gtkmm4-devel \
+  libadwaita-1-0 libadwaita-devel \ 
   meson ninja curl gcc-c++ pkg-config python3 \
   xdg-desktop-portal xdg-desktop-portal-gtk xdg-utils
 ```
@@ -87,11 +88,11 @@ sudo pacman -Syu --needed \
 ### Alpine Linux
 ```
 apk add \
-    font-noto-all
-    build-base pkgconf meson ninja-build python3 curl \
-    gtk4.0 gtk4.0-dev \
-    libadwaita libadwaita-dev \
-    xdg-desktop-portal xdg-desktop-portal-gtk xdg-utils
+  font-noto-all
+  build-base pkgconf meson ninja-build python3 curl \
+  gtk4.0 gtk4.0-dev \
+  libadwaita libadwaita-dev \
+  xdg-desktop-portal xdg-desktop-portal-gtk xdg-utils
 ```
 
 ### Void Linux
