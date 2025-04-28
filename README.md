@@ -7,7 +7,7 @@
 ### ***Packages names might be wrong, still testing*** 
 #### Tested on:
 - [x] Ubuntu
-- [ ] Fedora Workstation
+- [x] Fedora Workstation
 - [ ] OpenSUSE Tumbleweed
 - [x] Arch Linux
 - [ ] Alpine Linux

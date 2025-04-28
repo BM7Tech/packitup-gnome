@@ -8,7 +8,7 @@
 ### ***Nomes dos pacotes podem estar errado, ainda estou testando*** 
 #### Testado em:
 - [x] Ubuntu/Kubuntu
-- [ ] Fedora Workstation
+- [x] Fedora Workstation
 - [ ] OpenSUSE Tumbleweed
 - [x] Arch Linux
 - [ ] Alpine Linux
