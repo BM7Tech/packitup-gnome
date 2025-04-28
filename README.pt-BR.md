@@ -14,7 +14,7 @@
 - [x] Alpine Linux
 - [ ] Void Linux
 ## KDE Plasma/Kubuntu
- Esse é uma versão usando libadwaita, veja [PackItUP!](https://github.com/BM7Tech/packitup) para uma versão melhor adaptada ao ambiente KDE(GTK4 puro).
+Esse é uma versão usando libadwaita, veja [PackItUP!](https://github.com/BM7Tech/packitup) para uma versão melhor adaptada ao ambiente KDE(GTK4 puro).
 ## Instalar
 No momento a única maneira de instalar o nosso programa é clonando o repositório:
 
