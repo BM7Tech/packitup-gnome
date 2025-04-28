@@ -380,13 +380,7 @@ PackitupWindow::new_decoration_layout ()
   if (parent)
     {
       if (ADW_IS_HEADER_BAR (parent))
-        {
-          adw_header_bar_remove (m_rawHeader, gears);
-        }
-      else
-        {
-          gtk_widget_unparent (gears);
-        }
+        gtk_widget_unparent (gears);
     }
   if (close_on_left)
     adw_header_bar_pack_end (m_rawHeader, gears);
