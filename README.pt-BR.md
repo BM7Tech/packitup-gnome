@@ -14,7 +14,7 @@
 - [x] Alpine Linux
 - [ ] Void Linux
 ## KDE Plasma/Kubuntu
-Apesar do aplicativo funcionar no ambiente Desktop KDE, mudar a aparência da aplicação para combinar com o seu Desktop pode ser um tanto quanto complicado e conter alguns pequenos bugs. Entretando o aplicativo não contém a livraria LibAdwaita, facilitando a vida daqueles que amam KDE.
+ Esse é uma versão usando libadwaita, veja [PackItUP!](https://github.com/BM7Tech/packitup) para uma versão melhor adaptada ao ambiente KDE(GTK4 puro).
 ## Instalar
 No momento a única maneira de instalar o nosso programa é clonando o repositório:
 

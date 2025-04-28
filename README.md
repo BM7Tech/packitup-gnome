@@ -13,7 +13,7 @@
 - [x] Alpine Linux
 - [ ] Void Linux
 ## KDE Plasma/Kubuntu
-Although the app work in KDE environment, theming it might be tricky and it might contain minor glitches. It doesn't contain LibAdwaita though, making KDE lovers life easier.
+This is a libadwaita version, check [PackItUP!](https://github.com/BM7Tech/packitup) for a version more adept to the KDE environment (pure GTK4).
 ## Install
 At the moment the only way to install is by cloning the repository:
 
