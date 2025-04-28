@@ -568,6 +568,7 @@ PackitupWindow::create ()
 
   AdwApplicationWindow *raw_window = ADW_APPLICATION_WINDOW (c_window);
   g_object_ref (raw_window);
+  g_object_unref (c_builder);
 
   auto *self = new PackitupWindow (raw_window);
   g_signal_connect (raw_window, "hide", G_CALLBACK (on_packitup_window_hide),

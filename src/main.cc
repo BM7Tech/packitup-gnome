@@ -114,7 +114,7 @@ on_action_quit (GSimpleAction *action, GVariant *state, gpointer user_data)
   window = windows;
   while (window)
     {
-      gtk_widget_set_visible (GTK_WIDGET (window), false);
+      gtk_widget_set_visible (GTK_WIDGET (window->data), false);
       window = window->next;
     }
 
