@@ -257,6 +257,18 @@ PackitupWindow::PackitupWindow (AdwApplicationWindow *win) : window_ (win)
   gtk_menu_button_set_direction (GTK_MENU_BUTTON (gears), GTK_ARROW_NONE);
   gtk_menu_button_set_icon_name (GTK_MENU_BUTTON (gears),
                                  "open-menu-symbolic");
+  // Connect the menu(gears_menu.ui) to the MenuButton m_gears
+  // The connection between action and menu item is specified in gears_menu.ui)
+  auto menu_builder = Gtk::Builder::create_from_resource (
+      "/tech/bm7/packitup-gnome/src/gears_menu.ui");
+  auto c_menu_builder = menu_builder->gobj ();
+  // auto c_menu_builder = menu_builder->gobj ();
+  auto menu = gtk_builder_get_object (c_menu_builder, "menu");
+  if (!menu)
+    throw std::runtime_error ("No \"menu\" object in gears_menu.ui");
+
+  gtk_menu_button_set_menu_model (GTK_MENU_BUTTON (gears),
+                                  G_MENU_MODEL (menu));
 
   new_decoration_layout ();
 
@@ -356,18 +368,6 @@ PackitupWindow::new_decoration_layout ()
 
   adw_header_bar_set_decoration_layout (m_rawHeader, new_layout.c_str ());
 
-  // Connect the menu(gears_menu.ui) to the MenuButton m_gears
-  // The connection between action and menu item is specified in gears_menu.ui)
-  auto menu_builder = Gtk::Builder::create_from_resource (
-      "/tech/bm7/packitup-gnome/src/gears_menu.ui");
-  auto c_menu_builder = menu_builder->gobj ();
-  // auto c_menu_builder = menu_builder->gobj ();
-  auto menu = gtk_builder_get_object (c_menu_builder, "menu");
-  if (!menu)
-    throw std::runtime_error ("No \"menu\" object in gears_menu.ui");
-
-  gtk_menu_button_set_menu_model (GTK_MENU_BUTTON (gears),
-                                  G_MENU_MODEL (menu));
   if (close_on_left == currently_on_left)
     return;
   if (gtk_widget_get_parent (gears) != NULL)
