@@ -248,12 +248,9 @@ PackitupWindow::PackitupWindow (AdwApplicationWindow *win) : window_ (win)
   m_revealer.property_child_revealed ().signal_changed ().connect (
       sigc::mem_fun (*this, &PackitupWindow::on_result_changed));
   // App Gears menu, with preferences, about and quit button
-  // auto gears = gtk_builder_get_object (c_builder, "gears");
-  // auto gtkmm_MenuBuilder = Gtk::Builder::create_from_resource (
-  //    "/tech/bm7/packitup-gnome/src/menu_button.ui");
-  // auto c_gtkmmMenuBuilder = gtkmm_MenuBuilder->gobj ();
-  // auto rawGears = gtk_builder_get_object (c_gtkmmMenuBuilder, "gears");
+  // Setup menu button, we need to setup twice for proper packing
   gears = gtk_menu_button_new ();
+  g_object_ref_sink (gears);
   gtk_menu_button_set_direction (GTK_MENU_BUTTON (gears), GTK_ARROW_NONE);
   gtk_menu_button_set_icon_name (GTK_MENU_BUTTON (gears),
                                  "open-menu-symbolic");
@@ -270,7 +267,8 @@ PackitupWindow::PackitupWindow (AdwApplicationWindow *win) : window_ (win)
   gtk_menu_button_set_menu_model (GTK_MENU_BUTTON (gears),
                                   G_MENU_MODEL (menu));
 
-  adw_header_bar_pack_start (m_rawHeader, gears);
+  adw_header_bar_pack_end (m_rawHeader, gears);
+
   new_decoration_layout ();
 
   // Ensure that the HeaderBar has at least icon:close decoration layout
@@ -375,14 +373,42 @@ PackitupWindow::new_decoration_layout ()
       g_warning ("Attempted to move invalid button widget");
       return;
     }
+
+  if (close_on_left == currently_on_left)
+    return;
+
   // Remove from parent if any
   GtkWidget *parent = gtk_widget_get_parent (gears);
   if (parent)
-    gtk_widget_unparent (gears);
+    {
+      adw_header_bar_remove (m_rawHeader, gears);
+      g_object_unref (gears);
+      gears = nullptr;
+    }
+
+  // Setup menu button, we need to setup twice for proper packing
+  gears = gtk_menu_button_new ();
+  gtk_menu_button_set_direction (GTK_MENU_BUTTON (gears), GTK_ARROW_NONE);
+  gtk_menu_button_set_icon_name (GTK_MENU_BUTTON (gears),
+                                 "open-menu-symbolic");
+  // Connect the menu(gears_menu.ui) to the MenuButton m_gears
+  // The connection between action and menu item is specified in gears_menu.ui)
+  auto menu_builder = Gtk::Builder::create_from_resource (
+      "/tech/bm7/packitup-gnome/src/gears_menu.ui");
+  auto c_menu_builder = menu_builder->gobj ();
+  // auto c_menu_builder = menu_builder->gobj ();
+  auto menu = gtk_builder_get_object (c_menu_builder, "menu");
+  if (!menu)
+    throw std::runtime_error ("No \"menu\" object in gears_menu.ui");
+
+  gtk_menu_button_set_menu_model (GTK_MENU_BUTTON (gears),
+                                  G_MENU_MODEL (menu));
+
   if (close_on_left)
     adw_header_bar_pack_end (m_rawHeader, gears);
   else
     adw_header_bar_pack_start (m_rawHeader, gears);
+  currently_on_left = close_on_left;
 }
 
 void
