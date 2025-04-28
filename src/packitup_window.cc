@@ -270,6 +270,7 @@ PackitupWindow::PackitupWindow (AdwApplicationWindow *win) : window_ (win)
   gtk_menu_button_set_menu_model (GTK_MENU_BUTTON (gears),
                                   G_MENU_MODEL (menu));
 
+  adw_header_bar_pack_start (m_rawHeader, gears);
   new_decoration_layout ();
 
   // Ensure that the HeaderBar has at least icon:close decoration layout
@@ -374,18 +375,17 @@ PackitupWindow::new_decoration_layout ()
       g_warning ("Attempted to move invalid button widget");
       return;
     }
-
   // Remove from parent if any
-  GtkWidget *parent = gtk_widget_get_parent (gears);
-  if (parent)
-    {
-      if (ADW_IS_HEADER_BAR (parent))
-        gtk_widget_unparent (gears);
-    }
-  if (close_on_left)
-    adw_header_bar_pack_end (m_rawHeader, gears);
-  else
-    adw_header_bar_pack_start (m_rawHeader, gears);
+  // GtkWidget *parent = gtk_widget_get_parent (gears);
+  // if (parent)
+  //  {
+  //    if (ADW_IS_HEADER_BAR (parent))
+  //      gtk_widget_unparent (gears);
+  //}
+  // if (close_on_left)
+  //  adw_header_bar_pack_end (m_rawHeader, gears);
+  // else
+  //  adw_header_bar_pack_start (m_rawHeader, gears);
 }
 
 void
