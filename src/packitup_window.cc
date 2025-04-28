@@ -20,6 +20,7 @@
 
 #include "packitup_window.h"
 #include "gdkmm/event.h"
+#include "glib-object.h"
 #include "packitup.h"
 #include <glib/gi18n.h>
 #include <glibmm/i18n.h>
@@ -403,6 +404,7 @@ PackitupWindow::new_decoration_layout ()
 
   gtk_menu_button_set_menu_model (GTK_MENU_BUTTON (gears),
                                   G_MENU_MODEL (menu));
+  g_object_ref_sink (gears);
 
   if (close_on_left)
     adw_header_bar_pack_end (m_rawHeader, gears);
