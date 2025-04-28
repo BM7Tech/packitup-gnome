@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: packitup-gnome\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-28 03:55-0300\n"
+"POT-Creation-Date: 2025-04-28 14:54-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -140,6 +140,10 @@ msgstr ""
 
 #: src/packitup_prefs.cc:82
 msgid "Slide Down"
+msgstr ""
+
+#: src/main.cc:85
+msgid "Never run out of beer again."
 msgstr ""
 
 #: src/window.ui:26 src/window.ui:36

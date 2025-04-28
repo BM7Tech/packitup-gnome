@@ -1,6 +1,6 @@
 src/packitup_window.cc
 src/packitup_prefs.cc
-src/packitup.cc
+src/main.cc
 src/window.ui
 src/gears_menu.ui
 src/prefs.ui

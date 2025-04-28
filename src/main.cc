@@ -21,6 +21,7 @@
 #include "packitup.h"
 #include "packitup_prefs.h"
 #include <giomm.h>
+#include <glib/gi18n.h>
 #include <glibconfig.h>
 #include <glibmm.h>
 #include <glibmm/i18n.h>
@@ -123,11 +124,6 @@ on_action_quit (GSimpleAction *action, GVariant *state, gpointer user_data)
 static void
 activate_callback (GApplication *gapp, gpointer user_data)
 {
-  // GObjectClass *klass = G_OBJECT_GET_CLASS (gapp);
-
-  // GApplicationClass *parent_class
-  //     = G_APPLICATION_CLASS (g_type_class_peek_parent (klass));
-  // parent_class->activate (gapp);
   static_cast<Packitup *> (user_data)->on_activate ();
 }
 

@@ -21,8 +21,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: packitup-gnome\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-04-28 03:55-0300\n"
-"PO-Revision-Date: 2025-04-28 13:34-0300\n"
+"POT-Creation-Date: 2025-04-28 14:54-0300\n"
+"PO-Revision-Date: 2025-04-28 14:59-0300\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: pt_BR\n"
@@ -159,6 +159,10 @@ msgstr "Deslizar para Direita"
 msgid "Slide Down"
 msgstr "Deslizar para Baixo"
 
+#: src/main.cc:85
+msgid "Never run out of beer again."
+msgstr "Nunca mais fique sem cerveja."
+
 #: src/window.ui:26 src/window.ui:36
 msgid "Pack It UP!"
 msgstr "Pack It UP!"
@@ -209,7 +213,7 @@ msgstr "Bebem mais que moderado:"
 
 #: src/window.ui:139
 msgid "Drinks alright:"
-msgstr "Bebem normal:"
+msgstr "Bebem o normal:"
 
 #: src/window.ui:161
 msgid "Select the Unit:"
