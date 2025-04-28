@@ -376,16 +376,13 @@ PackitupWindow::new_decoration_layout ()
       return;
     }
   // Remove from parent if any
-  // GtkWidget *parent = gtk_widget_get_parent (gears);
-  // if (parent)
-  //  {
-  //    if (ADW_IS_HEADER_BAR (parent))
-  //      gtk_widget_unparent (gears);
-  //}
-  // if (close_on_left)
-  //  adw_header_bar_pack_end (m_rawHeader, gears);
-  // else
-  //  adw_header_bar_pack_start (m_rawHeader, gears);
+  GtkWidget *parent = gtk_widget_get_parent (gears);
+  if (parent)
+    gtk_widget_unparent (gears);
+  if (close_on_left)
+    adw_header_bar_pack_end (m_rawHeader, gears);
+  else
+    adw_header_bar_pack_start (m_rawHeader, gears);
 }
 
 void
