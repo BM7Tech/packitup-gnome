@@ -8,7 +8,7 @@
 #### Tested on:
 - [x] Ubuntu
 - [x] Fedora Workstation
-- [ ] OpenSUSE Tumbleweed
+- [x] OpenSUSE Tumbleweed
 - [x] Arch Linux
 - [x] Alpine Linux
 - [ ] Void Linux

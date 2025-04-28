@@ -9,7 +9,7 @@
 #### Testado em:
 - [x] Ubuntu/Kubuntu
 - [x] Fedora Workstation
-- [ ] OpenSUSE Tumbleweed
+- [x] OpenSUSE Tumbleweed
 - [x] Arch Linux
 - [x] Alpine Linux
 - [ ] Void Linux
