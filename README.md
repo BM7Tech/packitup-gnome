@@ -10,7 +10,7 @@
 - [x] Fedora Workstation
 - [ ] OpenSUSE Tumbleweed
 - [x] Arch Linux
-- [ ] Alpine Linux
+- [x] Alpine Linux
 - [ ] Void Linux
 ## KDE Plasma/Kubuntu
 Although the app work in KDE environment, theming it might be tricky and it might contain minor glitches. It doesn't contain LibAdwaita though, making KDE lovers life easier.
@@ -90,6 +90,7 @@ apk add \
     font-noto-all
     build-base pkgconf meson ninja-build python3 curl \
     gtk4.0 gtk4.0-dev \
+    libadwaita libadwaita-dev \
     xdg-desktop-portal xdg-desktop-portal-gtk xdg-utils
 ```
 

@@ -11,7 +11,7 @@
 - [x] Fedora Workstation
 - [ ] OpenSUSE Tumbleweed
 - [x] Arch Linux
-- [ ] Alpine Linux
+- [x] Alpine Linux
 - [ ] Void Linux
 ## KDE Plasma/Kubuntu
 Apesar do aplicativo funcionar no ambiente Desktop KDE, mudar a aparência da aplicação para combinar com o seu Desktop pode ser um tanto quanto complicado e conter alguns pequenos bugs. Entretando o aplicativo não contém a livraria LibAdwaita, facilitando a vida daqueles que amam KDE.
@@ -92,6 +92,7 @@ apk add \
     build-base pkgconf meson ninja-build python3 curl \
     gtk4.0 gtk4.0-dev gtkmm4 gtkmm4-dev \
     libxml2 gettext \
+    libadwaita libadwaita-dev \
     xdg-desktop-portal xdg-desktop-portal-gtk xdg-utils
 ```
 
