@@ -8,10 +8,10 @@
 ### ***Nomes dos pacotes podem estar errado, ainda estou testando*** 
 #### Testado em:
 - [x] Ubuntu/Kubuntu
-- [x] Fedora Workstation/KDE Plasma
-- [x] OpenSUSE Tumbleweed
+- [ ] Fedora Workstation
+- [ ] OpenSUSE Tumbleweed
 - [x] Arch Linux
-- [x] Alpine Linux
+- [ ] Alpine Linux
 - [ ] Void Linux
 ## KDE Plasma/Kubuntu
 Apesar do aplicativo funcionar no ambiente Desktop KDE, mudar a aparência da aplicação para combinar com o seu Desktop pode ser um tanto quanto complicado e conter alguns pequenos bugs. Entretando o aplicativo não contém a livraria LibAdwaita, facilitando a vida daqueles que amam KDE.
@@ -46,6 +46,7 @@ sudo apt install -y \
   fonts-noto \
   libgtk-4-1 libgtk-4-dev \
   libgtkmm-4.0-0 libgtkmm-4.0-dev \
+  libadwaita-1-0 libadwaita-1-dev \
   build-essential meson ninja-build curl \
   gettext libxml2-utils \
   pkg-config python3 \
@@ -57,6 +58,7 @@ sudo apt install -y \
 sudo dnf install -y \
   google-noto-fonts-common \
   gtk4 gtk4-devel gtkmm4.0 gtkmm4.0-devel \
+  libadwaita libadwaita-devel \
   @c-development @development-tools \
   libxml2 gettext \
   meson ninja-build curl pkgconf-pkg-config python3 \

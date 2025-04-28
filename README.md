@@ -6,11 +6,11 @@
 [![Português](https://img.shields.io/badge/README-pt--BR-green)](./README.pt-BR.md)
 ### ***Packages names might be wrong, still testing*** 
 #### Tested on:
-- [x] Ubuntu/Kubuntu
-- [x] Fedora Workstation/KDE Plasma
-- [x] OpenSUSE Tumbleweed
+- [x] Ubuntu
+- [ ] Fedora Workstation
+- [ ] OpenSUSE Tumbleweed
 - [x] Arch Linux
-- [x] Alpine Linux
+- [ ] Alpine Linux
 - [ ] Void Linux
 ## KDE Plasma/Kubuntu
 Although the app work in KDE environment, theming it might be tricky and it might contain minor glitches. It doesn't contain LibAdwaita though, making KDE lovers life easier.
@@ -45,6 +45,7 @@ sudo apt install -y \
   fonts-noto \
   libgtk-4-1 libgtk-4-dev \
   libgtkmm-4.0-0 libgtkmm-4.0-dev \
+  libadwaita-1-0 libadwaita-1-dev \
   build-essential meson ninja-build curl \
   gettext libxml2-utils \
   pkg-config python3 \
@@ -57,6 +58,7 @@ sudo dnf install -y \
   google-noto-fonts-common \
   gtk4 gtk4-devel gtkmm4.0 gtkmm4.0-devel \
   @c-development @development-tools \
+  libadwaita libadwaita-dev
   libxml2 gettext \
   meson ninja-build curl pkgconf-pkg-config python3 \
   xdg-desktop-portal xdg-desktop-portal-gtk xdg-utils
