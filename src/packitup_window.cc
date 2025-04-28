@@ -46,7 +46,7 @@ extern "C"
 #define HAS_STYLE_PROVIDER_ADD_PROVIDER_FOR_DISPLAY                           \
   GTKMM_CHECK_VERSION (4, 9, 1)
 
-#define HAS_LOAD_FROM_STRING GTKMM_CHECK_VERSION (4, 12, 0)
+#define HAS_LOAD_FROM_STRING GTK_CHECK_VERSION (4, 12, 0)
 
 static void on_unit_changed_callback (GObject * /*combo_row*/,
                                       GParamSpec * /*pspec*/,
