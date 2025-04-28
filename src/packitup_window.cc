@@ -424,7 +424,7 @@ PackitupWindow::reload_theme_css ()
 #else
       std::string css = "windowcontrols>image{ min-height:24px; "
                         "min-width:24px; margin: 0px 6px; }";
-      gtk_css_provicer_load_from_data (AppCustomCssProvider, css);
+      gtk_css_provider_load_from_data (AppCustomCssProvider, css);
 #endif
     }
 }
