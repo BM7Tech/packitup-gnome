@@ -418,11 +418,11 @@ PackitupWindow::reload_theme_css ()
           m_providerAdded = false;
         }
 #if HAS_LOAD_FROM_STRING
-      Glib::ustring css = "windowcontrols>image{ min-height:24px; "
-                          "min-width:24px; margin: 0px 6px; }";
-      gtk_css_provider_load_from_string (AppCustomCssProvider, css.c_str ());
+      const char *css = "windowcontrols>image{ min-height:24px; "
+                        "min-width:24px; margin: 0px 6px; }";
+      gtk_css_provider_load_from_string (AppCustomCssProvider, css);
 #else
-      std::string css = "windowcontrols>image{ min-height:24px; "
+      const char *css = "windowcontrols>image{ min-height:24px; "
                         "min-width:24px; margin: 0px 6px; }";
       gtk_css_provider_load_from_data (AppCustomCssProvider, css);
 #endif
